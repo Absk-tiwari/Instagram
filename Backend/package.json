@@ -1,0 +1,11 @@
+{
+  "name": "insta-backend",
+  "version": "1.0.0",
+  "description": "Backend for the insta clone",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "NULL",
+  "license": "ISC"
+}
