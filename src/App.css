@@ -1,0 +1,38 @@
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+.items {
+  margin-top: 10%;
+}
+
+.side-item {
+  font-size: larger;
+  cursor: pointer;
+  height: 46px;
+}
+
+#main {
+  border-right: 0.8px solid lightgray;
+}
+
+.side-item:hover {
+  background-color: rgba(0.2, 0.2, 0.2, 0.05);
+  cursor: pointer;
+  border-radius: 10px;
+  width: 216px;
+}
+
+img.icons {
+  height: 5%;
+}
