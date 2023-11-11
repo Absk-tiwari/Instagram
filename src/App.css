@@ -1,38 +1,235 @@
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.App{
+  height: 100vh;
+  width: 100vw;
 }
-
-.App-link {
-  color: #61dafb;
+body{
+  margin: 0;
+  padding: 0;
 }
-.items {
-  margin-top: 10%;
+.custom-sidebar .custom-logo{
+  height: 10vh;
+  padding-left: 31px;
+  padding-top: 42px;
+  position: fixed;
 }
-
-.side-item {
-  font-size: larger;
-  cursor: pointer;
-  height: 46px;
-}
-
-#main {
+.custom-sidebar{
+  height: 100%;
+  width: 250px;
   border-right: 0.8px solid lightgray;
 }
 
-.side-item:hover {
+.custom-sidebarList{
+  height: auto;
+  width: 16%; 
+  position: fixed;
+  padding-top: 90px;
+}
+.custom-sidebarList .custom-row{
+  margin-left: 5%;
+  margin-top: 3%;
+  font-size: larger;
+  cursor: pointer;
+  height: 50px;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.custom-row:hover {
   background-color: rgba(0.2, 0.2, 0.2, 0.05);
   cursor: pointer;
-  border-radius: 10px;
-  width: 216px;
+  border-radius: 10px; 
+  font-weight: 500;
 }
 
 img.icons {
-  height: 5%;
+  height: 25px !important;
+}
+
+.custom-row #icon {
+  flex:30%;
+  display: grid;
+  place-items: center;
+  height: 28px!important;
+}
+.custom-row #title {
+  flex: 90%;
+  text-decoration: none;
+  color: black;
+}
+ 
+.active{
+  background-color: rgba(0.2, 0.2, 0.2, 0.05);
+  cursor: pointer;
+  border-radius: 10px; 
+  font-weight: 500;
+}
+#more{
+  padding-top:70px;
+}
+
+.story{
+  height: 80px;
+  width: 80px;
+  background-color: #e1e1e1;
+  border-radius: 100%;
+  border: 4px solid #16a516;
+  cursor: pointer;
+}
+
+
+.profileRow{
+  cursor: pointer;
+  height: 10vh;
+  /* background-color: burlywood; */
+  /* border-radius: 8%; */
+  width: 100%;
+}
+img{
+  cursor: pointer;
+}
+
+.pfpicture{
+  margin-top: 10px;
+  height: 50px;
+  width: 50px;
+  border-radius: 100%;
+  background-color: aliceblue;
+}
+
+.profileRow span{ 
+  color: gray;
+}
+.profileRow p{ 
+  font-size: larger;
+  margin-top: 6px; 
+}
+.profileRow p #sug{ 
+  font-size: small; 
+}
+.profileHead{
+  line-height: 1;
+}
+.followbtn{
+  background-color: #4a3f3f3c;
+}
+
+.postContent{
+  height: 55vh;
+  width: 100%; 
+}
+
+.userPost{
+  height: 50px;
+  width: 50px;
+  border-radius: 100%;
+}
+
+ 
+
+.card {
+  margin-left: 17%;
+  background-color: white!important;
+  border: none!important  ;
+}
+
+.card-header{
+  background-color: white!important;
+  border: none!important  ;
+}
+.card-footer{
+  border: none!important;
+  background-color: white!important;
+}
+
+.card i{
+  cursor: pointer;
+}
+
+.post{
+  height: 50vh;
+}
+
+
+.animate{
+  animation-duration: 1000ms;
+  animation-name: like-heart-animation;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes like-heart-animation {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  15% {
+    opacity: 0.9;
+    transform: scale(1.2);
+  }
+  30% {
+    transform: scale(0.95);
+  }
+  45%,
+  80% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+
+.Profile{
+  /* background-color: #16a516; */
+  /* margin-block: 35px!important;
+  margin-inline: 65px!important; */
+  margin-top: 20px;
+  margin-left: 20px;
+  float:left;
+  display: block;
+  max-width: 1000px!important;
+}
+
+.info-container{
+  /* background-color:burlywood; */
+  margin:0;
+  /* margin-inline:0px; */
+  height:35%;
+  display: flex;
+  border-bottom: 1px solid darkgray;
+}
+
+.info-container .col-md-4{
+  height: 100%;
+  /* background-color: yellowgreen; */
+}
+.info-container .container{
+  height: 100%;
+  display: block;
+  align-items: center;
+  justify-content: center;
+  /* background-color: turquoise; */
+  text-align: center;
+}
+.info-container img{
+  height: 80%;
+  margin-top: 5%;
+  border-radius: 90%;
+}
+.info-container .row{ 
+  /* height: 33%; */
+  margin-top: 10px;
+  vertical-align: center;
+  place-items: center;
+  margin-right: 40%;
+}
+ 
+
+.editprofile{
+  border-radius: 10%;
+  border: none;
+  height: 40px;
+  width: 120px;
+  background-color: rgba(0.2, 0.2, 0.2, 0.05);
+}
+.editprofile:hover{
+   background-color: rgba(6, 6, 6, 0.25);
 }
