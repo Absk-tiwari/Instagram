@@ -1,30 +1,30 @@
-.App{
+.App {
   height: 100vh;
-  width: 100vw;
+  width: 100%;
 }
-body{
+body {
   margin: 0;
   padding: 0;
 }
-.custom-sidebar .custom-logo{
+.custom-sidebar .custom-logo {
   height: 10vh;
   padding-left: 31px;
   padding-top: 42px;
   position: fixed;
 }
-.custom-sidebar{
+.custom-sidebar {
   height: 100%;
   width: 250px;
   border-right: 0.8px solid lightgray;
 }
 
-.custom-sidebarList{
+.custom-sidebarList {
   height: auto;
-  width: 16%; 
+  width: 16%;
   position: fixed;
   padding-top: 90px;
 }
-.custom-sidebarList .custom-row{
+.custom-sidebarList .custom-row {
   margin-left: 5%;
   margin-top: 3%;
   font-size: larger;
@@ -39,7 +39,7 @@ body{
 .custom-row:hover {
   background-color: rgba(0.2, 0.2, 0.2, 0.05);
   cursor: pointer;
-  border-radius: 10px; 
+  border-radius: 10px;
   font-weight: 500;
 }
 
@@ -48,28 +48,28 @@ img.icons {
 }
 
 .custom-row #icon {
-  flex:30%;
+  flex: 30%;
   display: grid;
   place-items: center;
-  height: 28px!important;
+  height: 28px !important;
 }
 .custom-row #title {
   flex: 90%;
   text-decoration: none;
   color: black;
 }
- 
-.active{
+
+.active {
   background-color: rgba(0.2, 0.2, 0.2, 0.05);
   cursor: pointer;
-  border-radius: 10px; 
+  border-radius: 10px;
   font-weight: 500;
 }
-#more{
-  padding-top:70px;
+#more {
+  padding-top: 70px;
 }
 
-.story{
+.story {
   height: 80px;
   width: 80px;
   background-color: #e1e1e1;
@@ -78,19 +78,18 @@ img.icons {
   cursor: pointer;
 }
 
-
-.profileRow{
+.profileRow {
   cursor: pointer;
   height: 10vh;
   /* background-color: burlywood; */
   /* border-radius: 8%; */
   width: 100%;
 }
-img{
+img {
   cursor: pointer;
 }
 
-.pfpicture{
+.pfpicture {
   margin-top: 10px;
   height: 50px;
   width: 50px;
@@ -98,61 +97,58 @@ img{
   background-color: aliceblue;
 }
 
-.profileRow span{ 
+.profileRow span {
   color: gray;
 }
-.profileRow p{ 
+.profileRow p {
   font-size: larger;
-  margin-top: 6px; 
+  margin-top: 6px;
 }
-.profileRow p #sug{ 
-  font-size: small; 
+.profileRow p #sug {
+  font-size: small;
 }
-.profileHead{
+.profileHead {
   line-height: 1;
 }
-.followbtn{
+.followbtn {
   background-color: #4a3f3f3c;
 }
 
-.postContent{
+.postContent {
   height: 55vh;
-  width: 100%; 
+  width: 100%;
 }
 
-.userPost{
+.userPost {
   height: 50px;
   width: 50px;
   border-radius: 100%;
 }
 
- 
-
 .card {
   margin-left: 17%;
-  background-color: white!important;
-  border: none!important  ;
+  background-color: white !important;
+  border: none !important  ;
 }
 
-.card-header{
-  background-color: white!important;
-  border: none!important  ;
+.card-header {
+  background-color: white !important;
+  border: none !important  ;
 }
-.card-footer{
-  border: none!important;
-  background-color: white!important;
+.card-footer {
+  border: none !important;
+  background-color: white !important;
 }
 
-.card i{
+.card i {
   cursor: pointer;
 }
 
-.post{
+.post {
   height: 50vh;
 }
 
-
-.animate{
+.animate {
   animation-duration: 1000ms;
   animation-name: like-heart-animation;
   animation-timing-function: ease-in-out;
@@ -177,31 +173,31 @@ img{
   }
 }
 
-.Profile{
+.Profile {
   /* background-color: #16a516; */
   /* margin-block: 35px!important;
   margin-inline: 65px!important; */
   margin-top: 20px;
   margin-left: 20px;
-  float:left;
+  float: left;
   display: block;
-  max-width: 1000px!important;
+  max-width: 1000px !important;
 }
 
-.info-container{
+.info-container {
   /* background-color:burlywood; */
-  margin:0;
+  margin: 0;
   /* margin-inline:0px; */
-  height:35%;
+  height: 35%;
   display: flex;
   border-bottom: 1px solid darkgray;
 }
 
-.info-container .col-md-4{
+.info-container .col-md-4 {
   height: 100%;
   /* background-color: yellowgreen; */
 }
-.info-container .container{
+.info-container .container {
   height: 100%;
   display: block;
   align-items: center;
@@ -209,27 +205,35 @@ img{
   /* background-color: turquoise; */
   text-align: center;
 }
-.info-container img{
+.info-container img {
   height: 80%;
   margin-top: 5%;
   border-radius: 90%;
 }
-.info-container .row{ 
+.info-container .row {
   /* height: 33%; */
   margin-top: 10px;
   vertical-align: center;
   place-items: center;
   margin-right: 40%;
 }
- 
 
-.editprofile{
+.editprofile {
   border-radius: 10%;
   border: none;
   height: 40px;
   width: 120px;
   background-color: rgba(0.2, 0.2, 0.2, 0.05);
 }
-.editprofile:hover{
-   background-color: rgba(6, 6, 6, 0.25);
+.editprofile:hover {
+  background-color: rgba(6, 6, 6, 0.25);
+}
+
+a.active {
+  border-top: 2px solid black !important;
+  border-radius: 0px !important;
+}
+
+.p-section i {
+  font-size: x-small;
 }
