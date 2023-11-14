@@ -1,13 +1,14 @@
-import React from 'react'
-import '../App.css';
-import { SidebarData } from './SidebarData'
-import {  Link, useLocation  } from 'react-router-dom';
+import React from "react";
+import "../App.css";
+import { SidebarData } from "./SidebarData";
+import { Link, useLocation } from "react-router-dom";
+import More from "../assets/icons/more.png";
 
-function SidebarComponent(){
-   const location = useLocation();
+function SidebarComponent() {
+  const location = useLocation();
   return (
-    <div className='custom-sidebar'>
-        <div className='custom-logo'>
+    <div className="custom-sidebar">
+      <div className="custom-logo">
         <svg
           aria-label="Instagram"
           fill="currentColor"
@@ -24,19 +25,59 @@ function SidebarComponent(){
             fillRule="evenodd"
           ></path>
         </svg>
+      </div>
+      <div className="custom-sidebarList">
+        {SidebarData.map((val, key) => {
+          return (
+            <div
+              id={key === 8 ? "more" : ""}
+              className={`custom-row ${
+                location.pathname === val.link ? "active" : ""
+              }`}
+              key={key}
+            >
+              <div id="icon" style={{ height: "20px" }}>
+                {val.icon}
+              </div>
+              <Link id="title" to={val.link}>
+                {val.title}
+              </Link>
+            </div>
+          );
+        })}
+        <div
+          id={"more"}
+          className={` dropend custom-row`}
+          data-bs-toggle="dropdown"
+        >
+          <div id="icon" style={{ height: "20px" }}>
+            <img className="icons" src={More} alt="not found" />
+          </div>
+          <Link id="title" to={"#"}>
+            More
+          </Link>
+
+          <ul className="dropdown-menu">
+            <li>
+              <Link className="dropdown-item mt-3 mb-3 px-4" to="#">
+                Action
+              </Link>
+            </li>
+            <li>
+              <Link className="dropdown-item mt-3 mb-3 px-4" to="#">
+                Action two
+              </Link>
+            </li>
+            <li>
+              <Link className="dropdown-item mt-3 mb-3 px-4" to="#">
+                Log out
+              </Link>
+            </li>
+          </ul>
         </div>
-        <div className='custom-sidebarList'>
-            {SidebarData.map((val, key) => {
-                return(
-                    <div id={key===8? 'more':''} className={`custom-row ${location.pathname===val.link?'active':''}`} key={key}>
-                        <div id='icon' style={{height:'20px'}}>{val.icon}</div> 
-                        <Link id='title' to={val.link}>{val.title}</Link>
-                    </div>
-                )
-            })}
-        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default SidebarComponent
+export default SidebarComponent;

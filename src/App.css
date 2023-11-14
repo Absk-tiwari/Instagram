@@ -15,7 +15,6 @@ body {
 .custom-sidebar {
   height: 100%;
   width: 250px;
-  border-right: 0.8px solid lightgray;
 }
 
 .custom-sidebarList {
@@ -23,6 +22,7 @@ body {
   width: 16%;
   position: fixed;
   padding-top: 90px;
+  border-right: 0.8px solid lightgray;
 }
 .custom-sidebarList .custom-row {
   margin-left: 5%;
@@ -65,17 +65,29 @@ img.icons {
   border-radius: 10px;
   font-weight: 500;
 }
+.postImg {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+.postImg:hover {
+  opacity: 0.9;
+  filter: brightness(50%);
+  transition: 0.3s;
+  background: rgba(0, 0, 0, 0.5);
+}
 #more {
-  padding-top: 70px;
+  margin-top: 20px;
 }
 
 .story {
-  height: 80px;
+  height: 60px;
   width: 80px;
   background-color: #e1e1e1;
   border-radius: 100%;
-  border: 4px solid #16a516;
+  border: 4px solid #67d967;
   cursor: pointer;
+  margin-left: 15px;
+  padding: 30px;
 }
 
 .profileRow {
@@ -236,4 +248,18 @@ a.active {
 
 .p-section i {
   font-size: x-small;
+}
+
+html {
+  overflow: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+}
+
+.dropdown-menu {
+  inset: auto auto 0px 180px !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
