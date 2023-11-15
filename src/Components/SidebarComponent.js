@@ -3,6 +3,7 @@ import "../App.css";
 import { SidebarData } from "./SidebarData";
 import { Link, useLocation } from "react-router-dom";
 import More from "../assets/icons/more.png";
+import obito from "../assets/icons/obito.jpg";
 import Modal from "./Modal";
 
 function SidebarComponent() {
@@ -11,6 +12,25 @@ function SidebarComponent() {
 
   const toggleModal = () => {
     setmodal(!open);
+  };
+
+  const submit = (event) => {
+    console.log(event.target);
+    document.getElementById("create").click();
+    event.preventDefault();
+  };
+
+  const refer = (e) => {
+    let elem = e.target;
+    console.log(elem, elem.children.length);
+    if (elem.children.length ?? false) {
+      console.log("aya", elem.children[1]);
+      if (elem.children[1] ?? false) {
+        console.log(elem.children[1]);
+        elem.children[1].click();
+      }
+    }
+    // window.location.href = e.target.dataset.refer;
   };
   return (
     <div className="custom-sidebar">
@@ -36,24 +56,43 @@ function SidebarComponent() {
         {SidebarData.map((val, key) => {
           return (
             <div
-              id={key === 8 ? "more" : ""}
               className={`custom-row ${
                 location.pathname === val.link ? "active" : ""
               }`}
               key={key}
+              onClick={refer}
+              data-refer={val.link}
             >
-              <div id="icon" style={{ height: "20px" }}>
+              <div id="icon" style={{ height: "20px" }} data-refer={val.link}>
                 {val.icon}
               </div>
-              <Link id="title" to={val.link}>
-                {val.title}
-              </Link>
+              {val.link === "/notifications" ? (
+                <Link
+                  id="title"
+                  to={val.link}
+                  onClick={val.title === "Create" ? submit : ""}
+                  data-refer={val.link}
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasWithBothOptions"
+                >
+                  {val.title}
+                </Link>
+              ) : (
+                <Link
+                  id="title"
+                  to={val.link}
+                  onClick={val.title === "Create" ? submit : ""}
+                  data-refer={val.link}
+                >
+                  {val.title}
+                </Link>
+              )}
             </div>
           );
         })}
         <div
           id={"more"}
-          className={` dropend custom-row`}
+          className={` dropup custom-row`}
           data-bs-toggle="dropdown"
         >
           <div id="icon" style={{ height: "20px" }}>
@@ -63,15 +102,15 @@ function SidebarComponent() {
             More
           </Link>
 
-          <ul className="dropdown-menu">
+          <ul className="dropdown-menu ">
             <li>
-              <Link className="dropdown-item  px-4" to="#">
-                Action
+              <Link className="dropdown-item px-4" to="#">
+                Settings
               </Link>
             </li>
             <li>
-              <Link className="dropdown-item  px-4" to="#">
-                Action two
+              <Link className="dropdown-item px-4" to="#">
+                Saved
               </Link>
             </li>
             <li>
@@ -113,6 +152,39 @@ function SidebarComponent() {
               </li>
             </>
           </Modal>
+        </div>
+      </div>
+      <form id="createPost" method="post" className="d-none">
+        <input type="file" id="create" className="d-none" name="file" />
+      </form>
+      <div
+        className="offcanvas offcanvas-start"
+        data-bs-scroll="true"
+        data-bs-backdrop="false"
+        tabIndex="-1"
+        id="offcanvasWithBothOptions"
+        aria-labelledby="offcanvasWithBothOptionsLabel"
+      >
+        <div className="offcanvas-header">
+          <h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+            Notifications
+          </h5>
+        </div>
+        <div className="offcanvas-body">
+          <div className="row">
+            <div className="hstack list-item gap-3">
+              <img
+                src={obito}
+                alt="not yet?"
+                className="rounded-circle col-md-2"
+              />
+              <p className="text-dark text-wrap">
+                <strong>PataNayKey</strong> Started following you
+              </p>
+              <small className="text-secondary">2h</small>
+              <button className="btn btn-primary followbtn">follow</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

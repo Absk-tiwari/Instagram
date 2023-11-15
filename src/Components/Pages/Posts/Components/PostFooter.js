@@ -67,6 +67,14 @@ const PostFooter = (props) => {
           <span className="text-secondary">View all comments</span>
         </div>
       </div>
+      <div className="hstack gap-4 mt-2">
+        <form id="commentForm">
+          <input placeholder="Add a comment..." id="input" />
+          <button type="button" className="btn text-primary ">
+            Add
+          </button>
+        </form>
+      </div>
     </>
   );
 };

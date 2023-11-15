@@ -28,7 +28,7 @@ body {
 .custom-sidebarList .custom-row {
   margin-left: 5%;
   margin-top: 3%;
-  font-size: larger;
+  font-size: medium;
   cursor: pointer;
   height: 50px;
   width: 90%;
@@ -42,6 +42,7 @@ body {
   cursor: pointer;
   border-radius: 10px;
   font-weight: 500;
+  font-size: large;
 }
 
 img.icons {
@@ -64,7 +65,7 @@ img.icons {
   background-color: rgba(0.2, 0.2, 0.2, 0.05);
   cursor: pointer;
   border-radius: 10px;
-  font-weight: 500;
+  font-weight: 700;
 }
 .postImg {
   margin: 0px !important;
@@ -261,8 +262,9 @@ html {
 }
 
 .dropdown-menu {
-  inset: auto auto 0px 180px !important;
+  inset: auto auto 0px 0px !important;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  width: 200px !important;
 }
 
 .more {
@@ -280,4 +282,27 @@ html {
   height: 45px;
   display: flex !important;
   align-items: center;
+}
+.dropdown-item:hover {
+  background-color: #eeeeee !important;
+}
+
+.offcanvas.offcanvas-start {
+  left: 16% !important;
+}
+.offcanvas-header {
+  border-bottom: 2px solid darkgray;
+}
+.offcanvas-body .row {
+  border-bottom: 1px solid darkgray;
+  border-right: 1px solid darkgray;
+  border-bottom-right-radius: 10px;
+  margin-bottom: 4px;
+}
+
+#input {
+  border: none !important;
+}
+:focus-visible {
+  outline: none !important;
 }

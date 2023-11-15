@@ -28,9 +28,9 @@ const Modal = ({ isOpen, dimens, onClose, children }) => {
           width: width,
           margin: "auto",
           padding: "2%",
-          border: "2px solid #000",
+          border: "none",
           borderRadius: "12px",
-          boxShadow: "1px solid gray",
+          boxShadow: "10px solid gray",
         }}
       >
         {children}

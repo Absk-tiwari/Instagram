@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
-import { act } from "react-dom/test-utils";
 
 const Profile = () => {
   const [active, setStat] = useState(1);
