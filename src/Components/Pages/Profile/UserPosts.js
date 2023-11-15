@@ -13,13 +13,10 @@ const UserPosts = () => {
   const posts = useContext(PostContext);
   //  console.log(posts);
   const getContent = (e) => {
-    const data = e.target.dataset;
-    if (data) {
-      console.log();
-      e.target.nextSibling.style.display = "flex";
-    }
+    //const data = e.target.dataset;
+    //console.log(data);
   };
-  console.log(posts);
+  //console.log(posts);
   return (
     <>
       {!posts ? (
@@ -40,31 +37,18 @@ const UserPosts = () => {
           </p>
         </div>
       ) : (
-        <div className="container">
+        <div className="container" style={{ overflowY: "scroll" }}>
           <div className="row d-flex">
             {posts.map((post) => {
               return (
-                <>
-                  <img
-                    className="col-md-4 postImg"
-                    key={post.username}
-                    src={post.content}
-                    alt="not yet?"
-                    data-content={post.likes}
-                    onMouseOver={getContent}
-                  />
-                  <p
-                    className="text-white"
-                    style={{
-                      display: "none",
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                    }}
-                  >
-                    {post.likes}
-                  </p>
-                </>
+                <img
+                  className="col-md-4 postImg"
+                  key={post.username}
+                  src={post.content}
+                  alt="not yet?"
+                  data-content={post.likes}
+                  onMouseOver={getContent}
+                />
               );
             })}
           </div>

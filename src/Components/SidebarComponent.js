@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "../App.css";
 import { SidebarData } from "./SidebarData";
 import { Link, useLocation } from "react-router-dom";
 import More from "../assets/icons/more.png";
+import Modal from "./Modal";
 
 function SidebarComponent() {
   const location = useLocation();
+  const [open, setmodal] = useState(false);
+
+  const toggleModal = () => {
+    setmodal(!open);
+  };
   return (
     <div className="custom-sidebar">
       <div className="custom-logo">
@@ -59,21 +65,54 @@ function SidebarComponent() {
 
           <ul className="dropdown-menu">
             <li>
-              <Link className="dropdown-item mt-3 mb-3 px-4" to="#">
+              <Link className="dropdown-item  px-4" to="#">
                 Action
               </Link>
             </li>
             <li>
-              <Link className="dropdown-item mt-3 mb-3 px-4" to="#">
+              <Link className="dropdown-item  px-4" to="#">
                 Action two
               </Link>
             </li>
             <li>
-              <Link className="dropdown-item mt-3 mb-3 px-4" to="#">
+              <Link
+                className="dropdown-item  px-4"
+                to="#"
+                onClick={toggleModal}
+              >
                 Log out
               </Link>
             </li>
           </ul>
+          <Modal
+            isOpen={open}
+            dimens={{ height: 250, width: 360 }}
+            onClose={toggleModal}
+          >
+            <>
+              <h3 className="text-center">Are you sure?</h3>
+
+              <li
+                style={{ listStyleType: "none" }}
+                className="text-center mt-5 mb-4"
+              >
+                <Link className="text-primary  text-decoration-none fs-4">
+                  Logout
+                </Link>
+              </li>
+              <li style={{ listStyleType: "none" }}>
+                <hr className="dropdown-divider" />
+              </li>
+              <li
+                style={{ listStyleType: "none" }}
+                className="text-center align-items-center justify-contents-center"
+              >
+                <Link className="text-secondary  text-decoration-none">
+                  Cancel
+                </Link>
+              </li>
+            </>
+          </Modal>
         </div>
       </div>
     </div>

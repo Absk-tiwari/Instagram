@@ -4,15 +4,24 @@ import { Link } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
+import { act } from "react-dom/test-utils";
 
 const Profile = () => {
   const [active, setStat] = useState(1);
+
+  const preview = (e) => {
+    let div = document.createElement("div");
+    div.style.position = "absolute";
+    div.appendChild(e.target);
+    console.log(div);
+    document.body.appendChild(div);
+  };
   return (
     <div className="container Profile" style={{}}>
       <div className="col-md-12 info-container">
         <div className="col-md-4">
           <div className="container">
-            <img src={obito} alt="not yet?" />
+            <img src={obito} alt="not yet?" onClick={preview} />
           </div>
         </div>
         <div className="col-md-8">
@@ -65,9 +74,10 @@ const Profile = () => {
             }}
           >
             <Link
-              className={`nav-link  text-dark ${active === 1 ? "active" : ""}`}
+              className={`nav-link text-dark ${active === 1 ? "active" : ""}`}
             >
-              <i className="fa fa-table text-secondary mx-1"></i> POSTS
+              <i className="fa fa-table text-secondary mx-1"></i>
+              POSTS
             </Link>
           </li>
           <li
