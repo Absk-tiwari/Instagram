@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import camera from "../../../assets/icons/camera.png";
 import PostContext from "../../../Contexts/Profiles/PostContext";
+import Photo from "./Photo";
 
 const UserPosts = () => {
   const style = {
@@ -10,13 +11,12 @@ const UserPosts = () => {
     borderStyle: "rounded",
   };
   // eslint-disable-next-line
-  const posts = useContext(PostContext);
+  const posts = useContext(PostContext); 
   //  console.log(posts);
-  const getContent = (e) => {
-    //const data = e.target.dataset;
-    //console.log(data);
-  };
-  //console.log(posts);
+  // const getContent = id => { 
+  //   console.log(id);
+  //   document.querySelector(`#${id}`).classList.remove('d-none');
+  // }; 
   return (
     <>
       {!posts ? (
@@ -40,15 +40,8 @@ const UserPosts = () => {
         <div className="container" style={{ overflowY: "scroll" }}>
           <div className="row d-flex">
             {posts.map((post) => {
-              return (
-                <img
-                  className="col-md-4 postImg"
-                  key={post.username}
-                  src={post.content}
-                  alt="not yet?"
-                  data-content={post.likes}
-                  onMouseOver={getContent}
-                />
+              return ( 
+                <Photo key={post.index} params={{index:post.index,username:post.username,content:post.content, likes:post.likes }}/>
               );
             })}
           </div>

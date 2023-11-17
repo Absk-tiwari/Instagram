@@ -8,6 +8,7 @@ import dots from "../../assets/icons/dots.png";
 const PostState = (props) => {
   const posts = [
     {
+      index:0,
       content: itachi,
       comments: "31K",
       likes: "1.1M",
@@ -22,6 +23,7 @@ const PostState = (props) => {
       data: {},
     },
     {
+      index:1,
       content: itachi,
       comments: "31K",
       likes: "1.1M",
@@ -36,6 +38,7 @@ const PostState = (props) => {
       data: {},
     },
     {
+      index:2,
       content: itachi,
       comments: "31K",
       likes: "1.1M",
@@ -50,6 +53,7 @@ const PostState = (props) => {
       data: {},
     },
     {
+      index:3,
       content: obito,
       comments: "32K",
       likes: "1.2M",
@@ -64,6 +68,7 @@ const PostState = (props) => {
       data: {},
     },
     {
+      index:4,
       content: profile,
       comments: "32K",
       likes: "1.2M",

@@ -70,6 +70,8 @@ img.icons {
 .postImg {
   margin: 0px !important;
   padding: 0px !important;
+  width:  -webkit-fill-available;
+  height:  -webkit-fill-available;
 }
 .postImg:hover {
   opacity: 0.9;
@@ -90,6 +92,7 @@ img.icons {
   cursor: pointer;
   margin-left: 15px;
   padding: 30px;
+  z-index: -1;
 }
 
 .profileRow {
@@ -110,7 +113,9 @@ img {
   border-radius: 100%;
   background-color: aliceblue;
 }
-
+.card{
+  z-index: -1;
+}
 .profileRow span {
   color: gray;
 }
@@ -290,10 +295,10 @@ html {
 .offcanvas.offcanvas-start {
   left: 16% !important;
 }
-.offcanvas-header {
+.header-notification {
   border-bottom: 2px solid darkgray;
 }
-.offcanvas-body .row {
+.offcanvas-body .notification {
   border-bottom: 1px solid darkgray;
   border-right: 1px solid darkgray;
   border-bottom-right-radius: 10px;
@@ -305,4 +310,11 @@ html {
 }
 :focus-visible {
   outline: none !important;
+}
+
+.hovered{
+  position: absolute;
+  top: 45%;
+  left: 40%;
+  z-index: 999;
 }

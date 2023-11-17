@@ -66,14 +66,14 @@ function SidebarComponent() {
               <div id="icon" style={{ height: "20px" }} data-refer={val.link}>
                 {val.icon}
               </div>
-              {val.link === "/notifications" ? (
+              {val.link === "/notifications" || val.link === '/search' ? (
                 <Link
                   id="title"
                   to={val.link}
                   onClick={val.title === "Create" ? submit : ""}
                   data-refer={val.link}
                   data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasWithBothOptions"
+                  data-bs-target={val.modal}
                 >
                   {val.title}
                 </Link>
@@ -92,7 +92,7 @@ function SidebarComponent() {
         })}
         <div
           id={"more"}
-          className={` dropup custom-row`}
+          className={`dropup custom-row`}
           data-bs-toggle="dropdown"
         >
           <div id="icon" style={{ height: "20px" }}>
@@ -162,16 +162,16 @@ function SidebarComponent() {
         data-bs-scroll="true"
         data-bs-backdrop="false"
         tabIndex="-1"
-        id="offcanvasWithBothOptions"
+        id="notifications"
         aria-labelledby="offcanvasWithBothOptionsLabel"
       >
-        <div className="offcanvas-header">
+        <div className="offcanvas-header header-notification">
           <h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">
             Notifications
           </h5>
         </div>
         <div className="offcanvas-body">
-          <div className="row">
+          <div className="row notification">
             <div className="hstack list-item gap-3">
               <img
                 src={obito}
@@ -184,6 +184,33 @@ function SidebarComponent() {
               <small className="text-secondary">2h</small>
               <button className="btn btn-primary followbtn">follow</button>
             </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="offcanvas offcanvas-start"
+        data-bs-scroll="true"
+        data-bs-backdrop="false"
+        tabIndex="-1"
+        id="search"
+        aria-labelledby="offcanvasWithBothOptionsLabel"
+      >
+        <div className="offcanvas-header">
+          <h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+            Search
+          </h5>
+        </div>
+        <div className="offcanvas-body">
+          <div className="row">
+            <div className="hstack list-item gap-3"> 
+              <input className="form-control"/><i className="fa fa-search"></i>
+            </div>
+          </div>
+          <div className="row">
+            <div className="mt-2 list-item gap-3"> 
+              <b>Recent</b> 
+            </div>
+            <li className="nav-link mx-3 mt-3 d-flex"><p className="col-md-10">absk.tiwari</p><i className="fa fa-close"></i></li>
           </div>
         </div>
       </div>

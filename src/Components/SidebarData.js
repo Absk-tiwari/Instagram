@@ -26,6 +26,7 @@ export const SidebarData = [
       </i>
     ),
     link: "/search",
+    modal: "#search",
   },
   {
     title: "Explore",
@@ -46,6 +47,7 @@ export const SidebarData = [
     title: "Notifications",
     icon: <img className="icons" src={Notifications} alt="not found" />,
     link: "/notifications",
+    modal: "#notifications",
   },
   {
     title: "Create",
