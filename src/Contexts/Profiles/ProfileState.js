@@ -7,27 +7,56 @@ const ProfileState = (props) => {
         {
             pfp : pfp,
             username : 'testing.user',
-            url : ''
+            url : '',
+            name : 'Mr.Testing'
         },
         {
             pfp : pfp,
             username : 'testing.user2',
-            url : ''
+            url : '',
+            name : 'Mr.Testing'
         },
         {
             pfp : pfp,
             username : 'testing.user3',
-            url : ''
+            url : '',
+            name : 'Mr.Testing'
         },
         {
             pfp : pfp,
             username : 'testing.user4',
-            url : ''
+            url : '',
+            name : 'Mr.Testing'
         },
-    ]
+    ];
+
+    const LoggedIn = {
+            pfp ,
+            username : 'te.sting8398',
+            name : 'Deployment',
+            bio : 'Future belongs to those who believe in beauty of their dreams',
+            followers:'173',
+            following: '98',
+            url : '/profile'
+        };
+     
+        const chats = [
+            {
+                pfp : pfp,
+                username : 'testing.user3',
+                url : '',
+                name : 'Mr.Testing'
+            },
+            {
+                pfp : pfp,
+                username : 'testing.user4',
+                url : '',
+                name : 'Mr.Testing'
+            }
+        ]
     
   return (
-    <ProfileContext.Provider value={profiles}>
+    <ProfileContext.Provider value={{profiles, LoggedIn, chats}}>
         {props.children}
     </ProfileContext.Provider>
   )

@@ -4,7 +4,7 @@ import ProfileContext from '../../../Contexts/Profiles/ProfileContext';
 import pfp from '../../../assets/icons/itachi.jpg';
 const Suggestions = () => {
   const context = useContext(ProfileContext)
-  const profiles = context;
+  const { profiles }= context;
   return (
    <>
      <div className='col-md-3'>

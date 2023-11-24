@@ -41,8 +41,8 @@ body {
   background-color: rgba(0.2, 0.2, 0.2, 0.05);
   cursor: pointer;
   border-radius: 10px;
-  font-weight: 500;
-  font-size: large;
+  /* font-weight: 500; */
+  /* font-size: large; */
 }
 
 img.icons {
@@ -266,6 +266,9 @@ html {
   background: transparent; /* make scrollbar transparent */
 }
 
+i{
+  cursor: pointer;
+}
 .dropdown-menu {
   inset: auto auto 0px 0px !important;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
@@ -317,4 +320,48 @@ html {
   top: 45%;
   left: 40%;
   z-index: 999;
+}
+
+.randomDiv{
+  position : fixed;
+  z-index:999;
+  left : 35%;
+  top : 20%;
+}
+
+.addCover{
+  opacity: 0.5;
+  filter: blur(4px);
+  z-index: -1;
+  overflow: hidden;
+}
+
+.random{
+  height: 60vh;
+  width: 60vh;
+  border-radius : 50%;
+}
+.form-control:focus{
+  /* border: none !important; */
+   box-shadow: none!important;  
+  border-color: lightgray!important;
+}
+.searchbox{
+  background-color: rgb(241, 238, 238)!important;
+}
+
+.chatUser p{
+  font-size: small;
+  color:gray;
+}
+
+.search_in_chat{
+  border: none!important;
+  height: 6vh!important;    
+  /* margin-bottom: 10px; */
+}
+
+.searchChat hr{
+  margin-top: 0px!important;
+  margin-bottom: 0px!important
 }

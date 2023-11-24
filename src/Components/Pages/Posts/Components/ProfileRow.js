@@ -14,7 +14,7 @@ const ProfileRow = (props) =>{
             <div className='col-sm-8'>
                 <p>{profile.username}
                     <br/>
-                <span id='sug'>{!profile.self ? 'Suggested for you':profile.name} </span>
+                <span id='sug'>{!profile.self  ? 'Suggested for you':profile.name} </span>
                 </p>
             </div> 
             <div className='col-sm-4'>
