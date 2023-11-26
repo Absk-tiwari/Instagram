@@ -70,8 +70,8 @@ img.icons {
 .postImg {
   margin: 0px !important;
   padding: 0px !important;
-  width:  -webkit-fill-available;
-  height:  -webkit-fill-available;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
 }
 .postImg:hover {
   opacity: 0.9;
@@ -113,7 +113,7 @@ img {
   border-radius: 100%;
   background-color: aliceblue;
 }
-.card{
+.card {
   z-index: -1;
 }
 .profileRow span {
@@ -144,7 +144,7 @@ img {
   border-radius: 100%;
 }
 
-.card {
+.post {
   margin-left: 17%;
   background-color: white !important;
   border: none !important  ;
@@ -266,7 +266,7 @@ html {
   background: transparent; /* make scrollbar transparent */
 }
 
-i{
+i {
   cursor: pointer;
 }
 .dropdown-menu {
@@ -307,7 +307,9 @@ i{
   border-bottom-right-radius: 10px;
   margin-bottom: 4px;
 }
-
+.offcanvas-backdrop.show {
+  opacity: 0 !important;
+}
 #input {
   border: none !important;
 }
@@ -315,53 +317,56 @@ i{
   outline: none !important;
 }
 
-.hovered{
+.hovered {
   position: absolute;
   top: 45%;
   left: 40%;
   z-index: 999;
 }
 
-.randomDiv{
-  position : fixed;
-  z-index:999;
-  left : 35%;
-  top : 20%;
+.randomDiv {
+  position: fixed;
+  z-index: 999;
+  left: 35%;
+  top: 20%;
 }
 
-.addCover{
+.addCover {
   opacity: 0.5;
   filter: blur(4px);
   z-index: -1;
   overflow: hidden;
 }
 
-.random{
+.random {
   height: 60vh;
   width: 60vh;
-  border-radius : 50%;
+  border-radius: 50%;
 }
-.form-control:focus{
+.form-control:focus {
   /* border: none !important; */
-   box-shadow: none!important;  
-  border-color: lightgray!important;
+  box-shadow: none !important;
+  border-color: lightgray !important;
 }
-.searchbox{
-  background-color: rgb(241, 238, 238)!important;
+.searchbox {
+  background-color: rgb(241, 238, 238) !important;
 }
 
-.chatUser p{
+.chatUser p {
   font-size: small;
-  color:gray;
+  color: gray;
 }
 
-.search_in_chat{
-  border: none!important;
-  height: 6vh!important;    
+.search_in_chat {
+  border: none !important;
+  height: 6vh !important;
   /* margin-bottom: 10px; */
 }
 
-.searchChat hr{
-  margin-top: 0px!important;
-  margin-bottom: 0px!important
+.searchChat hr {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+.form-floating > .form-control {
+  height: 6px !important;
 }
