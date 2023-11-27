@@ -7,6 +7,7 @@ const Messages = () => {
   const { chats, LoggedIn } = useContext(ProfileContext);
   const [open, setmodal] = useState(false);
   const toggleModal = e => {   
+      console.log((e.target.id)) 
       if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   };
 
@@ -15,8 +16,7 @@ const Messages = () => {
     width: "17%",
     border: "2px solid black ",
     borderStyle: "rounded",
-  };
-  console.log(chats);
+  }; 
   // const inviteUser = () => {
 
   // }
@@ -76,12 +76,12 @@ const Messages = () => {
               <p className="pt-1 text-secondary">
                 Send private photos and messages to a friend or group
               </p>
-              <button className="btn btn-primary" onClick={toggleModal}>
+              <button className="btn btn-primary openModal" onClick={toggleModal}>
                 Send message
               </button>
             </div>
           </div>
-          '
+          
         </div>
       </div>
       <Modal

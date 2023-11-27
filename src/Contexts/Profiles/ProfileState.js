@@ -32,6 +32,7 @@ const ProfileState = (props) => {
 
     const LoggedIn = {
             pfp ,
+            posts : profiles.length,
             username : 'te.sting8398',
             name : 'Deployment',
             bio : 'Future belongs to those who believe in beauty of their dreams',

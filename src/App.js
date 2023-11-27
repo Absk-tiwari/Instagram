@@ -17,6 +17,7 @@ import StoryState from "./Contexts/Stories/StoryState";
 import Story from "./Components/Pages/Story";
 import Login from "./Components/Pages/Auth/Login";
 import Signup from "./Components/Pages/Auth/Signup";
+import ProfileSetting from "./Components/Pages/Settings/ProfileSetting";
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
                   />
                   <Route exact path="/reels" element={<Reels />} />
                   <Route exact path="/profile" element={<Profile />} />
+                  <Route exact path="/edit-profile" element={<ProfileSetting />} />
                   <Route path="/stories/:username/view" element={<Story />} />
                 </Routes>
               </Router>

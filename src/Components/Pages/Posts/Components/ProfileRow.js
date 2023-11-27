@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Button from '../../../StateComponents/Button';
 
 const ProfileRow = (props) =>{
     const bg = '#e3e3e34a';
@@ -19,9 +20,9 @@ const ProfileRow = (props) =>{
             </div> 
             <div className='col-sm-4'>
                 {  profile.self ?              
-                   <button onClick={()=>setbg(!show)} style={{backgroundColor:show?bg:''}} className='btn btn-sm followbtn mx-1 my-3 border-0 fs-5 text-primary'>Switch</button>
-                    :     
-                   <button onClick={()=>setbg(!show)} style={{backgroundColor:show?bg:''}} className='btn btn-sm followbtn mx-1 my-3 border-0 text-primary'>{show?'Following':'Follow'}</button> }
+                  <Button text={'Switch'}/>
+                    : <Button text={'Follow'} alt={'Following'}/>
+                }                  
 
             </div>
        </div>

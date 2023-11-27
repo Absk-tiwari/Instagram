@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 //eslint-disable-next-line
 import ProfileData from "../../DataContainer(notInUse)/ProfileData";
+import Button from "../../../StateComponents/Button";
 
 const UserPost = (props) => {
   const { pfp, username, posted, location } = props.post;
@@ -28,9 +29,7 @@ const UserPost = (props) => {
         <small className="mb-2">{location}</small>
       </div>
       <div className="col-auto">
-        <button className="btn btn-sm my-2 border-0 fs-6 text-primary">
-          Follow
-        </button>
+         <Button text={'Follow'} alt={'Following'} />
       </div>
       <div className="col-sm-1 offset-sm-2 pt-2 float-sm-right">
         <i className="fa fa-ellipsis-h" />

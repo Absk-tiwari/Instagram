@@ -1,12 +1,14 @@
-import { React, useState } from "react";
+import { React, useContext, useState } from "react";
 import obito from "../../../assets/icons/pfp.png";
 import { Link } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
+import ProfileContext from "../../../Contexts/Profiles/ProfileContext";
 
 const Profile = () => {
   const [active, setStat] = useState(1);
+  const {LoggedIn} = useContext(ProfileContext);
 
   const preview = (e) => {
     let div = document.createElement("div"); 
@@ -43,31 +45,31 @@ const Profile = () => {
               <h4>te.sting8398</h4>
             </div>
             <div className="col-md-6">
-              <button className=" text-dark editprofile">
-                <strong>Edit Profile</strong>
-              </button>
+              <Link to={'/edit-profile'} className="btn editprofile text-decoration-none text-dark fw-bold btn-secondary">
+                Edit Profile
+               </Link>
             </div>
           </div>
 
           <div className="row">
             <div className="col-sm-3">
-              <strong>2</strong> posts
+              <strong>{LoggedIn.posts}</strong> posts
             </div>
             <div className="col-sm-4">
-              <strong>173</strong> followers
+              <strong>{LoggedIn.followers}</strong> followers
             </div>
             <div className="col-sm-4">
-              <strong>99</strong> following
+              <strong>{LoggedIn.following}</strong> following
             </div>
           </div>
           <div className="row">
             <div className="col-sm-12">
-              <strong>Deployment</strong>
+              <strong>{LoggedIn.name}</strong>
             </div>
           </div>
           <div className="row">
             <div className="col-sm-12">
-              <small> The future belongs to those who believe in the beauty of their dreams </small>
+              <small>{LoggedIn.bio}</small>
             </div>
           </div>
         </div>

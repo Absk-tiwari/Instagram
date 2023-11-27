@@ -5,10 +5,10 @@ import { Link, useLocation } from "react-router-dom";
 import More from "../assets/icons/more.png";
 import obito from "../assets/icons/obito.jpg";
 import Modal from "./Modal";
+import Button from "./StateComponents/Button";
 
 function SidebarComponent() {
   const location = useLocation();
-  console.log(location.pathname);
   const [term, setTerm] = useState("");
   const [open, setmodal] = useState(false);
   const [search, setSearch] = useState("");
@@ -188,7 +188,7 @@ function SidebarComponent() {
                 <strong>User</strong> Started following you
               </p>
               <small className="text-secondary">2h</small>
-              <button className="btn btn-primary followbtn">follow</button>
+              <Button text={'follow'} alt={'following'}/>
             </div>
           </div>
         </div>

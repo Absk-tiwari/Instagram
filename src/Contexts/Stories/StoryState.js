@@ -8,43 +8,43 @@ import obio from '../../assets/icons/pfp.png';
 const StoryState = (props) => {
     const stories = [
         {
-            sno:1,
+            sno:12,
             cover:itachi,
             content : '',
             username:'itachi'
         },
         {
-            sno:2,
+            sno:11,
             cover:profile,
             content : '',
             username:'kiba'
         },
         {
-            sno:3977,
+            sno:10,
             cover:obio,
             content : '',
             username:'obio'
         },
         {
-            sno:3432,
+            sno:9,
             cover:obio,
             content : '',
             username:'obio'
         },
         {
-            sno:3454,
+            sno:8,
             cover:obio,
             content : '',
             username:'obio'
         },
         {
-            sno:333,
+            sno:7,
             cover:obio,
             content : '',
             username:'obio'
         },
         {
-            sno:4,
+            sno:6,
             cover:obito,
             content : '',
             username:'obio'
@@ -56,7 +56,7 @@ const StoryState = (props) => {
             username:'obio'
         },
         {
-            sno:6,
+            sno:4,
             cover:obito,
             content : '',
             username:'obio'

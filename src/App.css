@@ -130,7 +130,7 @@ img {
   line-height: 1;
 }
 .followbtn {
-  background-color: #4a3f3f3c;
+  background-color:rgba(225, 225, 225, 0.954)!important;
 }
 
 .postContent {
@@ -239,13 +239,13 @@ img {
 
 .editprofile {
   border-radius: 10%;
-  border: none;
+  border: none!important;
   height: 40px;
   width: 120px;
-  background-color: rgba(0.2, 0.2, 0.2, 0.05);
+  background-color: lightgray!important;
 }
 .editprofile:hover {
-  background-color: rgba(6, 6, 6, 0.25);
+  background-color: rgba(6, 6, 6, 0.25)!important;
 }
 
 a.active {
@@ -379,7 +379,7 @@ i {
 .progress-item{
   margin-top: 5px!important;
   background-color: rgb(112, 115, 118);
-  z-index: 9999;
+  z-index: 9999999;
   height: 4px;
   margin-left: 4px;
   display: flex;
@@ -395,4 +395,8 @@ i {
 }
 .form-floating > .form-control {
   height: 6px !important;
+}
+
+#list-active{
+  z-index: 999999!important;
 }
