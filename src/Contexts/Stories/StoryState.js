@@ -10,47 +10,56 @@ const StoryState = (props) => {
         {
             sno:1,
             cover:itachi,
-            content : ''
+            content : '',
+            username:'itachi'
         },
         {
             sno:2,
             cover:profile,
-            content : ''
+            content : '',
+            username:'kiba'
         },
         {
             sno:3977,
             cover:obio,
-            content : ''
+            content : '',
+            username:'obio'
         },
         {
             sno:3432,
             cover:obio,
-            content : ''
+            content : '',
+            username:'obio'
         },
         {
             sno:3454,
             cover:obio,
-            content : ''
+            content : '',
+            username:'obio'
         },
         {
             sno:333,
             cover:obio,
-            content : ''
+            content : '',
+            username:'obio'
         },
         {
             sno:4,
             cover:obito,
-            content : ''
+            content : '',
+            username:'obio'
         },
         {
             sno:5,
             cover:profile,
-            content : ''
+            content : '',
+            username:'obio'
         },
         {
             sno:6,
             cover:obito,
-            content : ''
+            content : '',
+            username:'obio'
         },
        
     ]

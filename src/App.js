@@ -14,8 +14,10 @@ import SidebarComponent from "./Components/SidebarComponent";
 import ProfileState from "./Contexts/Profiles/ProfileState";
 import PostState from "./Contexts/Profiles/PostState";
 import StoryState from "./Contexts/Stories/StoryState";
+import Story from "./Components/Pages/Story";
 
 function App() {
+
   return (
     <>
       <StoryState>
@@ -37,6 +39,7 @@ function App() {
                   />
                   <Route exact path="/reels" element={<Reels />} />
                   <Route exact path="/profile" element={<Profile />} />
+                  <Route path="/stories/:username/view" element={<Story />} />
                 </Routes>
               </Router>
             </div>

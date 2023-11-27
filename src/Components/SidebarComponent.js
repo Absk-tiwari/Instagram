@@ -12,8 +12,8 @@ function SidebarComponent() {
   const [open, setmodal] = useState(false);
   const [search ,setSearch] = useState('');
   const [formtriggered, setTriggered] = useState(true);
-  const toggleModal = () => {
-    setmodal(!open);
+  const toggleModal = (e) => {
+    if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   };
 
   useEffect(()=>{
@@ -117,8 +117,9 @@ function SidebarComponent() {
             <li>
               <Link className="dropdown-item px-4" to="#"> Saved </Link>
             </li>
+            <li><hr className="dropdown-divider"/></li>
             <li>
-              <Link className="dropdown-item px-4" to="#" onClick={toggleModal}> Log out </Link>
+              <Link className="dropdown-item px-4 openModal" to="#" onClick={toggleModal}> Log out </Link>
             </li>
           </ul>
           <Modal isOpen={open} dimens={{ height: 250, width: 360 }}  onClose={toggleModal} >
@@ -131,7 +132,7 @@ function SidebarComponent() {
                 <hr className="dropdown-divider" />
               </li>
               <li style={lstyle} className="text-center align-items-center justify-contents-center" >
-                <Link className="text-secondary text-decoration-none">Cancel</Link>
+                <Link className="text-secondary text-decoration-none" onClick={()=>setmodal(false)}>Cancel</Link>
               </li>
             </>
 
@@ -183,10 +184,9 @@ function SidebarComponent() {
               {search && search.map((item,key) => {
                
                 return <li key={key} className="nav-link mx-3 mt-3 d-flex lh-1">
-                  <p className="col-md-10">{item}</p>
-                  <i className="fa fa-close" onClick={() => removeItem(search.indexOf(item)) }></i>
-                </li>
-
+                  <p className="col-md-11">{item}</p>
+                  <i className="btn btn-close" onClick={() => removeItem(search.indexOf(item)) }></i>
+                </li> 
               })}
             </div>
           </div>

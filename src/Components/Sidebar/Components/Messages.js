@@ -6,8 +6,8 @@ import Modal from '../../Modal';
 const Messages = () => {
   const {chats,LoggedIn}= useContext(ProfileContext);
   const [open, setmodal] = useState(false);
-  const toggleModal = () => {
-    setmodal(!open);
+  const toggleModal = e => {   
+      if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   };
 
   const style = {
@@ -35,7 +35,7 @@ const Messages = () => {
        {chats.length && chats.map(chat => {
         return <div className='row mt-3' key={chat.username}>
                   <div className='col-sm-2'>
-                      <img src={chat.pfp} style={{height:'50px'}} className='mx-auto rounded-circle' /></div>
+                      <img src={chat.pfp} style={{height:'50px'}} className='mx-auto rounded-circle' alt='not?' /></div>
                   <div className='col-sm-10 chatUser'>
                     <strong>{chat.username}</strong>
                     <p>{chat.username}</p>
@@ -51,12 +51,12 @@ const Messages = () => {
             <br/>
             <p className='fs-5 pt-4'>Your Messages</p>
             <p className='pt-1 text-secondary'>Send private photos and messages to a friend or group</p>
-            <button className='btn btn-primary' onClick={toggleModal}>Send message</button>
+            <button className='btn btn-primary openModal' onClick={toggleModal}>Send message</button>
           </div>
         </div>'
       </div>
     </div>
-    <Modal isOpen={open} dimens={{ height: 410, width: 550 }}  onClose={toggleModal}>
+    <Modal isOpen={open} dimens={{ height: 410, width: 550 }} onClose={toggleModal} >
             <>
             <div className='searchChat'>
               <p className="text-center fw-bolder">New message</p>

@@ -1,6 +1,8 @@
-import React, { useContext } from "react";
-import Story from "./Story";
+import React, { useContext } from "react"; 
 import StoryContext from "../../../Contexts/Stories/StoryContext";
+import Stories from "./Stories";
+import { Link } from 'react-router-dom'
+
 const Navbar = () => {
   const stories = useContext(StoryContext);
   return (
@@ -8,7 +10,7 @@ const Navbar = () => {
       <nav className="navbar navbar-expand-lg mt-5 mx-5 navbar">
         <div className="container-fluid" style={{ overflow: "auto" }}>
           {stories.map((story) => {
-            return <Story img={story.cover} key={story.sno} />;
+            return <Link key={story.sno} to={`/stories/${story.username}/view`}><Stories img={story.cover}  ></Stories></Link>;
           })}
         </div>
       </nav>

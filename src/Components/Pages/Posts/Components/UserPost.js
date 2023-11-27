@@ -6,17 +6,22 @@ import ProfileData from "../../DataContainer(notInUse)/ProfileData";
 
 const UserPost = (props) => {
   const { pfp, username, posted, location } = props.post;
+  
+  const refer = ( link) => {
+    console.log(link)
+     
+  }
   return (
     <>
-      <div className="col-sm-2">
+      <div className="col-sm-2" onClick={()=>refer(username)}>
         <img className="userPost" src={pfp} alt="not yet" />
       </div>
-      <div className="col-auto pt-2">
+      <div className="col-auto pt-2" onClick={()=>refer(`/profile?username=${username}`)}>
         <Link
           style={{ textDecoration: "none", color: "black" }}
-          to={`/profile?username=${username}`}
+          id="link"
         >
-          <b>{username}</b>
+        <b >{username}</b>
         </Link>
         <small className="text-secondary mx-2">{posted}</small>
         <br />
