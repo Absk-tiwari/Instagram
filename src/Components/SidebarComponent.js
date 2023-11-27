@@ -174,7 +174,7 @@ function SidebarComponent() {
       <form id="createPost" method="post" className="d-none">
         <input type="file" id="create" className="d-none" name="file" />
       </form>
-      <div className="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabIndex="-1"
+      <div className="offcanvas offcanvas-start" data-bs-scroll="true"  tabIndex="-1"
         id="notifications" aria-labelledby="offcanvasWithBothOptionsLabel">
        
         <div className="offcanvas-header header-notification">
@@ -194,7 +194,7 @@ function SidebarComponent() {
         </div>
       </div>
       <div
-        className="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabIndex="-1" id="search" aria-labelledby="offcanvasWithBothOptionsLabel">
+        className="offcanvas offcanvas-start" data-bs-scroll="true"  tabIndex="-1" id="search" aria-labelledby="offcanvasWithBothOptionsLabel">
         <div className="offcanvas-header">
           <h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">
             Search

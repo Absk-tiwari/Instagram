@@ -14,12 +14,9 @@ import SidebarComponent from "./Components/SidebarComponent";
 import ProfileState from "./Contexts/Profiles/ProfileState";
 import PostState from "./Contexts/Profiles/PostState";
 import StoryState from "./Contexts/Stories/StoryState";
-<<<<<<< HEAD
 import Story from "./Components/Pages/Story";
-=======
 import Login from "./Components/Pages/Auth/Login";
 import Signup from "./Components/Pages/Auth/Signup";
->>>>>>> af5a25ac0882fd17d472153d71acb09b46bce6dc
 
 function App() {
 
