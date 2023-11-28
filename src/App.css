@@ -72,6 +72,7 @@ img.icons {
   padding: 0px !important;
   width: -webkit-fill-available;
   height: -webkit-fill-available;
+  z-index: 1;
 }
 .postImg:hover {
   opacity: 0.9;

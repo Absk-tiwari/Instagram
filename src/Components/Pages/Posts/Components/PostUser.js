@@ -10,7 +10,7 @@ const PostUser = (props) => {
   
   const refer = e => {
     let elem = e.target;
-    console.log(elem.closest('.head'))
+    elem.closest('.head').querySelector('.linkToProfile').click();
   }
   return (
     <>
@@ -18,14 +18,14 @@ const PostUser = (props) => {
       <div className="col-2" onClick={refer}>
         <img className="userPost" src={pfp} alt="?"/>
       </div>
-      <div className="col-3 pt-2" >
-        <Link className="text-decoration-none text-dark fw-bold" id="link" to={`/profile?username=${username}`}>
+      <div className="col-4 pt-2" >
+        <Link className="text-decoration-none text-dark fw-bold linkToProfile" id="link" to={`/profile?username=${username}`}>
            {username}
         </Link>
         <small className="text-secondary mx-2">{posted}</small> <br/>
         <small className="mb-2">{location}</small>
       </div>
-      <div className="col-6">
+      <div className="col-5">
         <Button text={'Follow'} alt={'Following'} />
       </div>
       <i className="fa fa-ellipsis-h mx-4" />
