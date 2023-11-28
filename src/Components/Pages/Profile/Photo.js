@@ -36,7 +36,7 @@ const Photo = (props) => {
                 <p className='placeholder col-10'></p>
                 <p className='placeholder col-2'></p>
               </div>
-              <div className="card-body mx-2">
+              <div className="col-12 card-body mx-2">
                 <p className="card-title placeholder-glow mb-3">
                   <span className="placeholder col-6"></span>
                 </p>
@@ -47,12 +47,17 @@ const Photo = (props) => {
                   <span className="placeholder col-6"></span>
                   <span className="placeholder col-8"></span>
                 </p>
-                <div className="placeholder-glow d-block">
-                  <p className='placeholder col-3'></p>
-                  <p className='placeholder col-3'></p>
-                  <p className='placeholder col-3'></p>
-                  <p className='placeholder col-3'></p>
-                </div>
+                <p className="card-body placeholder-glow">
+                  <span className='placeholder col-2'></span>
+                  <span className='placeholder col-9'></span>
+                  <span className='placeholder col-8'></span>
+                  <span className='placeholder col-10'></span>
+                  <span className='placeholder col-5'></span>
+                  <span className='placeholder col-8'></span>
+                  <span className='placeholder col-5'></span>
+                  <span className='placeholder col-9'></span>
+                  <span className='placeholder col-4'></span>
+                </p>
               </div>
             </div>
           </div>

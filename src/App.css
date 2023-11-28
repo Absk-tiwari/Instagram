@@ -401,3 +401,6 @@ i {
 #list-active{
   z-index: 999 !important;
 }
+#modal{
+  z-index: 1000;
+}
