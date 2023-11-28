@@ -114,7 +114,7 @@ img {
   background-color: aliceblue;
 }
 .card {
-  z-index: -1;
+  position: static!important;
 }
 .profileRow span {
   color: gray;
@@ -130,7 +130,7 @@ img {
   line-height: 1;
 }
 .followbtn {
-  background-color:rgba(225, 225, 225, 0.954)!important;
+  background-color:#e4e9ed!important;
 }
 
 .postContent {
@@ -373,7 +373,7 @@ i {
   height: 100vh;
   width: 100vw;
   position: relative;
-  z-index: 999;
+  z-index: 1;
   background: #3a3838;
 }
 .progress-item{
@@ -398,5 +398,5 @@ i {
 }
 
 #list-active{
-  z-index: 999999!important;
+  z-index: 999 !important;
 }

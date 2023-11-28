@@ -1,11 +1,11 @@
 import React  from 'react';
-import UserPost from './UserPost';
+import PostUser from './PostUser';
 
 const PostHead = (props) => { 
     
   return (
     <div className='row d-flex'>
-        <UserPost post={props.post}/>
+        <PostUser post={props.post}/>
     </div>
   )
 }

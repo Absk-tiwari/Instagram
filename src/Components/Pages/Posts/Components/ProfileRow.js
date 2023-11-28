@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
+import React  from 'react'
 import Button from '../../../StateComponents/Button';
 
-const ProfileRow = (props) =>{
-    const bg = '#e3e3e34a';
-    const [show ,setbg]= useState(false);
+const ProfileRow = (props) =>{  
     const {profile} = props;
   return (
     <div className='row mx-0 mt-1 my-1 profileRow d-block' >
