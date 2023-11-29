@@ -404,3 +404,37 @@ i {
 #modal{
   z-index: 1000;
 }
+.placeholder{
+  border-radius: 8px;
+}
+
+.comments{
+    width: 250px;
+    max-width: 500px;
+    height: 100px!important;
+    max-height: 500px;
+    height: 100px;
+    position:absolute;
+    border-radius:15px ;
+    top:2px;
+    left:120px;
+    padding:30px;
+    background-color: lightgray;
+    color: black;
+    animation: move 20s infinite;
+    animation-iteration-count: infinite;
+    font-size: x-small; 
+    z-index: 999999;
+    text-wrap: pretty;
+}
+@keyframes move {
+  20% {box-shadow: 10px 20px 30px gray;}
+  from{
+    bottom:45px;
+    left:40px; 
+  }
+  to{
+    top:100px;
+    left:300px;
+  }
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Modal from '../../Modal';
-
+import ob from '../../../assets/icons/obito.jpg'
 const Photo = (props) => {
     const params = props.params;
     const [open, setmodal] = useState(false);
@@ -26,15 +26,21 @@ const Photo = (props) => {
         <Modal isOpen={open} dimens={{height:500 ,width:920 }} onClose={toggleModal}>
           <>
           <div className='container d-flex'>
-            <div className='col-6'>
-              <img src={''} className='imgContainer' alt='?'/>
+            <div className='col-6' style={{borderRight:'1px solid gray',position:'relative'}}>
+              <img src={ob} className='imgContainer' style={{width:'-webkit-fill-available'}} alt='?'/>
               <p className='text-center'>Hello would you work ?</p>
+              <i style={{position:'absolute',top:'40vh',left:'25vw',color:'white'}} className='fa fa-heart-o fs-5'></i>
             </div>
             <div className='col-6'>
-              <div className='col-12 placeholder-glow mt-3 mx-2'>
+              <div className='col-12 placeholder-glow mt-3 mx-2' style={{position:'relative'}}>
                 <p className='placeholder col-4'></p>
                 <p className='placeholder col-10'></p>
-                <p className='placeholder col-2'></p>
+                <div className='row comments'>
+                  <p>Here is some commment; let's see if it wraps</p>
+                  <strong>User.name</strong>
+                  <small className='text-secondary'>2 days ago</small>
+                </div>
+                <hr/>
               </div>
               <div className="col-12 card-body mx-2">
                 <p className="card-title placeholder-glow mb-3">
@@ -42,21 +48,16 @@ const Photo = (props) => {
                 </p>
                 <p className="card-text placeholder-glow">
                   <span className="placeholder col-7"></span>
-                  <span className="placeholder col-4"></span>
-                  <span className="placeholder col-4"></span>
+                  <span className="placeholder col-6"></span>
+                  <span className="placeholder col-7"></span>
                   <span className="placeholder col-6"></span>
                   <span className="placeholder col-8"></span>
                 </p>
                 <p className="card-body placeholder-glow">
                   <span className='placeholder col-2'></span>
-                  <span className='placeholder col-9'></span>
-                  <span className='placeholder col-8'></span>
+                  <span className='placeholder col-11'></span>
                   <span className='placeholder col-10'></span>
                   <span className='placeholder col-5'></span>
-                  <span className='placeholder col-8'></span>
-                  <span className='placeholder col-5'></span>
-                  <span className='placeholder col-9'></span>
-                  <span className='placeholder col-4'></span>
                 </p>
               </div>
             </div>
