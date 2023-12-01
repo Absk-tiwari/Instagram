@@ -14,11 +14,11 @@ const Post = () => {
               <PostHead post={post} />
             </div>
             <div className="card-body">
-              <img className="postContent" src={post.content} alt="not yet?" />
+              <img className="postContent" src={post.content} alt="." />
             </div>
             <div className="card-footer">
               <PostFooter
-                post={{ likes: post.likes, username: post.username }}
+                post={{ likes: post.likes, username: post.username }} alt={{details:true}}
               />
             </div>
           </div>

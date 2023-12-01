@@ -28,7 +28,15 @@ const PostUser = (props) => {
       <div className="col-5">
         <Button text={'Follow'} alt={'Following'} />
       </div>
-      <i className="fa fa-ellipsis-h mx-4" />
+      <i className="fa fa-ellipsis-h mx-4 dropup" data-bs-toggle="dropdown"/>
+        <ul className="dropdown-menu" style={{position:'fixed'}}>
+          <li>
+            <Link className="dropdown-item px-4" to="#"> Report </Link>
+          </li>
+          <li>
+            <Link className="dropdown-item px-4" to="#"> Block </Link>
+          </li>
+        </ul>
       </div>
     </>
   );

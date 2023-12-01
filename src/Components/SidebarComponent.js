@@ -119,7 +119,7 @@ function SidebarComponent() {
 
             <Link id="title" to={"#"}>  More  </Link>
 
-          <ul className="dropdown-menu ">
+          <ul className="dropdown-menu">
             <li>
               <Link className="dropdown-item px-4" to="#"> Settings </Link>
             </li>

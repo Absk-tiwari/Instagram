@@ -418,17 +418,19 @@ i {
     border-radius:15px ;
     top:2px;
     left:120px;
-    padding:30px;
+    padding:15px;
     background-color: lightgray;
     color: black;
     animation: move 20s infinite;
     animation-iteration-count: infinite;
     font-size: x-small; 
     z-index: 999999;
-    text-wrap: pretty;
+   
 }
 @keyframes move {
-  20% {box-shadow: 10px 20px 30px gray;}
+  20% {
+    box-shadow: 10px 20px 30px gray;
+  }
   from{
     bottom:45px;
     left:40px; 

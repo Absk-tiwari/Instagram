@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Modal from '../../Modal';
-import ob from '../../../assets/icons/obito.jpg'
+import ob from '../../../assets/icons/itachi.jpg'
+import PostFooter from '../Posts/Components/PostFooter';
 const Photo = (props) => {
     const params = props.params;
     const [open, setmodal] = useState(false);
@@ -12,13 +13,12 @@ const Photo = (props) => {
     const putContents = e => {
       // document.querySelector('.imgContainer').setAttribute('src', e.target.getAttribute('src'))
     }
-
+    const post = {likes:'49', username:'absk.tiwari'}
     useEffect(()=>{ console.log('chala ai?') },[]);
 
   return (
-    <div className="col-md-4 openModal posts-of-logged-in-user" key={params.index} onMouseOver={()=>setState(true)} style={{position:state &&'relative'}}  onMouseLeave={()=>setState(false)}>
-        <img className="postImg" key={params.username} onClick={(e)=>{setmodal(!open); putContents(e)}} src={params.content} alt="not yet?"
-            data-content={params.likes} />
+    <div className="col-md-4 openModal posts-of-logged-in-user" key={params.index} onMouseOver={()=>setState(true)} style={{position:state && 'relative'}}  onMouseLeave={()=>setState(false)}>
+        <img className="postImg" key={params.username} onClick={(e)=>{setmodal(!open); putContents(e)}} src={params.content} alt="not yet?" data-content={params.likes} />
         <div className={`text-center ${!state && 'd-none'} hstack gap-2 text-white hovered`}> 
             <i className='fa fa-heart mb-3 fs-5'></i>
             <p >{params.likes}</p>
@@ -26,18 +26,15 @@ const Photo = (props) => {
         <Modal isOpen={open} dimens={{height:500 ,width:920 }} onClose={toggleModal}>
           <>
           <div className='container d-flex'>
-            <div className='col-6' style={{borderRight:'1px solid gray',position:'relative'}}>
-              <img src={ob} className='imgContainer' style={{width:'-webkit-fill-available'}} alt='?'/>
-              <p className='text-center'>Hello would you work ?</p>
-              <i style={{position:'absolute',top:'40vh',left:'25vw',color:'white'}} className='fa fa-heart-o fs-5'></i>
+            <div className='col-6' style={{position:'relative'}}>
+              <img src={ob} className='imgContainer' style={{maxHeight:'456px',marginRight:'24px', width:'-webkit-fill-available'}} alt='?'/>
             </div>
             <div className='col-6'>
               <div className='col-12 placeholder-glow mt-3 mx-2' style={{position:'relative'}}>
-                <p className='placeholder col-4'></p>
-                <p className='placeholder col-10'></p>
+                <PostFooter post={post} alt={{details:false}} />
                 <div className='row comments'>
-                  <p>Here is some commment; let's see if it wraps</p>
-                  <strong>User.name</strong>
+                  <img src={ob} className='rounded-circle col-1' style={{height:'50px',width:'70px'}} alt='?'/>
+                  <p className='col-8'><strong>User.name</strong><br/>Here is some commment; let's see if it wraps</p>
                   <small className='text-secondary'>2 days ago</small>
                 </div>
                 <hr/>
