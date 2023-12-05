@@ -23,11 +23,9 @@ const UserPosts = () => {
         <div id="menu1" className={`container`}>
           <br />
 
-          <img
-            src={camera}
+          <img src={camera}
             className="img-fluid rounded-circle mx-auto d-block mt-5 "
-            style={style}
-            alt="not yet?"
+            style={style} alt="?"
           />
           <small className="mx-auto d-block text-center pt-5">
             When you share photos, they will appear on your profile

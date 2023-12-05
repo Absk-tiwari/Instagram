@@ -386,7 +386,7 @@ i {
   display: flex;
 }
 
-.progress-item.active{
+.progress-item.seen{
   background-color: white!important;
   box-shadow: #eeeeee;
 }
@@ -439,4 +439,35 @@ i {
     top:100px;
     left:300px;
   }
+}
+.spinner-container{
+  justify-content: center;
+  align-items: center;
+  display: grid;
+}
+
+.spinner {
+  border : 10px solid #f3f3f3;
+  border-top: 10px solid #bcbbbb;
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite; 
+}
+
+@keyframes spinner{
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+.page{
+  width: 82vw;
+}
+.custom-sidebar{
+  width: 18vw
+  ;
+}
+.stats{
+  cursor: pointer;
 }

@@ -31,7 +31,7 @@ const Profile = () => {
     }
   })
   return (
-    <div className="container Profile" >
+    <div className="page Profile" >
       <div className="col-md-12 info-container">
         <div className="col-md-4">
           <div className="container">
@@ -52,13 +52,13 @@ const Profile = () => {
           </div>
 
           <div className="row">
-            <div className="col-sm-3">
+            <div className="col-sm-3 stats">
               <strong>{LoggedIn.posts}</strong> posts
             </div>
-            <div className="col-sm-4">
-              <strong>{LoggedIn.followers}</strong> followers
+            <div className="col-sm-4 stats">
+              <strong >{LoggedIn.followers}</strong> followers
             </div>
-            <div className="col-sm-4">
+            <div className="col-sm-4 stats">
               <strong>{LoggedIn.following}</strong> following
             </div>
           </div>
