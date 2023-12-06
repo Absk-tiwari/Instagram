@@ -7,7 +7,7 @@ const Suggestions = () => {
   const { profiles }= context;
   return (
    <>
-     <div className='col-md-3'>
+     <div className='col-md-3 rightSide'>
         <div className='mt-5 mb-5'>
           <ProfileRow profile={{pfp:pfp,username:'absk.tiwari',url:'',self:true,name:'Abhishek'}}/>
         </div>

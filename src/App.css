@@ -7,6 +7,26 @@ body {
   padding: 0;
   position: relative;
 }
+@media screen and (max-width:400px) {
+  html{
+    position: relative;
+  }
+  .custom-sidebar{
+    display: flex;
+    position: absolute;
+  }
+  #title{
+    display: none;
+  }
+  .rightSide{
+    display: none;
+  }
+  .navbar{
+    display: flex!important;
+    flex-direction: column!important;
+    overflow: scroll!important;
+  }
+}
 .custom-sidebar .custom-logo {
   height: 10vh;
   padding-left: 31px;
