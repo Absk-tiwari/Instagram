@@ -18,7 +18,6 @@ import Story from "./Components/Pages/Story";
 import Login from "./Components/Pages/Auth/Login";
 import Signup from "./Components/Pages/Auth/Signup";
 import ProfileSetting from "./Components/Pages/Settings/ProfileSetting";
-
 function App() {
 
   return (

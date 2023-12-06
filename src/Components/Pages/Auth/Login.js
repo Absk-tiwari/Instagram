@@ -1,7 +1,19 @@
-import React from "react";
+import React, {useContext, useState} from "react";
 import logo from "../../../assets/icons/insta.svg";
 import { Link } from "react-router-dom";
+import AuthContext from "../../../Contexts/Auth/AuthContext";
 const Login = () => {
+  const {login} = useContext(AuthContext) 
+  const [fields, setfields] = useState({username:"sddsf", password : "sdfs"})
+
+  const process = e => {
+    e.preventDefault();
+    console.log(fields)
+    login(fields)
+  }
+  const onchange = e => {
+    setfields({...fields, [e.target.name]:e.target.value})
+  }
   return (
     <>
       <div className="container-fluid justify-contents-center">
@@ -20,10 +32,13 @@ const Login = () => {
               </div>
               <div className="loginBody">
                 <div className="container">
-                  <form>
+                  <form onSubmit={process}>
                     <div className="form-floating mb-3">
                       <input
-                        type="email"
+                        type="text"
+                        onChange={onchange}
+                        name="username"
+                        value={fields.username}
                         className="form-control"
                         id="username"
                         placeholder="username"
@@ -38,14 +53,16 @@ const Login = () => {
                         className="form-control"
                         id="password"
                         placeholder="password"
+                        name="password"
+                        value={fields.password}
+                        onChange={onchange}
                       />
                       <label htmlFor="password">Password</label>
                     </div>
                     <input
-                      type="button"
+                      type="submit"
                       className="btn col-12 btn-primary mb-3 fw-bold"
                       value="Log in"
-                      disabled
                     />
                     <small className="text-secondary offset-4 px-4 ">
                       Forgot password?
