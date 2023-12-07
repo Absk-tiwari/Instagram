@@ -18,14 +18,17 @@ import Story from "./Components/Pages/Story";
 import Login from "./Components/Pages/Auth/Login";
 import Signup from "./Components/Pages/Auth/Signup";
 import ProfileSetting from "./Components/Pages/Settings/ProfileSetting";
+import AuthState from "./Contexts/Auth/AuthState"; 
 function App() {
-
+  
   return (
     <>
+    <AuthState>
       <StoryState>
         <PostState>
           <ProfileState>
             <div className="App" style={{ display: "flex" }}>
+           
               <Router>
                 <SidebarComponent />
                 {/* <AnimatedRoutes/> */}
@@ -51,6 +54,7 @@ function App() {
           </ProfileState>
         </PostState>
       </StoryState>
+      </AuthState>
     </>
   );
 }

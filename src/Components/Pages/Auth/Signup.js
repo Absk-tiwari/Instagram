@@ -1,13 +1,14 @@
 import React, {useContext, useState} from "react";
 import logo from "../../../assets/icons/insta.svg";
-import AuthContext from "../../../Contexts/Auth/AuthContext";
+import AuthContext from "../../../Contexts/Auth/AuthContext"; 
+import LoadingBar from "react-top-loading-bar";
 const Signup = () => {
+  const [progress,setProgress] = useState(0)
   const {signup} = useContext(AuthContext) 
   const [fields, setfields]= useState({name : '',username:'',email : '', password: ''})
-
+  
   const process = e => {
-    e.preventDefault()
-    console.log(fields)
+    e.preventDefault() 
     signup(fields)
   }
 
@@ -16,6 +17,7 @@ const Signup = () => {
   }
   return (
     <>
+    <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
       <div className="container-fluid justify-contents-center">
         <div className="container d-flex mt-5">
           <div className="col-md-5 offset-4 mt-3">
@@ -50,7 +52,7 @@ const Signup = () => {
                   <label htmlFor="password">Password</label>
                 </div>
                 <input type="submit" className="btn col-12 btn-primary mb-3 fw-bold"
-                  value="Sign up"  />
+                  onClick={() => setProgress(100)} value="Sign up" disabled={fields.username.length > 5 && fields.email.length > 10 && fields.password.length > 7 && fields.name.length > 5? '' : true} />
                 <p className="text-secondary text-center px-4 ">
                   By signing up , you agree to our faltu terms, conditions & Privacy Policy
                 </p>

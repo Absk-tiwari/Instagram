@@ -1,5 +1,5 @@
 import AuthContext from "./AuthContext";
-
+import { useState } from "react";
 
 const AuthState=(props)=>{
 
@@ -31,7 +31,8 @@ const AuthState=(props)=>{
             console.log(error)
         }
     }
-    
+    const [progress, setProgress] = useState(0)
+
     const signup = async({name, email, username, password}) =>{
         try {
            const json = await fetch(`${host}/api/auth/createUser`,{
@@ -50,7 +51,7 @@ const AuthState=(props)=>{
     }
     
     return (
-    <AuthContext.Provider value={{login, signup}}>
+    <AuthContext.Provider value={{login, signup, progress, setProgress}}>
         {props.children}
     </AuthContext.Provider>
     )

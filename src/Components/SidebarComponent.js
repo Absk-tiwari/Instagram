@@ -6,6 +6,7 @@ import More from "../assets/icons/more.png";
 import obito from "../assets/icons/obito.jpg";
 import Modal from "./Modal";
 import Button from "./StateComponents/Button";
+import LoadingBar from "react-top-loading-bar";
 
 function SidebarComponent() {
   const location = useLocation();
@@ -31,7 +32,10 @@ function SidebarComponent() {
     event.preventDefault();
   };
 
+  const [progress,setProgress] = useState(0)
+
   const refer = (e) => {
+    setProgress(100) 
     if (e.target.dataset.refer !== "/search")
       document.querySelector(".close").click();
     let elem = e.target;
@@ -74,6 +78,7 @@ function SidebarComponent() {
   return (
     !["/login", "/signup"].includes(location.pathname) && (
       <div className="custom-sidebar">
+        <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
         <div className="custom-logo">
           
           <svg aria-label="Instagram" fill="currentColor" height="40" role="img" viewBox="32 4 113 32" width="130" >
