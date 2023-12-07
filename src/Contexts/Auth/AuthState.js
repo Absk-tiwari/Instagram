@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const AuthState=(props)=>{
 
-    const host = 'http://localhost:1901';
+    const host = 'http://127.0.0.1:1901';
 
     const login = async({username, password}) =>{
         try {
@@ -35,7 +35,7 @@ const AuthState=(props)=>{
 
     const signup = async({name, email, username, password}) =>{
         try {
-           const json = await fetch(`${host}/api/auth/createUser`,{
+           const json = await fetch(`${host}/api/auth/signup`,{
                 method : 'POST',
                 headers : {
                     'Content-Type' : 'application/json'

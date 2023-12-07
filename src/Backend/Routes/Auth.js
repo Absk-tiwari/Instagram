@@ -57,16 +57,15 @@ router.post('/login',[
 ],async (req,res) => {
     try {
         const errors=validationResult(req);
-        // If there are errors return and finish right away
+        // Iff ? its finished : can go
         if(!errors.isEmpty()){
             return res.status(400).res.json({errors : errors.array()})
-        }
-        const {username, password} = req.body;
+        } 
         let user= await User.findOne({username : req.body.username})
         if(!user){
             return res.status(400).json({error : "Incorrect Credentials!"})
         }
-        const compared = await bcrypt.compare(password, user.password)
+        const compared = await bcrypt.compare(req.body.password, user.password)
         if(!compared){
             return res.status(400).json({error : "Incorrect Credentials!"})
         }
@@ -81,7 +80,7 @@ router.post('/login',[
         
     } catch (e) {
         console.log(e.message);
-        res.status(500).json({'error':'Internal server error!'})        
+        res.status(500).json({error:'Internal server error!'})        
     }
 });
 

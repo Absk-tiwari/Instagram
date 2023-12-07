@@ -1,18 +1,24 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ProfileContext from '../../../Contexts/Profiles/ProfileContext'
 import Button from '../../StateComponents/Button';
 import Modal from '../../Modal';
+import LoadingBar from "react-top-loading-bar";
 
 const ProfileSetting = () => {
   const {LoggedIn} = useContext(ProfileContext);
   const [open, setmodal] = useState(false);
+  const [progress,setProgress] = useState(0)
   const [fields, setFields] = useState({bio:LoggedIn.bio})
+  useEffect(()=>{
+    setProgress(100)
+  },[])
   const toggleModal = e => {
     if(e.target.id === 'modal' || e.target.classList.includes('openModal')) setmodal(!open)
   }
 
   return (
     <>
+   <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
     <div className='container mt-4 d-flex' style={{ flexDirection:'column' }}>
         <div className='row offset-1 mt-3 mb-3'>
             <h2 className='fw-bold'>Edit Profile</h2>

@@ -31,6 +31,7 @@ const Profile = () => {
     }
   })
   return (
+    <>
     <div className="page Profile" >
       <div className="col-md-12 info-container">
         <div className="col-md-4">
@@ -103,6 +104,7 @@ const Profile = () => {
         
       </div>
     </div>
+    </>
   );
 };
 
