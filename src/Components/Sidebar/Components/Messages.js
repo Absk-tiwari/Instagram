@@ -9,6 +9,7 @@ const Messages = () => {
   const [isLoading, setLoading] = useState(false)
   const [searchParam, setSearchParam] = useState('');
   const [open, setmodal] = useState(false);
+  const [opened, openedChat] = useState(false);
   const toggleModal = e => {   
       console.log((e.target.id)) 
       if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
@@ -20,6 +21,11 @@ const Messages = () => {
     border: "2px solid black ",
     borderStyle: "rounded",
   }; 
+
+  const openChat = e => {
+    console.log(e.target.children);
+    openedChat(!opened)
+  }
   const searchChatUser = e => {
     setLoading(true)
     e.preventDefault();
@@ -54,7 +60,7 @@ const Messages = () => {
           {chats.length &&
             chats.map((chat) => {
               return (
-                <div className="row mt-3" key={chat.username}>
+                <div className="row mt-3" style={{cursor:'pointer'}} onClick={openChat} key={chat.username}>
                   <div className="col-sm-2">
                     <img
                       src={chat.pfp} style={{ height: "50px" }} className="mx-auto rounded-circle" alt="?"
@@ -62,14 +68,14 @@ const Messages = () => {
                   </div>
                   <div className="col-sm-10 chatUser">
                     <strong>{chat.username}</strong>
-                    <p>{chat.username}</p>
+                    <p className="username">{chat.username}</p>
                   </div>
                 </div>
               );
             })}
         </div>
         <div className="col-md-8" style={{ overflowY: "hidden" }}>
-          <div className="text-center d-flex justify-content-center align-items-center min-vh-100">
+         { !opened ? <div className="text-center d-flex justify-content-center align-items-center min-vh-100">
             <div className="container text-center d-block">
               <img src={msg} alt="?" style={style} className="rounded-circle" />
               <br />
@@ -81,8 +87,25 @@ const Messages = () => {
                 Send message
               </button>
             </div>
-          </div>
-          
+          </div> : (
+                <div className="col-12 card-body mx-2">
+                  <p className="card-title placeholder-glow mb-5 mt-5 mx-5 d-flex" >
+                  <span className="placeholder col-6" style={{height:'40px'}}></span>
+                  <span className="placeholder col-1 offset-2"></span>
+                  <span className="placeholder offset-1 col-1"></span>
+                </p>
+                <p className="card-text placeholder-glow mt-4 mx-5">
+                  <span className="placeholder mt-4 col-7"></span>
+                  <span className="placeholder mt-5 col-6"></span>
+                  
+                </p>
+                <p className="card-body placeholder-glow mx-5">
+                   
+                  <span className='placeholder col-5'></span>
+                </p>
+              </div>        
+          )
+         }
         </div>
       </div>
       <Modal isOpen={open} dimens={{ height: 410, width: 550 }} onClose={toggleModal} >

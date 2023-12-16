@@ -491,3 +491,11 @@ i {
 .stats{
   cursor: pointer;
 }
+.account{
+  position: absolute;
+  top:82vh;
+  left:5vw
+}
+svg{
+  cursor: pointer;
+}
