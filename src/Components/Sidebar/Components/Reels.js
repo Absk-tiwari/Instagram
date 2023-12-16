@@ -1,7 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import obito from '../../../assets/icons/obito.jpg'
 const Reels = () => {
   const icon = {color:'white',fontSize:'30px', height:'40px', marginTop:'8px', fontWeight:'600'}
+  useEffect(()=>{
+    let vids = document.getElementsByTagName('video')
+    console.log(vids)
+    for(let i=0; i<vids.length; i++){
+      vids[i].addEventListener('dblclick', e=>{  e.preventDefault()
+        const like = document.querySelector('.fa-heart-o')
+        if(like){
+          like.click()
+        }
+        console.log('double cliked')
+      })
+    }
+  },[])
   const [like, reactPost] = useState(false);
   const [sound, setsound] = useState(true)
   const add = e => {
