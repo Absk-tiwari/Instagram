@@ -23,19 +23,19 @@ function App() {
   
   return (
     <>
-    <AuthState>
+    <Router>
+     <AuthState>
       <StoryState>
         <PostState>
           <ProfileState>
             <div className="App" style={{ display: "flex" }}>
            
-              <Router>
                 <SidebarComponent />
                 {/* <AnimatedRoutes/> */}
                 <Routes>
                   <Route exact path="/login" element={<Login />} />
                   <Route exact path="/signup" element={<Signup />} />
-                  <Route exact path="/" element={<Home />} />
+                  <Route exact path="/home" element={<Home />} />
                   <Route exact path="/search" element={<Search />} />
                   <Route exact path="/explore" element={<Explore />} />
                   <Route exact path="/messages" element={<Messages />} />
@@ -49,12 +49,12 @@ function App() {
                   <Route exact path="/edit-profile" element={<ProfileSetting />} />
                   <Route path="/stories/:username/view" element={<Story />} />
                 </Routes>
-              </Router>
             </div>
           </ProfileState>
         </PostState>
       </StoryState>
-      </AuthState>
+     </AuthState>
+    </Router>
     </>
   );
 }

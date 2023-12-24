@@ -14,7 +14,7 @@ const loggedIn= (req, res , next)=> {
         next();
         
     }catch(err){
-        res.send({error : 'Internal server occurred!'})
+        res.send({error : 'Action Denied!'})
     }
 }
 module.exports = loggedIn;

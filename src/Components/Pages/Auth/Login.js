@@ -3,15 +3,20 @@ import logo from "../../../assets/icons/insta.svg";
 import { Link } from "react-router-dom";
 import AuthContext from "../../../Contexts/Auth/AuthContext";
 import LoadingBar from "react-top-loading-bar";
+import Loader from "../../StateComponents/Loader";
 const Login = () => {
-  const [progress,setProgress] = useState(0)
+  const [progress, setProgress] = useState(0)
   const {login } = useContext(AuthContext) 
   const [fields, setfields] = useState({username:"", password : ""})
+  const [isLoading, setLoading] = useState(false)
 
   const process = e => {
+    setLoading(!isLoading)
     e.preventDefault();
-    console.log(fields)
-    login(fields)
+    setTimeout(() => {
+      login(fields)
+    }, 4000);
+    setLoading(!isLoading)
   }
   const onchange = e => {
     setfields({...fields, [e.target.name]:e.target.value})
@@ -65,10 +70,11 @@ const Login = () => {
                     <input
                       type="submit"
                       className="btn col-12 btn-primary mb-3 fw-bold"
-                      value="Log in"
-                      disabled={fields.username.length > 5 && fields.password.length > 7   ? '' : true}
+                      value={`Log in`}
+                      disabled={fields.username.length > 5 && fields.password.length > 7 ? '' : true}
                       onClick={() => setProgress(100)}
                     />
+                    {isLoading && <Loader height='30'/>}
                     <small className="text-secondary offset-4 px-4 ">
                       Forgot password?
                     </small>

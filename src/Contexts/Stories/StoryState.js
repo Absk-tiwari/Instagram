@@ -4,8 +4,10 @@ import itachi from '../../assets/icons/itachi.jpg';
 import obito from '../../assets/icons/obito.jpg';
 import profile from '../../assets/icons/profile.png';
 import obio from '../../assets/icons/pfp.png';
+import headers from '../../APIs/Headers';
 
 const StoryState = (props) => {
+    const host = 'http://127.0.0.1:1901';
     const stories = [
         {
             sno:12,
@@ -63,9 +65,23 @@ const StoryState = (props) => {
         },
        
     ]
+
+    const getStories = async() => {
+      try{
+        const res = await fetch(`${host}/api/stories`, {
+            method:'GET',
+            headers : headers()
+        });
+        const stories = await res.json();
+        return stories;
+      }catch (er){
+        alert(er.message)
+        console.log(er)
+      }
+    }
   return (
      <>
-        <StoryContext.Provider value={stories}>
+        <StoryContext.Provider value={{ stories, getStories }}>
             {props.children}
         </StoryContext.Provider>
      </>
