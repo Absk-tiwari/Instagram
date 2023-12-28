@@ -1,31 +1,31 @@
 const mongoose=require('mongoose'); 
-const storySchema = new mongoose.Schema({
-    name:{
+const PostSchema = new mongoose.Schema({
+    user_id : {
         type : String,
-        required : true
+        required : true,
     },
     username : {
         type : String,
         required : true,
         unique : true
     },
-    content : {
+    content:{
+        type:String,
+        required:true
+    },
+    name:{
         type : String,
         required : true
-    },
-    viewed:{
-        type : Boolean,
-        default : false
     },
     created_at : {
         type : Date,
         default : Date.now
-    }, 
+    },
     deleted : {
         type : Boolean,
-        default : false
+        default:false
     }
 });
-const Story= mongoose.model('Story', storySchema);
-Story.createIndexes(); 
-module.exports=Story 
+const Post= mongoose.model('Post', PostSchema);
+Post.createIndexes(); 
+module.exports=Post

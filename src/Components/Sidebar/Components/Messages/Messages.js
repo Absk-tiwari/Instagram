@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
-import ProfileContext from "../../../Contexts/Profiles/ProfileContext";
-import msg from "../../../assets/icons/messenger.jpg";
-import Modal from "../../Modal";
-import Loader from "../../StateComponents/Loader";
+import React, { useContext, useEffect, useState } from "react";
+import ProfileContext from "../../../../Contexts/Profiles/ProfileContext";
+import msg from "../../../../assets/icons/messenger.jpg";
+import Modal from "../../../Modal";
+import Loader from "../../../StateComponents/Loader";
+import Chat from "./Chat";
 
 const Messages = () => {
   const { chats, LoggedIn } = useContext(ProfileContext);
@@ -15,6 +16,11 @@ const Messages = () => {
       if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   };
 
+  const [selectedUser,setUser] = useState('')
+
+  // useEffect(()=>{
+  //   console.log('clicked')
+  // },[selectedUser])
   const style = {
     height: "15%",
     width: "17%",
@@ -23,8 +29,10 @@ const Messages = () => {
   }; 
 
   const openChat = e => {
-    console.log(e.target.children);
-    openedChat(!opened)
+    let ele = e.target
+    let username = ele.dataset.username
+    openedChat(true); 
+    setUser(username)
   }
   const searchChatUser = e => {
     setLoading(true)
@@ -60,15 +68,15 @@ const Messages = () => {
           {chats.length &&
             chats.map((chat) => {
               return (
-                <div className="row mt-3" style={{cursor:'pointer'}} onClick={openChat} key={chat.username}>
-                  <div className="col-sm-2">
+                <div className="row mt-3" style={{cursor:'pointer'}} onClick={openChat} data-username={chat.username} key={chat.username}>
+                  <div className="col-sm-2" data-username={chat.username}>
                     <img
                       src={chat.pfp} style={{ height: "50px" }} className="mx-auto rounded-circle" alt="?"
                     />
                   </div>
-                  <div className="col-sm-10 chatUser">
-                    <strong>{chat.username}</strong>
-                    <p className="username">{chat.username}</p>
+                  <div className="col-sm-10 chatUser" data-username={chat.username}>
+                    <strong data-username={chat.username}>{chat.username}</strong>
+                    <p className="username" data-username={chat.username}>{chat.username}</p>
                   </div>
                 </div>
               );
@@ -87,24 +95,7 @@ const Messages = () => {
                 Send message
               </button>
             </div>
-          </div> : (
-                <div className="col-12 card-body mx-2">
-                  <p className="card-title placeholder-glow mb-5 mt-5 mx-5 d-flex" >
-                  <span className="placeholder col-6" style={{height:'40px'}}></span>
-                  <span className="placeholder col-1 offset-2"></span>
-                  <span className="placeholder offset-1 col-1"></span>
-                </p>
-                <p className="card-text placeholder-glow mt-4 mx-5">
-                  <span className="placeholder mt-4 col-7"></span>
-                  <span className="placeholder mt-5 col-6"></span>
-                  
-                </p>
-                <p className="card-body placeholder-glow mx-5">
-                   
-                  <span className='placeholder col-5'></span>
-                </p>
-              </div>        
-          )
+          </div> :  <Chat username={selectedUser}/>
          }
         </div>
       </div>

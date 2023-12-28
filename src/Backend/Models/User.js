@@ -30,10 +30,26 @@ const userSchema= new mongoose.Schema({
         type: String,
         default : '',
     },
+    gender : {
+        type: String,
+        default : '',
+    },
     date : {
         type : Date,
         default : Date.now
-    }
+    },
+    active : {
+        type : Date,
+        default : null 
+    },
+    deleted:{
+        type : Boolean,
+        default:false
+    },
+    deleted_at:{
+        type: Date,
+        default:null
+    },
 });
 const User=mongoose.model('User', userSchema);
 User.createIndexes();

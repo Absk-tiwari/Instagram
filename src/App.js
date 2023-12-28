@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Home from "./Components/Pages/Home/Home";
-import Messages from "./Components/Sidebar/Components/Messages";
+import Messages from "./Components/Sidebar/Components/Messages/Messages";
 import Search from "./Components/Sidebar/Components/Search";
 import Explore from "./Components/Sidebar/Components/Explore";
 import Profile from "./Components/Sidebar/Components/Profile";

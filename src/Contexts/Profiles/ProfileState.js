@@ -28,6 +28,12 @@ const ProfileState = (props) => {
             url : '',
             name : 'Mr.Testing'
         },
+        {
+            pfp : pfp,
+            username : 'testing.user5',
+            url : 'hastings',
+            name : 'Mr.Testings'
+        },
     ];
 
     const LoggedIn = {
