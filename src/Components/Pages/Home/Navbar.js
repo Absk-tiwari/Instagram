@@ -12,7 +12,7 @@ const Navbar = () => {
     setTimeout(() => {
       setLoader(false)
     }, 7000); 
-  }, [])
+  }, [getStories])
 
   const placeholderStyle = {height:'60px',width:'60px',marginLeft:'40px', borderRadius:'50%'};
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext,   useState } from "react";
 import ProfileContext from "../../../../Contexts/Profiles/ProfileContext";
 import msg from "../../../../assets/icons/messenger.jpg";
 import Modal from "../../../Modal";
@@ -47,7 +47,7 @@ const Messages = () => {
     <>
       <div className="page d-flex">
         <div
-          className="col-md-4"
+          className="col-md-4 user-row"
           style={{
             height: "100vh",
             overflowY: "scroll",
@@ -82,7 +82,7 @@ const Messages = () => {
               );
             })}
         </div>
-        <div className="col-md-8" style={{ overflowY: "hidden" }}>
+        <div className="col-md-8 chat-open-screen" style={{ overflowY: "hidden" }}>
          { !opened ? <div className="text-center d-flex justify-content-center align-items-center min-vh-100">
             <div className="container text-center d-block">
               <img src={msg} alt="?" style={style} className="rounded-circle" />

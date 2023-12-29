@@ -7,12 +7,13 @@ body {
   padding: 0;
   position: relative;
 }
-@media screen and (max-width:400px) {
+@media screen and (max-width:1000px) {
   html{
     position: relative;
   }
   .custom-sidebar{
     display: flex;
+    max-width: 10px!important;
     position: absolute;
   }
   #title{
@@ -26,6 +27,16 @@ body {
     flex-direction: column!important;
     overflow: scroll!important;
   }
+}
+@media screen and (max-width:1000px) {
+  .user-row{
+    display: none;
+  }
+  /* .chat-open-screen{
+    display: block;
+    position: relative;
+    max-width: 90vw!important;
+  }  */
 }
 .custom-sidebar .custom-logo {
   height: 10vh;
@@ -498,4 +509,11 @@ i {
 }
 svg{
   cursor: pointer;
+}
+.chat-input{
+  padding-left: 60px;
+  width: 95%;
+  height:55px;
+  margin-left:10px;
+  border-radius:25px; 
 }

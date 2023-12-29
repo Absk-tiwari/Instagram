@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React  from "react";
 import PostHead from "./Components/PostHead";
+// eslint-disable-next-line
 import PostContext from "../../../Contexts/Profiles/PostContext";
 import PostFooter from "./Components/PostFooter";
 

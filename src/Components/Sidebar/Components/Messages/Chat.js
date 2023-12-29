@@ -1,7 +1,6 @@
 import React, { useEffect , useState } from 'react'
 import img from "../../../../assets/icons/itachi.jpg" ;
-import icon from "../../../../assets/icons/messages.png" ;
-import Loader from '../../../StateComponents/Loader';
+
 
 function Chat(props) {
   const {username} = props    
@@ -42,8 +41,8 @@ function Chat(props) {
         </div>        
      : (
         <>
-        <div className='container-fluid' style={{margin:0,padding:0}}>
-            <section className='header' style={{backgroundColor:'lightgray'}}>
+        <div className='container-fluid' style={{margin:0,padding:0,position:''}}>
+            <section className='header' style={{backgroundColor:'aliceblue'}}>
                 <div className='hstack'>
                     <div className='col-9 hstack'>
                         <div className='img-container mx-5 col-1'>
@@ -62,14 +61,17 @@ function Chat(props) {
                 </div>
             </section>
             <section className='body' style={{height:'70vh'}}>
-                    <div className='spinner-container'>
-                        <div className='spinner' style={{marginTop:'30vh', height:'100px', width:'100px'}}></div>
-                    </div>
+                <div className='spinner-container'>
+                    <div className='spinner' style={{marginTop:'30vh', height:'100px', width:'100px'}}></div>
+                </div>
             </section>
             <section className='footer mt-5'>
-                <div className='hstack'>
-                    <input type='text' className='form-control' style={{width:'90%', marginLeft:'15px'}}/>
-                    <img src={icon} alt='>' style={{height:'40px',width:'40px',rotate:'45deg'}}/>
+                <div className='hstack' style={{position:'relative'}}>
+                    <input type='text' className='chat-input'/>
+                    <span style={{left:'3%',position:'absolute'}}><i class="fa-regular fs-3 fa-face-smile"></i></span>
+                    <span style={{left:'86%',position:'absolute'}}><i class="fa-regular fs-3 fa-image"/></span>
+                    <span style={{width:'88%', position:'absolute', fontSize:'large', left:'90%'}}><i className="fa-solid fs-3 fa-paperclip"></i></span>
+                    <span className='text-primary fs-5 d-none fw-bold' style={{width:'90%', marginLeft:'15px',position:'absolute', left:'88%',fontFamily:'monospace'}} > Send </span>
                 </div>
             </section>
         </div>
