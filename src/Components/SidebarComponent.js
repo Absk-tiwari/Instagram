@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 import { SidebarData } from "./SidebarData";
 import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router";
 import More from "../assets/icons/more.png";
 import obito from "../assets/icons/obito.jpg";
 import Modal from "./Modal";
@@ -14,6 +15,7 @@ function SidebarComponent() {
   const [open, setmodal] = useState(false);
   const [search, setSearch] = useState("");
   const [formtriggered, setTriggered] = useState(true);
+  let navigator = useNavigate();
   const toggleModal = (e) => {
     if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   };
@@ -27,9 +29,34 @@ function SidebarComponent() {
 
   const lstyle = { listStyleType: "none" };
 
+  const createPost = () => {
+
+    let fileInput = document.getElementById("create")
+    if (fileInput.files.length > 0) {
+      // Access the first selected file
+      var selectedFile = fileInput.files[0];
+ 
+      var fileReader = new FileReader();
+
+      fileReader.onload = function (e) {
+        // e.target.result contains the file data (e.g., base64 encoded for images)
+        console.log('File Data:', e.target.result);
+        localStorage.setItem('posted', e.target.result)
+        setTimeout(() => {
+          navigator('/createPost')
+        }, 3000);
+      };
+
+      // Read the file as text, binary, etc. depending on your needs
+      fileReader.readAsDataURL(selectedFile); // Change to readAsDataURL f
+    } else {
+      console.log('No file selected.');
+    }
+  }
   const submit = (event) => {
     document.getElementById("create").click();
-    event.preventDefault();
+    //event.preventDefault();
+    //navigator('/home')
   };
 
   const [progress,setProgress] = useState(0)
@@ -153,7 +180,7 @@ function SidebarComponent() {
         </div>
       </div>
       <form id="createPost" method="post" className="d-none">
-        <input type="file" id="create" className="d-none" name="file" />
+        <input type="file" onChange={createPost} id="create" className="d-none" name="file" />
       </form>
       <div className="offcanvas offcanvas-start" data-bs-scroll="true"  tabIndex="-1"
         id="notifications" aria-labelledby="offcanvasWithBothOptionsLabel">

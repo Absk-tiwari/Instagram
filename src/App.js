@@ -9,6 +9,7 @@ import Search from "./Components/Sidebar/Components/Search";
 import Explore from "./Components/Sidebar/Components/Explore";
 import Profile from "./Components/Sidebar/Components/Profile";
 import Reels from "./Components/Sidebar/Components/Reels";
+import Create from "./Components/Pages/Posts/Create";
 import Notifications from "./Components/Sidebar/Components/Notifications";
 import SidebarComponent from "./Components/SidebarComponent";
 import ProfileState from "./Contexts/Profiles/ProfileState";
@@ -45,6 +46,7 @@ function App() {
                     element={<Notifications />}
                   />
                   <Route exact path="/reels" element={<Reels />} />
+                  <Route exact path="/createPost" element={<Create/>} />
                   <Route exact path="/profile" element={<Profile />} />
                   <Route exact path="/edit-profile" element={<ProfileSetting />} />
                   <Route path="/stories/:username/view" element={<Story />} />

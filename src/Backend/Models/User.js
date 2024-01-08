@@ -39,8 +39,8 @@ const userSchema= new mongoose.Schema({
         default : Date.now
     },
     active : {
-        type : Date,
-        default : null 
+        type : String,
+        default : null
     },
     deleted:{
         type : Boolean,

@@ -75,7 +75,6 @@ const StoryState = (props) => {
         const stories = await res.json();
         return stories;
       }catch (er){
-        alert(er.message)
         console.log(er)
       }
     }
