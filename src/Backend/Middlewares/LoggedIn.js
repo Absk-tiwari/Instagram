@@ -14,7 +14,7 @@ const loggedIn= (req, res , next)=> {
         next();
         
     }catch(err){
-        res.send({error : 'Action Denied!'})
+        res.send({error : 'Action denied auth-token not correct or is unavailable!'})
     }
 }
 module.exports = loggedIn;

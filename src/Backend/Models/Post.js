@@ -7,15 +7,26 @@ const PostSchema = new mongoose.Schema({
     username : {
         type : String,
         required : true,
-        unique : true
+    },
+    name:{
+        type : String,
+        required : true
     },
     content:{
         type:String,
         required:true
     },
-    name:{
+    caption:{
         type : String,
-        required : true
+        default : null,
+    },
+    location:{
+        type : String,
+        default : null,
+    },
+    tagged:{
+        type : String,
+        default : null,
     },
     created_at : {
         type : Date,
@@ -27,5 +38,6 @@ const PostSchema = new mongoose.Schema({
     }
 });
 const Post= mongoose.model('Post', PostSchema);
+
 Post.createIndexes(); 
 module.exports=Post

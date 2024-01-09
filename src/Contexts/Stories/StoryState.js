@@ -4,9 +4,11 @@ import itachi from '../../assets/icons/itachi.jpg';
 import obito from '../../assets/icons/obito.jpg';
 import profile from '../../assets/icons/profile.png';
 import obio from '../../assets/icons/pfp.png';
+//eslint-disable-next-line
 import headers from '../../APIs/Headers';
 
 const StoryState = (props) => {
+    // eslint-disable-next-line
     const host = 'http://127.0.0.1:1901';
     const stories = [
         {
@@ -68,12 +70,12 @@ const StoryState = (props) => {
 
     const getStories = async() => {
       try{
-        const res = await fetch(`${host}/api/stories`, {
-            method:'GET',
-            headers : headers()
-        });
-        const stories = await res.json();
-        return stories;
+        // const res = await fetch(`${host}/api/stories`, {
+        //     method:'GET',
+        //     headers : headers()
+        // });
+        // const stories = await res.json();
+        return stories??[];
       }catch (er){
         console.log(er)
       }
