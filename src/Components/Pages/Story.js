@@ -6,8 +6,8 @@ const Story = () => {
     const all = useContext(StoryContext)
     let nextRef = useRef(null)
     let list = [];
-    all.forEach(element => {
-        let totalImages = all.length
+    all.stories.forEach(element => {
+        let totalImages = all.stories.length
         let width = 1155 / totalImages - 5; 
         list.push(<div className='progress-item' key={element.sno} style={{width: width+'px'}}></div>)
     });
@@ -52,7 +52,7 @@ const Story = () => {
             {list}
         </section>
         <section id='contents'  style={{height:'500px'}} >
-        {all.map(img => {
+        {all.stories.map(img => {
             return <li key={img.sno} id={img.sno} style={{zIndex:img.sno, position:'absolute', left:'23%', }}><img src={img.cover} style={{height:'100vh',width:'35vw'}}   alt="not?"/></li>
         })}
         </section>

@@ -1,93 +1,62 @@
 const  express = require("express");
 const User=require('../Models/User');
+const BlockedUser =require('../Models/BlockedUser');
 const router = express.Router();
-const {body, validationResult }=require('express-validator')
-const bcrypt= require('bcrypt');
-const jwt= require('jsonwebtoken');
 const fetchuser= require('../Middlewares/LoggedIn');
-const JWT_SECRET = 'whateverItWas';
 
+let error = { status : false, message:'Something went wrong!' }
+let output = { status : true }
 
-// Create a user
-router.post('/signup',[
-    body('name').isLength({min:5}),
-    body('username').isLength({min:5}),
-    body('password').isLength({min:6}),
-],async (req,res) => {
-    try {
-        const errors=validationResult(req);
-        // If there are error return and finish right away
-        if(!errors.isEmpty()){
-            return res.status(400).res.json({errors : errors.array()})
-        }
-        // return if the email already exists 
-        let user= await User.findOne({email : req.body.email})
-        if(user){
-            return res.status(400).json({error : "A user with that email already exists!"})
-        }
-        // Gnerate hash with salt
-        const salt = await bcrypt.genSalt(8);
-        const secPass = await bcrypt.hash(req.body.password, salt)
-        // Finally create one
-        user= User.create({
-            name : req.body.name,
-            email : req.body.email,
-            username : req.body.username,
-            password : secPass
-        })
-
-        res.json({status:true, message:'Account created successfully!'});
-        
-    } catch (e) {
-        res.status(500).json({status:false, message:error.message})        
-    }
-});
- 
-
-// Route 3 : Authenticate the user
-router.post('/login',[ 
-    body('username','Invalid credentials!').isLength({min:5}),
-    body('password','Password cannot be blank!').exists(),
-],async (req,res) => {
-    try {
-        const errors=validationResult(req);
-        // Iff ? its finished : can go
-        if(!errors.isEmpty()){
-            return res.status(400).res.json({errors : errors.array()})
-        } 
-        let user= await User.findOne({username : req.body.username})
-        if(!user){
-            return res.status(400).json({error : "Incorrect Credentials!"})
-        }
-        const compared = await bcrypt.compare(req.body.password, user.password)
-        if(!compared){
-            return res.status(400).json({error : "Incorrect Credentials!"})
-        }
-        
-        const payload = {
-            user : {
-                id : user.id
-            }
-        }
-        const authToken = jwt.sign(payload, JWT_SECRET);
-        res.json({status:true, authToken});
-        
-    } catch (e) {
-        console.log(e.message);
-        res.status(500).json({error:'Internal server error!'})        
-    }
-});
-
-// Route 3 : Get logged in user details - login required
+// yet to be tested : Get profile details - login required 
 router.post('/getuser', fetchuser, async(req, res) =>{
     try {
         const userid  = req.body.id; 
         const user= await User.findById(userid).select('-password');
-        res.json(user);
+        return res.json(user);
     } catch (e) {
-        res.status(500).send({status:false,message : 'Internal server occurred!'})
+        error.message = e.message
+        return res.status(500).send(error)
     }
-    }
-);
+});
 
-module.exports=router   
+
+// block someone for a user 
+router.post('/block', fetchuser, async (req,res) => {
+    try { 
+        
+       // yet to be tested
+       const users = [req.body.id, req.body.user_id]
+
+       let fetchedUsers;
+        await User.find({ $in: users }).project({ username:1 }).toArray(function(err, res){
+            if(err){
+                return res.json(error)
+            }
+            console.log(res)
+            fetchedUsers = res;
+        })
+       
+        // const userblock = await User.findById(req.body.id)
+
+       if(fetchedUsers){
+           const resp = await BlockedUser.create({
+             user: fetchedUsers[0].username,
+             blocked_user : fetchedUsers[1].username
+           })
+           if(resp){
+              output.message = 'User blocked!'
+              return res.json(output);
+           }
+       }
+
+       return res.json(error)
+        
+    } catch (e) {
+        error.message = e.message
+        return res.status(500).json(error)        
+    }
+});
+ 
+ 
+
+module.exports = router   

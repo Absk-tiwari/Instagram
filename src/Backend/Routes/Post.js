@@ -2,13 +2,24 @@ const  express = require("express");
 const Post=require('../Models/Post');
 const User=require('../Models/User');
 const router = express.Router();
-const {body, validationResult }=require('express-validator')
-const bcrypt= require('bcrypt');
-const jwt= require('jsonwebtoken');
 const fetchuser= require('../Middlewares/LoggedIn');
-const JWT_SECRET = 'whateverItWas';
+
+let error = { status : false, message:'Something went wrong!' }
+let output = { status : true }
+
+// yet to be tested
+router.get('/', fetchuser, async(req, res) =>{
+    try {
+        const posts = await Post.find({}).limit(15).toArray();
+        return res.json(posts);
+    } catch (e) {
+        error.message = e.message
+        return res.status(500).send(error)
+    }
+});
 
 
+// has been tested and worked 
 
 router.post('/create', fetchuser, async(req, res) =>{
     try {
@@ -24,38 +35,30 @@ router.post('/create', fetchuser, async(req, res) =>{
             })
 
             if(post){
-                return res.json({status:true, message:'Posted!'});
+                output.message ='Posted'
+                return res.json(output);
             }
         }
 
-        return res.json({status:false,message:'An error occurred!'});
+        return res.json(error);
         
     } catch (e) {
-        console.log(e.message)
-        return res.json({status:false,message:'Error 500 -'+e.message});
+        error.message = e.message 
+        return res.json(error);
     }
-    }
-);
 
-router.get('/getPosts', fetchuser, async(req, res) =>{
-    try {
-        const posts = await Post.find({}).limit(15).toArray();
-        res.json(posts);
-    } catch (e) {
-        res.status(500).send({status:false,message : 'Internal server occurred!'})
-    }
-    }
-);
+});
 
+
+// yet to be tested
 router.get('/getuserPosts', fetchuser, async(req, res) =>{
-    try {
-        const userid  = req.body.id; 
-        const posts = await Post.findById(userid).toArray();
-        res.json(posts);
+    try { 
+        const posts = await Post.findById(req.body.id).toArray();
+        return res.json(posts);
     } catch (e) {
-        res.status(500).send({status:false,message : 'Internal server occurred!'})
+        error.message = e.message
+        return res.status(500).send(error)
     }
-    }
-);
+});
 
 module.exports=router  

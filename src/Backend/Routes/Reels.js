@@ -1,39 +1,61 @@
 const  express = require("express");
 const User=require('../Models/User');
+const Reel=require('../Models/Reel');
 const router = express.Router();
-const {body, validationResult }=require('express-validator')
-const bcrypt= require('bcrypt');
-const jwt= require('jsonwebtoken');
 const fetchuser= require('../Middlewares/LoggedIn');
-const JWT_SECRET = 'whateverItWas';
 
+let error = {status: false, message:'Something went wrong!'}
+let output = {status: true, message:''}
 
-// Create a user
+// yet to be tested
 router.post('/', fetchuser, async (req,res) => {
     try {
         
         // return if the email already exists 
-          
-        // Finally create one
- 
-        res.json({status:true});
+        const reels = await Reel.find({}).limit(2).toArray()
+        if(reels) return res.json(reels);
+                
         
     } catch (e) {
-        res.status(500).json({status:false, message:error.message})        
+        error.message = e.message
+        return res.status(500).json(error)        
     }
 });
  
 
 // Route 3 : Authenticate the user
  
-// Route 3 : Get logged in user details - login required
-router.post('/getuser', fetchuser, async(req, res) =>{
-    try {
-        const userid  = req.body.id; 
-        const user= await User.findById(userid).select('-password');
-        res.json(user);
+// like a reel - login required
+router.post('/like', fetchuser, async(req, res) =>{
+    try 
+    { 
+        const acted = await Reel.updateOne(req.body.id)
+        if(acted) return res.json(output);
+        return res.json(error);
+
     } catch (e) {
-        res.status(500).send({status:false,message : 'Internal server occurred!'})
+        error.message = e.message
+        return res.status(500).send(error)
+    }
+    }
+);
+// add a comment
+router.post('/comment', fetchuser, async(req, res) =>{
+    try {
+        const user = await User.findbyId(req.body.id)
+        
+        const created = await Reel.updateOne({
+            comment: req.body.comment,
+            commented: user.username
+        })
+
+        if(created){
+            output.message ='Comment added!'
+            return res.json(output);
+        }
+    } catch (e) {
+        error.message = e.message 
+        return res.status(500).send(error)
     }
     }
 );

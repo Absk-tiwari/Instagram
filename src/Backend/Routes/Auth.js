@@ -7,6 +7,8 @@ const jwt= require('jsonwebtoken');
 const fetchuser= require('../Middlewares/LoggedIn');
 const JWT_SECRET = 'whateverItWas';
 
+let error = { status : false, message:'Something went wrong!' }
+let output = { status : true }
 
 // Create a user
 router.post('/signup',[
@@ -21,9 +23,10 @@ router.post('/signup',[
             return res.status(400).res.json({errors : errors.array()})
         }
         // return if the email already exists 
-        let user= await User.findOne({email : req.body.email})
+        let user = await User.findOne({email : req.body.email})
         if(user){
-            return res.status(400).json({error : "A user with that email already exists!"})
+            error.message="A user with that email already exists!"
+            return res.status(400).json(error)
         }
         // Gnerate hash with salt
         const salt = await bcrypt.genSalt(8);
@@ -36,10 +39,12 @@ router.post('/signup',[
             password : secPass
         })
 
-        res.json({status:true, message:'Account created successfully!'});
+        output.message = 'Account created successfully!'
+        return res.json(output);
         
     } catch (e) {
-        res.status(500).json({status:false, message:error.message})        
+        error.message = e.message
+        return res.status(500).json(error)        
     }
 });
  
@@ -55,13 +60,15 @@ router.post('/login',[
         if(!errors.isEmpty()){
             return res.status(400).res.json({errors : errors.array()})
         } 
-        let user= await User.findOne({username : req.body.username})
+        let user = await User.findOne({username : req.body.username})
         if(!user){
-            return res.status(400).json({error : "Incorrect Credentials!"})
+            error.message = "Incorrect Credentials!"
+            return res.status(400).json(error)
         }
         const compared = await bcrypt.compare(req.body.password, user.password)
         if(!compared){
-            return res.status(400).json({error : "Incorrect Credentials!"})
+            error.message = "Incorrect Credentials!"
+            return res.status(400).json(error)
         }
         
         const payload = {
@@ -69,23 +76,24 @@ router.post('/login',[
                 id : user.id
             }
         }
-        const authToken = jwt.sign(payload, JWT_SECRET);
-        res.json({status:true, authToken});
+        const authToken = jwt.sign(payload, JWT_SECRET)
+        return res.json({status:true, authToken})
         
     } catch (e) {
-        console.log(e.message);
-        res.status(500).json({error:'Internal server error!'})        
+        error.message = e.message
+        return res.status(500).json(error)        
     }
 });
 
 // Route 3 : Get logged in user details - login required
 router.post('/getuser', fetchuser, async(req, res) =>{
     try {
-        const userid  = req.body.id; 
-        const user= await User.findById(userid).select('-password');
-        res.json(user);
+        const userid = req.body.id; 
+        const user = await User.findById(userid).select('-password');
+        return res.json(user) 
     } catch (e) {
-        res.status(500).send({status:false,message : 'Internal server occurred!'})
+        error.message = e.message
+        return res.status(500).json(error)     
     }
     }
 );
