@@ -85,6 +85,7 @@ img.icons {
   display: grid;
   place-items: center;
   height: 28px !important;
+  position: relative;
 }
 .custom-row #title {
   flex: 90%;
@@ -516,4 +517,12 @@ svg{
   height:55px;
   margin-left:10px;
   border-radius:25px; 
+}
+.arrived{
+  position: absolute;
+  color: red;
+  bottom: 2px;
+  left: 25px;
+  font-size: xxx-large;
+  font-weight: 700;
 }

@@ -33,18 +33,13 @@ function SidebarComponent() {
 
     let fileInput = document.getElementById("create")
     if (fileInput.files.length > 0) {
-      // Access the first selected file
       var selectedFile = fileInput.files[0];
- 
       var fileReader = new FileReader();
 
       fileReader.onload = function (e) {
-        // e.target.result contains the file data (e.g., base64 encoded for images)
         console.log('File Data:', e.target.result);
         localStorage.setItem('posted', e.target.result)
-        setTimeout(() => {
-          navigator('/createPost')
-        }, 3000);
+        setTimeout(() => navigator('/createPost'), 3000);
       };
 
       // Read the file as text, binary, etc. depending on your needs
@@ -55,8 +50,6 @@ function SidebarComponent() {
   }
   const submit = (event) => {
     document.getElementById("create").click();
-    //event.preventDefault();
-    //navigator('/home')
   };
 
   const [progress,setProgress] = useState(0)
@@ -85,14 +78,7 @@ function SidebarComponent() {
 
   const searchUser = async (e) => {
     e.preventDefault();
-    // const data ={'username': term};
 
-    // const ret = await fetch('http://localhost:3000/profile',{
-    //   method : 'POST',
-    //   body : JSON.stringify(data)
-    // });
-    // console.log(ret);
-    // if(ret.json().length){
     if (search.length) {
       localStorage.setItem("searched", JSON.stringify([...search, ...[term]]));
     } else {
@@ -100,7 +86,6 @@ function SidebarComponent() {
     }
     setTriggered(!formtriggered);
     setTerm("");
-    // }
   };
   return (
     !["/login", "/signup"].includes(location.pathname) && (
@@ -130,6 +115,7 @@ function SidebarComponent() {
               >
                 <div id="icon" style={{ height: "20px" }} data-refer={val.link}>
                   {val.icon}
+                  {val.link === "/notifications" && <span className="arrived">.</span>}
                 </div>
                 {val.link === "/notifications" || val.link === "/search" ? (
                   <Link id="title" to={val.link} onClick={val.title === "Create" && submit}
