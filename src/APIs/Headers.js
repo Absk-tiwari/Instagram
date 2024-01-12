@@ -6,6 +6,10 @@ const headers = () => {
             'Content-Type' : 'application/json',
             'auth-token': token
         }
+    }else{
+        return {
+            'Content-Type' : 'application/json'
+        }
     }
 }
 

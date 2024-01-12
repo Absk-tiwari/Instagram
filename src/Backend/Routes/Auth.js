@@ -58,11 +58,11 @@ router.post('/login',[
         const errors=validationResult(req);
         // Iff ? its finished : can go
         if(!errors.isEmpty()){
-            return res.status(400).res.json({errors : errors.array()})
+            return res.status(400).json({errors : errors.array()})
         } 
         let user = await User.findOne({username : req.body.username})
         if(!user){
-            error.message = "Incorrect Credentials!"
+            error.message = "User not found, please create an account to start!"
             return res.status(400).json(error)
         }
         const compared = await bcrypt.compare(req.body.password, user.password)

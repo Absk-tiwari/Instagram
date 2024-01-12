@@ -21,7 +21,7 @@ const AuthState=(props)=>{
                 localStorage.setItem('token', response.authToken);
                 navigator('/home')
             }else{
-                alert('login Failed!')
+                alert(response.message)
                 console.log(response)
             }
 
@@ -38,10 +38,13 @@ const AuthState=(props)=>{
                 headers : headers(),
                 body : JSON.stringify({name, email, username, password})
             })
-            const data = await json.json();
-            console.log(data)
+            const resp = await json.json();
+            if(resp.status){
+                navigator('/login')
+            }else{
+                alert(resp.message)
+            }
         } catch (error) {
-            alert(error.message);
             console.log(error);         
         }
     }

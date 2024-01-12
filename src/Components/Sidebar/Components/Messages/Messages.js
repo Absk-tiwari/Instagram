@@ -1,9 +1,14 @@
-import React, { useContext,   useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ProfileContext from "../../../../Contexts/Profiles/ProfileContext";
 import msg from "../../../../assets/icons/messenger.jpg";
 import Modal from "../../../Modal";
 import Loader from "../../../StateComponents/Loader";
 import Chat from "./Chat";
+import { ConnectionState } from './../../../ConnectionState';
+import { ConnectionManager } from './../../../ConnectionManager';
+import { Events } from "./../../../Events";
+import { MyForm } from './../../../MyForm';
+import { socket } from '././../../../../socket';
 
 const Messages = () => {
   const { chats, LoggedIn } = useContext(ProfileContext);
@@ -15,6 +20,33 @@ const Messages = () => {
       console.log((e.target.id)) 
       if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   };
+
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [fooEvents, setFooEvents] = useState([]);
+  useEffect(() => {
+    function onConnect() {
+      setIsConnected(true);
+    }
+
+    function onDisconnect() {
+      setIsConnected(false);
+    }
+
+    function onFooEvent(value) {
+      setFooEvents(previous => [...previous, value]);
+    }
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+    socket.on('foo', onFooEvent);
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+      socket.off('foo', onFooEvent);
+    };
+  }, []);
+
 
   const [selectedUser,setUser] = useState('')
 
@@ -45,6 +77,10 @@ const Messages = () => {
   }
   return (
     <>
+      <ConnectionState isConnected={ isConnected } />
+      <Events events={ fooEvents } />
+      <ConnectionManager />
+      <MyForm />
       <div className="page d-flex">
         <div
           className="col-md-4 user-row"
