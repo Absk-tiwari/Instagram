@@ -51,10 +51,13 @@ const AuthState=(props)=>{
 
     const getUserDetails = async() => {
         try{
-            return await fetch(`${host}/api/auth/getUser`,{
+            const data = await fetch(`${host}/api/auth/getuser`,{
                 method:'GET',
                 headers : headers()
             });
+            const resp = await data.json()
+            return resp;
+            
         } catch (err){
             console.log(err)
         }

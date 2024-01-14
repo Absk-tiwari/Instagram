@@ -3,56 +3,52 @@ import ProfileContext from "../../../../Contexts/Profiles/ProfileContext";
 import msg from "../../../../assets/icons/messenger.jpg";
 import Modal from "../../../Modal";
 import Loader from "../../../StateComponents/Loader";
-import Chat from "./Chat";
-import { ConnectionState } from './../../../ConnectionState';
-import { ConnectionManager } from './../../../ConnectionManager';
-import { Events } from "./../../../Events";
-import { MyForm } from './../../../MyForm';
 import { socket } from '././../../../../socket';
+import respond from "../../../../respond";
+import Chat from '../Messages/Chat'
 
 const Messages = () => {
-  const { chats, LoggedIn } = useContext(ProfileContext);
-  const [isLoading, setLoading] = useState(false)
+  const [selectedUser,setUser] = useState({username:'',name:''})
   const [searchParam, setSearchParam] = useState('');
-  const [open, setmodal] = useState(false);
+  const [isLoading, setLoading] = useState(false)
   const [opened, openedChat] = useState(false);
-  const toggleModal = e => {   
-      console.log((e.target.id)) 
-      if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
-  };
+  const {chats,getChats} = useContext(ProfileContext);
+  let user = localStorage.getItem('userLogin')
+  user = JSON.parse(user)
+  
+  console.log('these are the chats',getChats(user.username));
+  const [open, setmodal] = useState(false);
+ 
+  let messages = [];
+  const addMessage = (from, content) => {
+    !messages.some(msg=> msg.from=== from) && messages.push({from,content})
+  }
+  socket.on('init',data=>{
+    console.log('called from socket behaviour..')
+    console.log(data)
+  })
 
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  const [fooEvents, setFooEvents] = useState([]);
+  socket.on('receive',data=>{
+    localStorage.setItem('cstring',data.connectionID)
+    let from = data.from
+    let content = data.content
+    addMessage(from,content)
+  })
+  
+  socket.on('notification',data=>{
+    console.log(data)
+    alert(data.content)
+    alert(data.confirmation)
+  })
+  
   useEffect(() => {
-    function onConnect() {
-      setIsConnected(true);
-    }
-
-    function onDisconnect() {
-      setIsConnected(false);
-    }
-
-    function onFooEvent(value) {
-      setFooEvents(previous => [...previous, value]);
-    }
-
-    socket.on('connect', onConnect);
-    socket.on('disconnect', onDisconnect);
-    socket.on('foo', onFooEvent);
-
-    return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-      socket.off('foo', onFooEvent);
-    };
+      respond()
   }, []);
+  
+  const toggleModal = e => {   
+    if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
+  } 
 
-
-  const [selectedUser,setUser] = useState('')
-
-  // useEffect(()=>{
-  //   console.log('clicked')
-  // },[selectedUser])
   const style = {
     height: "15%",
     width: "17%",
@@ -63,8 +59,9 @@ const Messages = () => {
   const openChat = e => {
     let ele = e.target
     let username = ele.dataset.username
+    let name = ele.dataset.name
     openedChat(true); 
-    setUser(username)
+    setUser({username,name})
   }
   const searchChatUser = e => {
     setLoading(true)
@@ -77,10 +74,6 @@ const Messages = () => {
   }
   return (
     <>
-      <ConnectionState isConnected={ isConnected } />
-      <Events events={ fooEvents } />
-      <ConnectionManager />
-      <MyForm />
       <div className="page d-flex">
         <div
           className="col-md-4 user-row"
@@ -91,7 +84,7 @@ const Messages = () => {
           }}
         >
           <div className="hstack gap-5 mt-5">
-            <h4 className="text-dark">{LoggedIn.username}</h4>
+            <h4 className="text-dark">{user.username}</h4>
             <i
               className="fa fa-edit fs-2 offset-sm-4 openModal"
               title="write a message " onClick={toggleModal}
@@ -102,17 +95,17 @@ const Messages = () => {
             <strong className="text-secondary offset-5 px-4">Requests</strong>
           </div>
           {chats.length &&
-            chats.map((chat) => {
+            chats.map((chat,index) => {
               return (
-                <div className="row mt-3" style={{cursor:'pointer'}} onClick={openChat} data-username={chat.username} key={chat.username}>
-                  <div className="col-sm-2" data-username={chat.username}>
-                    <img
-                      src={chat.pfp} style={{ height: "50px" }} className="mx-auto rounded-circle" alt="?"
+                <div className="row mt-3" style={{cursor:'pointer'}} onClick={openChat} data-username={chat.username} data-name={chat.name} key={index}>
+                  <div className="col-sm-2" data-name={chat.name} data-username={chat.username}>
+                    <img data-name={chat.name} data-username={chat.username}
+                      src={chat.pfp} style={{height:"50px"}} className="mx-auto rounded-circle" alt=""
                     />
                   </div>
-                  <div className="col-sm-10 chatUser" data-username={chat.username}>
-                    <strong data-username={chat.username}>{chat.username}</strong>
-                    <p className="username" data-username={chat.username}>{chat.username}</p>
+                  <div className="col-sm-10 chatUser" data-username={chat.username} data-name={chat.name}>
+                    <strong data-username={chat.username} data-name={chat.name} >{chat.username}</strong>
+                    <p className="username" data-username={chat.username} data-name={chat.name}>{chat.username}</p>
                   </div>
                 </div>
               );
@@ -131,7 +124,7 @@ const Messages = () => {
                 Send message
               </button>
             </div>
-          </div> :  <Chat username={selectedUser}/>
+          </div> :  <Chat me={user.username} username={selectedUser.username} name={selectedUser.name}/>
          }
         </div>
       </div>

@@ -526,3 +526,25 @@ svg{
   font-size: xxx-large;
   font-weight: 700;
 }
+
+.userStory{
+  position:absolute;
+  left:74%;
+  bottom:5%;
+  border-radius:50%;
+  padding-left:'4px';
+  background-color:cadetblue;
+  width:23px
+}
+.userStory i {
+  padding-left: 4px;
+}
+.other{
+  text-align: left;
+}
+.self{
+  text-align: right;
+}
+#container{
+  overflow: auto;
+}

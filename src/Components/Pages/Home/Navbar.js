@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 const Navbar = () => {
   const [Loaded, setLoader] = useState(true)
   const {stories, getStories} = useContext(StoryContext);
-
+  const addToStory = ()=> {}
   useEffect(()=>{
     getStories();
     setTimeout(() => {
@@ -20,9 +20,9 @@ const Navbar = () => {
   return (
     <>
       <nav className="navbar navbar-expand-lg mt-5 mx-4 navbar">
-        <div style={{position:'relative',marginBottom:'15px'}}>
+        <div style={{position:'relative',marginBottom:'15px'}} onClick={addToStory}>
           <Link to={`/stories/itachi/view`} style={{marginBottom:`auto`}} ><Stories img={ob}/></Link>
-          <div style={{position:`absolute`,left:`74%`,bottom:'5%',borderRadius:`50%`,paddingLeft:'4px',backgroundColor:`cadetblue`,width:`23px`}}><i className="fa fa-plus" style={{color:'white'}}></i></div>
+          <div className="userStory"><i className="fa fa-plus text-white" ></i></div>
         </div>
       { Loaded===false ?
         <div className="container-fluid" style={{ overflow: "auto" }}>

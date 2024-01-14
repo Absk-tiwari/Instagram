@@ -4,12 +4,14 @@ import ProfileContext from '../../../Contexts/Profiles/ProfileContext';
 import pfp from '../../../assets/icons/itachi.jpg';
 const Suggestions = () => {
   const context = useContext(ProfileContext)
+  let user = localStorage.getItem('userLogin')
+  user = JSON.parse(user)
   const { profiles }= context;
   return (
    <>
      <div className='col-md-3 rightSide'>
         <div className='mt-5 mb-5'>
-          <ProfileRow profile={{pfp:pfp,username:'absk.tiwari',url:'',self:true,name:'Abhishek'}}/>
+          <ProfileRow profile={{pfp:pfp,username:user.username,url:'',self:true,name:user.name}}/>
         </div>
         <span id='sug'> Suggested for you </span>
         {

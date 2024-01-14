@@ -1,8 +1,21 @@
 import React from 'react'
 import ProfileContext from './ProfileContext';
 import pfp from '../../assets/icons/pfp.png';
+import headers from '../../APIs/Headers';
 
 const ProfileState = (props) => {
+    const getChats = async(username)=>{
+        let res = await fetch('http://localhost:1901/api/messages',{
+            method:'POST',
+            headers:headers(),
+            body:JSON.stringify({username})
+        })
+
+        let data = await res.json()
+        return data;
+
+   }
+
     const profiles = [
         {
             pfp : pfp,
@@ -36,7 +49,7 @@ const ProfileState = (props) => {
         },
     ];
 
-    const LoggedIn = {
+        const LoggedIn = {
             pfp ,
             posts : profiles.length,
             username : 'te.sting8398',
@@ -50,20 +63,22 @@ const ProfileState = (props) => {
         const chats = [
             {
                 pfp : pfp,
-                username : 'testing.user3',
+                username : 'te.sting8398',
                 url : '',
-                name : 'Mr.Testing'
+                name : 'Deployment'
             },
             {
                 pfp : pfp,
-                username : 'testing.user4',
+                username : 'absk.tiwari',
                 url : '',
-                name : 'Mr.Testing'
+                name : 'Abhishek'
             }
-        ]
+        ];
+
+
     
   return (
-    <ProfileContext.Provider value={{profiles, LoggedIn, chats}}>
+    <ProfileContext.Provider value={{profiles, LoggedIn, chats, getChats}}>
         {props.children}
     </ProfileContext.Provider>
   )

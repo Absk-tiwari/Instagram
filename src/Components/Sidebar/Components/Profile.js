@@ -9,7 +9,8 @@ import ProfileContext from "../../../Contexts/Profiles/ProfileContext";
 const Profile = () => {
   const [active, setStat] = useState(1);
   const {LoggedIn} = useContext(ProfileContext);
-
+  let user = localStorage.getItem('userLogin')
+  user = JSON.parse(user)
   const preview = (e) => {
     let div = document.createElement("div"); 
     div.classList.add('randomDiv') ;
@@ -43,7 +44,7 @@ const Profile = () => {
 
           <div className="row">
             <div className="col-md-6">
-              <h4>te.sting8398</h4>
+              <h4>{user.username}</h4>
             </div>
             <div className="col-md-6">
               <Link to={'/edit-profile'} className="btn editprofile text-decoration-none text-dark fw-bold btn-secondary">
@@ -65,7 +66,7 @@ const Profile = () => {
           </div>
           <div className="row">
             <div className="col-sm-12">
-              <strong>{LoggedIn.name}</strong>
+              <p style={{fontFamily:'monospace'}}>{user.name}</p>
             </div>
           </div>
           <div className="row">

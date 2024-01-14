@@ -1,26 +1,59 @@
 import React, { useEffect , useState } from 'react'
 import img from "../../../../assets/icons/itachi.jpg" ;
-
+import {socket} from '../../../../socket'
 
 function Chat(props) {
-  const {username} = props    
-  
+  const {me,username} = props    
+  const [msg, setMessage] = useState('')
   const iconStyle ={
     fontSize:'25px',
     marginLeft:'40px',
     cursor:'pointer'
   }
-
-  const getChats = ()=>{}
+  let messages = [];
+  const addMessage = (from, content) => {
+    !messages.some(msg=> msg.from=== from) && messages.push({from,content})
+  }
+  socket.on('receive',data=>{
+    localStorage.setItem('cstring',data.connectionID)
+    let from = data.from
+    let content = data.content
+    addMessage(from,content)
+    showMessage(content)
+  })
+  const getChats = ()=>{//console.log(me+username)
+  }
   const [isLoading, setLoading] = useState(false)
-
+  const showMessage = (msg,other=true) => {
+      let box = document.getElementById('container')
+      let p = document.createElement('p')
+      p.innerText = msg
+      p.className = other ? 'other': 'self'
+      box.appendChild(p)
+  }
   useEffect(()=>{
     setLoading(true)
+    socket.on('receive',data=>{
+      let from = data.from
+      let content = data.content
+      addMessage(from,content)
+      // alert('you have a message '+data.content)
+      console.log(data)
+    })
     getChats();
-    setTimeout(() => {
-        setLoading(false)
-    }, 100);
+    setTimeout(()=>setLoading(false), 100);
   },[username])
+
+  const sendMessage = event => {
+    event.preventDefault()
+    if(msg){
+        let cstring = me+'_'+username
+        let data = {to:username,content:msg, cID:cstring}
+        socket.emit('send', data)
+        setMessage('')
+    }
+    showMessage(msg,false)
+  }
 
   return (
       <>
@@ -50,7 +83,7 @@ function Chat(props) {
                         </div>
                         <div className='col-10' style={{paddingTop:'15px'}}>
                             <h3>{username}</h3>
-                            <p>te.sting8398</p>
+                            <p>{props.name}</p>
                         </div>
                     </div>
                     <div className='col-3'>
@@ -61,18 +94,25 @@ function Chat(props) {
                 </div>
             </section>
             <section className='body' style={{height:'70vh'}}>
-                <div className='spinner-container'>
-                    <div className='spinner' style={{marginTop:'30vh', height:'100px', width:'100px'}}></div>
-                </div>
+                {messages.length ? (<div className='spinner-container'>
+                    <div style={{marginTop:'30vh', height:'100px'}}>
+                      <p> Send a message to start the conversation</p>
+                    </div>
+                </div>):(
+                  <div className='container' id='container'>
+                    
+                  </div>
+                )}
+
             </section>
-            <section className='footer mt-5'>
-                <div className='hstack' style={{position:'relative'}}>
-                    <input type='text' className='chat-input'/>
-                    <span style={{left:'3%',position:'absolute'}}><i class="fa-regular fs-3 fa-face-smile"></i></span>
-                    <span style={{left:'86%',position:'absolute'}}><i class="fa-regular fs-3 fa-image"/></span>
-                    <span style={{width:'88%', position:'absolute', fontSize:'large', left:'90%'}}><i className="fa-solid fs-3 fa-paperclip"></i></span>
-                    <span className='text-primary fs-5 d-none fw-bold' style={{width:'90%', marginLeft:'15px',position:'absolute', left:'88%',fontFamily:'monospace'}} > Send </span>
-                </div>
+            <section className='footer mt-4'>
+                <form className='hstack' onSubmit={sendMessage} style={{position:'relative'}}>
+                    <input type='text' className='chat-input' name='message' value={msg} onChange={e=>{setMessage(e.target.value)}} />
+                    <span style={{left:'3%',position:'absolute'}}><i className="fa-regular fs-3 fa-face-smile"></i></span>
+                    <span style={{left:'84%',position:'absolute'}}><i className={`fa-regular ${msg.length?'d-none':''} fs-3 fa-image`}/></span>
+                    <span style={{width:'88%', position:'absolute', fontSize:'large', left:'90%'}}><i className={`fa-solid fs-3 ${msg.length?'d-none':''} fa-paperclip`}></i></span>
+                    <span type='submit' className={`text-primary ${msg.length?'':'d-none'} fs-5 fw-bold`} style={{width:'90%', marginLeft:'15px',position:'absolute', left:'85%',fontFamily:'monospace'}} > Send </span>
+                </form>
             </section>
         </div>
         </>

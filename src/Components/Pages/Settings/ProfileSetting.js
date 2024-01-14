@@ -5,6 +5,8 @@ import Modal from '../../Modal';
 import LoadingBar from "react-top-loading-bar";
 
 const ProfileSetting = () => {
+  let user = localStorage.getItem('userLogin')
+  user = JSON.parse(user)
   const {LoggedIn} = useContext(ProfileContext);
   const [open, setmodal] = useState(false);
   const [progress,setProgress] = useState(0)
@@ -31,7 +33,7 @@ const ProfileSetting = () => {
                     <img src={LoggedIn.pfp} className='rounded-circle img-fluid' style={{height:'10vh',width:'5vw'}} alt='nhi dikha?' />
                 </div>
                 <div className='col-md-7' style={{lineHeight:'0.5'}}>
-                    <p className='text-dark fw-bold px-3 pt-3'>te.sting8398</p>
+                    <p className='text-dark fw-bold px-3 pt-3'>{user.username}</p>
                     <label htmlFor='pfpUpdate' className='fw-bold px-3 text-primary'>Change Profile Photo</label>
                     <input type='file' id='pfpUpdate' className='d-none' />
                 </div>
