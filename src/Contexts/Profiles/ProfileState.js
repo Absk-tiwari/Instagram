@@ -4,16 +4,24 @@ import pfp from '../../assets/icons/pfp.png';
 import headers from '../../APIs/Headers';
 
 const ProfileState = (props) => {
-    const getChats = async(username)=>{
+     const getChats = async(username)=>{
         let res = await fetch('http://localhost:1901/api/messages',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({username})
         })
 
-        let data = await res.json()
-        return data;
-
+        let data = await res.json();
+        let usernames=[];
+        data.forEach(ele => {
+            usernames.push(ele._id)
+        });
+        let users =await fetch('http://localhost:1901/api/profile/users',{
+            method:'POST',
+            headers:headers(),
+            body:JSON.stringify({users:usernames})
+        })
+        return await users.json();
    }
 
     const profiles = [
@@ -59,26 +67,49 @@ const ProfileState = (props) => {
             following: '98',
             url : '/profile'
         };
-     
-        const chats = [
-            {
-                pfp : pfp,
-                username : 'te.sting8398',
-                url : '',
-                name : 'Deployment'
-            },
-            {
-                pfp : pfp,
-                username : 'absk.tiwari',
-                url : '',
-                name : 'Abhishek'
+ 
+        const getChatsOf = async(cID) => {
+        let res = await fetch('http://localhost:1901/api/messages/of',{
+            method:'POST',
+            headers:headers(),
+            body:JSON.stringify({cID})
+        })
+
+        let data = await res.json()
+        return data;
+    }
+    const chats = [
+        {
+            pfp : pfp,
+            username : 'te.sting8398',
+            url : '',
+            name : 'Deployment'
+        },
+        {
+            pfp : pfp,
+            username : 'absk.tiwari',
+            url : '',
+            name : 'Abhishek'
+        }
+    ];
+
+    const searchUser = async (param)=>{
+        try{
+            let resp = await fetch('http://localhost:1901/api/profile/search',{
+                method:'POST',
+                headers:headers(),
+                body:JSON.stringify({param})
+            })
+            if(resp){
+                return resp.json()
             }
-        ];
+        }catch(e){
+            console.log(e.message)
+        }
+    }
 
-
-    
   return (
-    <ProfileContext.Provider value={{profiles, LoggedIn, chats, getChats}}>
+    <ProfileContext.Provider value={{profiles, LoggedIn, chats, getChats,getChatsOf,searchUser}}>
         {props.children}
     </ProfileContext.Provider>
   )

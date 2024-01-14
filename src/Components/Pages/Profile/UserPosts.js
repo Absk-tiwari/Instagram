@@ -11,7 +11,7 @@ const UserPosts = () => {
     borderStyle: "rounded",
   };
   // eslint-disable-next-line
-  const posts = useContext(PostContext); 
+  const {posts} = useContext(PostContext); 
   //  console.log(posts);
   // const getContent = id => { 
   //   console.log(id);

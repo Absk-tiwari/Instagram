@@ -4,6 +4,7 @@ import obito from "../../assets/icons/obito.jpg";
 import itachi from "../../assets/icons/pfp.png";
 import profile from "../../assets/icons/profile.png";
 import dots from "../../assets/icons/dots.png";
+import headers from "../../APIs/Headers";
 
 const PostState = (props) => {
   const posts = [
@@ -84,12 +85,23 @@ const PostState = (props) => {
     },
   ];
 
-  //   const personalPosts = () => {
-  //     console.log("calling...");
-  //   };
+    const personalPosts = async() => {
+      let resp = await fetch('http://localhost:1901/api/post/getuserPosts',{
+        method:'GET',
+        headers:headers()
+      })
+      return resp.json()
+    };
+
+    function getMyposts(){
+      let data= personalPosts()
+      let ab 
+      data.then(re=>{return ab=re})
+      return ab;
+    }
   return (
     <>
-      <PostContext.Provider value={posts}>
+      <PostContext.Provider value={{posts,getMyposts}}>
         {props.children}
       </PostContext.Provider>
     </>

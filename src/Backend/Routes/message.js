@@ -10,6 +10,7 @@ let output = { status : true }
 // yet to be tested
 router.post('/', fetchuser, async(req, res) =>{
     try {
+        // await Message.deleteMany()
         let username = req.body.username
         const result = await Message.aggregate([
             {
@@ -22,15 +23,43 @@ router.post('/', fetchuser, async(req, res) =>{
             },
             {
               $group: {
-                _id: '$connectionID',
+                _id: '$from',
                 count: { $sum: 1 },
               },
             },
         ]);
+        let conv = result.filter(item=>{
+             return item._id!==username
+        })
+        console.log(conv);
+        return res.json(conv);
+    } catch (e) {
+        error.message = e.message
+        return res.status(500).send(error)
+    }
+});
+
+
+// has been tested and worked 
+
+ 
+router.post('/of', fetchuser, async(req, res) =>{
+    try {
+        // await Message.deleteMany()
+        let cID = req.body.cID
+        let [fore,back] = cID.split('_')
+        let one = fore+'_'+back
+        let two = back+'_'+fore
+        const result = await Message.find({
+            $or : [
+               { connectionID:one},
+               { connectionID:two}
+            ]
+        }).select('from content');
           
         console.log(result);
-          
         return res.json(result);
+
     } catch (e) {
         error.message = e.message
         return res.status(500).send(error)
@@ -64,19 +93,6 @@ router.post('/create', fetchuser, async(req, res) =>{
     } catch (e) {
         error.message = e.message 
         return res.json(error);
-    }
-
-});
-
-
-// yet to be tested
-router.get('/getuserPosts', fetchuser, async(req, res) =>{
-    try { 
-        const posts = await Post.findById(req.body.id).toArray();
-        return res.json(posts);
-    } catch (e) {
-        error.message = e.message
-        return res.status(500).send(error)
     }
 });
 

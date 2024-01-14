@@ -1,14 +1,16 @@
-import { React, useContext, useState } from "react";
+import { React, useContext, useState, useEffect } from "react";
 import obito from "../../../assets/icons/pfp.png";
 import { Link } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
 import ProfileContext from "../../../Contexts/Profiles/ProfileContext";
+import PostContext from "../../../Contexts/Profiles/PostContext";
 
 const Profile = () => {
   const [active, setStat] = useState(1);
   const {LoggedIn} = useContext(ProfileContext);
+  const {getMyposts} = useContext(PostContext);
   let user = localStorage.getItem('userLogin')
   user = JSON.parse(user)
   const preview = (e) => {
@@ -31,6 +33,12 @@ const Profile = () => {
       document.querySelector('#root').classList.remove('addCover')
     }
   })
+  let posted
+  useEffect(()=>{
+    posted = getMyposts()
+    console.log(posted)
+  },[]);
+
   return (
     <>
     <div className="page Profile" >

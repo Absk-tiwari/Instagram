@@ -27,11 +27,21 @@ body {
     flex-direction: column!important;
     overflow: scroll!important;
   }
+  .user-row{
+    display: none;
+  }
+  .chat-open-screen{
+    width:97%;
+    margin-left: 20%;
+  }
 }
 @media screen and (max-width:1000px) {
   .user-row{
     display: none;
   }
+  .chat-open-screen{
+    width:66%;
+  } 
   /* .chat-open-screen{
     display: block;
     position: relative;
@@ -540,11 +550,29 @@ svg{
   padding-left: 4px;
 }
 .other{
-  text-align: left;
+  display: block;
+  height: 30px;
+  background-color: lightgray;
+  width: auto; 
+  float: left;
+  border-radius: 100px;
+  padding-inline: 15px;
+  clear:both
 }
 .self{
-  text-align: right;
+  display: block;
+  height: 31px;
+  background-color: lightgray;
+  width: auto; 
+  float: right;
+  border-radius: 100px;
+  padding-inline: 15px;
+  clear:both
 }
 #container{
   overflow: auto;
+  padding-top:12px
+}
+section.body{
+  overflow:auto
 }

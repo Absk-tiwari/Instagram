@@ -57,6 +57,35 @@ router.post('/block', fetchuser, async (req,res) => {
     }
 });
  
- 
+router.post('/users',fetchuser,async(req,res)=>{
+    try{
+        let users = req.body.users
+         console.log(users)
+        let fetchedUsers = await User.find({username:{ $in: users } })
+
+        return res.json(fetchedUsers);
+
+    }catch(e){
+        return res.json({message:e.message})
+    }
+})
+
+router.post('/search',fetchuser,async(req,res)=>{
+    try{
+        let term = req.body.param
+         console.log(term)
+        let fetchedUsers = await User.find({
+            $or: [
+                { name: { $regex: term, $options: 'i' } }, // Case-insensitive search
+                { username: { $regex: term, $options: 'i' } },
+                // Add more conditions if needed
+              ],
+         }).select('-password')
+        return res.json(fetchedUsers);
+
+    }catch(e){
+        return res.json({message:e.message})
+    }
+})
 
 module.exports = router   

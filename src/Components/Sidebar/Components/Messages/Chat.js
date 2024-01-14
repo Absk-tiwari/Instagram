@@ -1,47 +1,61 @@
-import React, { useEffect , useState } from 'react'
+import React, { useEffect , useState,useContext, useRef } from 'react'
 import img from "../../../../assets/icons/itachi.jpg" ;
 import {socket} from '../../../../socket'
+import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 
 function Chat(props) {
   const {me,username} = props    
+  const {getChatsOf} = useContext(ProfileContext)    
   const [msg, setMessage] = useState('')
+  const [hasmsg, mark] = useState(false)
+  const box = useRef()
   const iconStyle ={
     fontSize:'25px',
     marginLeft:'40px',
     cursor:'pointer'
   }
-  let messages = [];
-  const addMessage = (from, content) => {
-    !messages.some(msg=> msg.from=== from) && messages.push({from,content})
-  }
-  socket.on('receive',data=>{
-    localStorage.setItem('cstring',data.connectionID)
-    let from = data.from
-    let content = data.content
-    addMessage(from,content)
-    showMessage(content)
+   
+  socket.on('receive', data => {
+    localStorage.setItem('cstring', data.connectionID)
+    showMessage(data.content)
   })
-  const getChats = ()=>{//console.log(me+username)
+
+  const getChats = async() => {
+    let oldchats = await getChatsOf(me+'_'+username)
+
+    oldchats.forEach(chat=>{
+      mark(true)
+      if(chat.from === me){
+        showMessage(chat.content,false)
+      }else{
+        showMessage(chat.content)
+      }
+    })
   }
   const [isLoading, setLoading] = useState(false)
   const showMessage = (msg,other=true) => {
-      let box = document.getElementById('container')
+
+      let div = document.createElement('div')
+      div.style.display='block'
       let p = document.createElement('p')
       p.innerText = msg
       p.className = other ? 'other': 'self'
-      box.appendChild(p)
+      div.appendChild(p)
+      setTimeout(() => box.current.appendChild(div), 2400);      
+
   }
+  socket.on('receive',data=>{
+    console.log('received')
+    let content = data.content
+    showMessage(content)
+    // alert('you have a message '+data.content)
+  })
+  
   useEffect(()=>{
-    setLoading(true)
-    socket.on('receive',data=>{
-      let from = data.from
-      let content = data.content
-      addMessage(from,content)
-      // alert('you have a message '+data.content)
-      console.log(data)
-    })
+    setLoading(true);
+    mark(false);
     getChats();
-    setTimeout(()=>setLoading(false), 100);
+    setTimeout(()=>setLoading(false), 1000);
   },[username])
 
   const sendMessage = event => {
@@ -75,7 +89,7 @@ function Chat(props) {
      : (
         <>
         <div className='container-fluid' style={{margin:0,padding:0,position:''}}>
-            <section className='header' style={{backgroundColor:'aliceblue'}}>
+            <section className='header' style={{backgroundColor:'#e9ecef'}}>
                 <div className='hstack'>
                     <div className='col-9 hstack'>
                         <div className='img-container mx-5 col-1'>
@@ -93,24 +107,28 @@ function Chat(props) {
                     </div>
                 </div>
             </section>
-            <section className='body' style={{height:'70vh'}}>
-                {messages.length ? (<div className='spinner-container'>
+            <section className='body' style={{height:'70vh'}}  >
+              {!hasmsg && 
+                (<div className='spinner-container'>
                     <div style={{marginTop:'30vh', height:'100px'}}>
                       <p> Send a message to start the conversation</p>
                     </div>
-                </div>):(
-                  <div className='container' id='container'>
-                    
-                  </div>
-                )}
+                </div>)}
+              <div className='container' id='container' ref={box}/>
 
             </section>
             <section className='footer mt-4'>
                 <form className='hstack' onSubmit={sendMessage} style={{position:'relative'}}>
                     <input type='text' className='chat-input' name='message' value={msg} onChange={e=>{setMessage(e.target.value)}} />
-                    <span style={{left:'3%',position:'absolute'}}><i className="fa-regular fs-3 fa-face-smile"></i></span>
-                    <span style={{left:'84%',position:'absolute'}}><i className={`fa-regular ${msg.length?'d-none':''} fs-3 fa-image`}/></span>
-                    <span style={{width:'88%', position:'absolute', fontSize:'large', left:'90%'}}><i className={`fa-solid fs-3 ${msg.length?'d-none':''} fa-paperclip`}></i></span>
+                    <span style={{left:'3%',position:'absolute'}}>
+                      <i className="fa-regular fs-3 fa-face-smile"/>
+                    </span>
+                    <span style={{left:'84%',position:'absolute'}}>
+                      <i className={`fa-regular ${msg.length?'d-none':''} fs-3 fa-image`}/>
+                    </span>
+                    <span style={{width:'88%', position:'absolute', fontSize:'large', left:'90%'}}>
+                      <i className={`fa-solid fs-3 ${msg.length?'d-none':''} fa-paperclip`}/>
+                    </span>
                     <span type='submit' className={`text-primary ${msg.length?'':'d-none'} fs-5 fw-bold`} style={{width:'90%', marginLeft:'15px',position:'absolute', left:'85%',fontFamily:'monospace'}} > Send </span>
                 </form>
             </section>

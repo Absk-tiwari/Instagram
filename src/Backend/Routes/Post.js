@@ -53,11 +53,11 @@ router.post('/create', fetchuser, async(req, res) =>{
 // yet to be tested
 router.get('/getuserPosts', fetchuser, async(req, res) =>{
     try { 
-        const posts = await Post.findById(req.body.id).toArray();
+        const posts = await Post.findById(req.body.id);
         return res.json(posts);
     } catch (e) {
         error.message = e.message
-        return res.status(500).send(error)
+        return res.status(500).json(error)
     }
 });
 

@@ -3,6 +3,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { useEffect } from "react";
 import Home from "./Components/Pages/Home/Home";
 import Messages from "./Components/Sidebar/Components/Messages/Messages";
 import Search from "./Components/Sidebar/Components/Search";
@@ -20,8 +21,12 @@ import Login from "./Components/Pages/Auth/Login";
 import Signup from "./Components/Pages/Auth/Signup";
 import ProfileSetting from "./Components/Pages/Settings/ProfileSetting";
 import AuthState from "./Contexts/Auth/AuthState"; 
+import respond from "./respond";
 function App() {
-  
+  useEffect(() => {
+    respond()
+  }, []);
+
   return (
     <>
     <Router>
