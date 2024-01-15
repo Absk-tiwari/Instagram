@@ -1,14 +1,15 @@
 import React, { useEffect , useState,useContext, useRef } from 'react'
-import img from "../../../../assets/icons/itachi.jpg" ;
+import img from "../../../../assets/icons/profile.png" ;
 import {socket} from '../../../../socket'
 import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 
 function Chat(props) {
   const {me,username} = props    
-  const {getChatsOf} = useContext(ProfileContext)    
+  const {updateChat,getChatsOf} = useContext(ProfileContext)    
   const [msg, setMessage] = useState('')
   const [hasmsg, mark] = useState(false)
-  const box = useRef()
+  const [loader, load] = useState(true)
+  const box = useRef(null)
   const iconStyle ={
     fontSize:'25px',
     marginLeft:'40px',
@@ -22,27 +23,40 @@ function Chat(props) {
 
   const getChats = async() => {
     let oldchats = await getChatsOf(me+'_'+username)
-
-    oldchats.forEach(chat=>{
+    if(oldchats && oldchats.length){
       mark(true)
-      if(chat.from === me){
-        showMessage(chat.content,false)
-      }else{
-        showMessage(chat.content)
-      }
+      setLoading(true)
+      printMessage(oldchats)
+    }
+  }
+  const printMessage = msgArr => {
+    let html=''
+    msgArr.forEach(item=> { 
+        html+= `<div style='display:block'><p class='${item.from===me?'self':'other'}'>${item.content}</p></div>`
     })
+    setTimeout(() => {
+      load(false);
+      if(box.current){
+        box.current.innerHTML = html
+        document.getElementsByClassName('body')[0].scrollTop = document.getElementsByClassName('body')[0].scrollHeight
+        updateChat(me,username)
+      }
+    },2500);
   }
   const [isLoading, setLoading] = useState(false)
   const showMessage = (msg,other=true) => {
-
+     
       let div = document.createElement('div')
       div.style.display='block'
       let p = document.createElement('p')
       p.innerText = msg
       p.className = other ? 'other': 'self'
       div.appendChild(p)
-      setTimeout(() => box.current.appendChild(div), 2400);      
-
+      if(box.current ){
+        box.current.appendChild(div)
+        document.getElementsByClassName('body')[0].scrollTop = document.getElementsByClassName('body')[0].scrollHeight
+      }
+      // setTimeout(() => , 2400);      
   }
   socket.on('receive',data=>{
     console.log('received')
@@ -54,8 +68,7 @@ function Chat(props) {
   useEffect(()=>{
     setLoading(true);
     mark(false);
-    getChats();
-    setTimeout(()=>setLoading(false), 1000);
+    getChats().then(()=>setLoading(false));
   },[username])
 
   const sendMessage = event => {
@@ -93,7 +106,7 @@ function Chat(props) {
                 <div className='hstack'>
                     <div className='col-9 hstack'>
                         <div className='img-container mx-5 col-1'>
-                            <img src={img} style={{height:'63px',width:'63px'}} className='rounded-circle' alt={username} />
+                            <img src={img} style={{height:'63px'}} className='rounded-circle' alt={username} />
                         </div>
                         <div className='col-10' style={{paddingTop:'15px'}}>
                             <h3>{username}</h3>
@@ -108,12 +121,13 @@ function Chat(props) {
                 </div>
             </section>
             <section className='body' style={{height:'70vh'}}  >
-              {!hasmsg && 
+              {!hasmsg ? 
                 (<div className='spinner-container'>
                     <div style={{marginTop:'30vh', height:'100px'}}>
                       <p> Send a message to start the conversation</p>
                     </div>
-                </div>)}
+                </div>):loader && <div className='spinner-container' style={{marginLeft:'45%',marginTop:'30%',display:'block'}}>
+                      <div className='spinner' style={{height:'60px', width:'60px'}}/></div>}
               <div className='container' id='container' ref={box}/>
 
             </section>

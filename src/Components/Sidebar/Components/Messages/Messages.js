@@ -1,35 +1,34 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ProfileContext from "../../../../Contexts/Profiles/ProfileContext";
 import msg from "../../../../assets/icons/messenger.jpg";
 import Modal from "../../../Modal";
 import Loader from "../../../StateComponents/Loader";
 import { socket } from '././../../../../socket';
 import Chat from '../Messages/Chat'
-import obito from '../../../../assets/icons/obito.jpg'
+import profile from '../../../../assets/icons/profile.png'
 const Messages = () => {
   const [selectedUser,setUser] = useState({username:'',name:''})
   const [searchParam, setSearchParam] = useState('');
   const [isLoading, setLoading] = useState(false)
   const [opened, openedChat] = useState(false);
-  const {chats,searchUser} = useContext(ProfileContext);
+  const {searchUser,getChats} = useContext(ProfileContext);
+  const mapref = useRef(null)
   let user = localStorage.getItem('userLogin')
   user = JSON.parse(user)
   // let chats=[];
+  const [online , setOnline] = useState(false);
   const [open, setmodal] = useState(false);
-  const [chatLen, setLen] = useState(false)
   let messages = [];
   const addMessage = (from, content) => {
     !messages.some(msg=> msg.from=== from) && messages.push({from,content})
   }
 
-  // const init = async() => {
-  //   let chats = await getChats(user.username)
-  //   if(chats.length){
-  //     setLen(true)
-  //     let c = chats.map(c=>{return c.name})
-  //     console.log(c)
-  //   }
-  // }
+  let chatt;
+  const init = async() => {
+    let data =  getChats(user.username)
+    return await data.then(res=>{return res})  
+  }
+
  
   socket.on('receive',data=>{
     localStorage.setItem('cstring',data.connectionID)
@@ -41,14 +40,51 @@ const Messages = () => {
   socket.on('notification',data=>{
     console.log(data)
   }) 
+  let onlines=[];
+  socket.on('init',data=>{
+    setOnline(!online)
+    console.log('emit from socekt server..')
+    console.log(data)
+    for(let it of data){
+      onlines.push(it)
+    }
+  })
+  socket.on('flag',()=>setOnline(!online))
   
   // console.log('the chats;',chats)
   useEffect(()=>{
-    socket.on('init',data=>{
-      console.log('called from socket behaviour..')
-      console.log(data)
+    let resp =  init()
+    resp.then(res=>{ 
+      chatt = res;
+      let html=''
+        chatt.forEach(chat => { 
+            console.log(chat)
+            let should = onlines && onlines.includes(chat.username)?'Active now':chat.name;
+            html+=`<div class="row mt-3 openchat" style='cursor:pointer' data-username='${chat.username}' data-name='${chat.name}' >
+              <div class="col-sm-2" data-name='${chat.name}' data-username='${chat.username}'>
+                <img data-name='${chat.name}' data-username='${chat.username}'
+                  src='${profile}' style='height:50px' class="mx-auto rounded-circle" alt="" />
+              </div>
+              <div class="col-sm-10 chatUser" data-username='${chat.username}' data-name='${chat.name}'>
+                <strong data-username='${chat.username}' data-name='${chat.name}' >${chat.username}</strong>
+                <p class="username ${chat.unread?'text-dark':'p'}" style='font-weight:${chat.unread?'500':'p'}' data-username='${chat.username}' data-name='${chat.name}'>${chat.unread?chat.unread:should}</p>
+              </div>
+            </div>`; 
+        })
+        let el = document.getElementById('user-row-container')
+        if(el){
+          el.innerHTML = html
+        }
+        setTimeout(() => {          
+          let classes = document.getElementsByClassName('openchat')
+          for(let i of classes){
+            i.addEventListener('click', openChat)
+          }
+        }, 2000);
     })
-  },[chatLen])
+    console.log('rendered')
+
+  },[online])
 
   
   const toggleModal = e => {   
@@ -62,12 +98,15 @@ const Messages = () => {
     borderStyle: "rounded",
   }; 
 
-  const openChat = e => {
-    let ele = e.target
+  const openChat = event => {
+    let ele = event.target
+    console.log(ele)
     let username = ele.dataset.username
     let name = ele.dataset.name
     openedChat(true); 
     setUser({username,name})
+    setmodal(false)
+    setSearchParam('')
   }
 
   
@@ -80,23 +119,30 @@ const Messages = () => {
     //   setLoading(false);
     //   setSearchParam('')
     // }, 3000);
-    if(searchParam.length>4){
+    if(searchParam.length>3){
       results= searchUser(searchParam)
     }
     if(results){
         setLoading(false);
-        setLen(true)
+        let html=''
         results.then(res=>{
-          let html = res.map((result,index)=>{
-            return `<div style='height:60px;background-color:#e9ecef;border-radius:10px;width:300px;display:flex;margin-left:60px;margin-top:5px;padding-top:4px' onclick="openChat(event)" data-username='${result.username}' data-name='${result.name}'>
-              <img src='${obito}' class="mx-3 rounded-circle" style='height:52px' data-username='${result.username}' data-name='${result.name}' alt=""/>
+          res.forEach(result=>{
+           html += `<div style='height:60px;background-color:#e9ecef;border-radius:10px;width:300px;display:flex;margin-left:60px;margin-top:5px;padding-top:4px' class='open-searched' data-username='${result.username}' data-name='${result.name}'>
+              <img src='${profile}' class="mx-3 rounded-circle" style='height:52px' data-username='${result.username}' data-name='${result.name}' alt=""/>
               <div class="d-block" style="" data-username='${result.username}' data-name='${result.username}'>
                 <b data-username='${result.username}' data-name='${result.name}'>${result.username}</b> <br/>
                 <small data-username='${result.username}' data-name='${result.name}'>${result.name}</small>
               </div>
             </div>`
           })
-          document.getElementById('searchChat').innerHTML += html.join('')
+          document.getElementById('searchChat').innerHTML += html
+          
+          let classes = document.getElementsByClassName('open-searched')
+          if(classes){
+            for(let el of classes){
+              el.addEventListener('click', openChat)
+            }
+          }
         })
     }
   }
@@ -105,7 +151,7 @@ const Messages = () => {
     <>
       <div className="page d-flex">
         <div
-          className="col-md-4 user-row"
+          className="col-md-4 user-row" ref={mapref} 
           style={{height: "100vh",overflowY: "scroll",borderRight: "1px solid lightgray"}}
         >
           <div className="hstack gap-5 mt-5">
@@ -119,22 +165,7 @@ const Messages = () => {
             <strong>Messages</strong>
             <strong className="text-secondary offset-5 px-4">Requests</strong>
           </div>
-          {chats.length &&
-            chats.map((chat,index) => {
-              return (
-                <div className="row mt-3" style={{cursor:'pointer'}} onClick={openChat} data-username={chat.username} data-name={chat.name} key={index}>
-                  <div className="col-sm-2" data-name={chat.name} data-username={chat.username}>
-                    <img data-name={chat.name} data-username={chat.username}
-                      src={chat.pfp} style={{height:"50px"}} className="mx-auto rounded-circle" alt=""
-                    />
-                  </div>
-                  <div className="col-sm-10 chatUser" data-username={chat.username} data-name={chat.name}>
-                    <strong data-username={chat.username} data-name={chat.name} >{chat.username}</strong>
-                    <p className="username" data-username={chat.username} data-name={chat.name}>{chat.username}</p>
-                  </div>
-                </div>
-              );
-            })}
+          <div id="user-row-container"/>
         </div>
         <div className="col-md-8 chat-open-screen" style={{ overflowY: "hidden" }}>
          { !opened ? <div className="text-center d-flex justify-content-center align-items-center min-vh-100">

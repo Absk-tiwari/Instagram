@@ -1,6 +1,7 @@
 const  express = require("express");
 const Message=require('../Models/Message');
 const User=require('../Models/User');
+const Post=require('../Models/Post');
 const router = express.Router();
 const fetchuser= require('../Middlewares/LoggedIn');
 
@@ -28,10 +29,25 @@ router.post('/', fetchuser, async(req, res) =>{
               },
             },
         ]);
-        let conv = result.filter(item=>{
-             return item._id!==username
-        })
-        console.log(conv);
+        let conv =[]
+        for(let item of result){
+             if(item._id!==username){
+                let content = await Message.find({read:false}).select('content')
+                console.log(content.length)
+                if(content.length==1){
+                    item.unread = content.length
+                }else if(content.length > 1){
+                    item.unread = `${content.length} unread messages`
+                }else{
+                    item.unread = false
+                }
+                conv.push(item)
+             }
+        }
+        // let conv = 
+        // result.filter(item=>{
+        //      return item._id!==username
+        // }) 
         return res.json(conv);
     } catch (e) {
         error.message = e.message
@@ -73,7 +89,7 @@ router.post('/create', fetchuser, async(req, res) =>{
     try {
         const user = await User.findById(req.body.id).select('-password')
         if(user){
-            const post = Post.create({
+            const post = await Post.create({
                 user_id : user._id,
                 username : user.username,
                 name : user.name,
@@ -95,5 +111,41 @@ router.post('/create', fetchuser, async(req, res) =>{
         return res.json(error);
     }
 });
+
+router.post('/update', fetchuser, async(req, res) =>{
+    try {
+        const me = req.body.me
+        const username = req.body.username
+        let one = me+'_'+username
+        let two = username+'_'+me
+
+        const filter = {
+            $or: [
+              { connectionID: one },
+              { connectionID: two },
+            ],
+          };
+          
+        const update = {
+            $set: {
+                read:true, // Update the 'value' field to a new value
+                // Add more fields to update as needed
+            },
+        };
+          
+        let updated = await Message.updateMany(filter,update)
+        if(updated){
+            output.message ='done'
+            return res.json(output);
+        }
+        return res.json(error);
+         
+    } catch (e) {
+        error.message = e.message 
+        return res.json(error);
+    }
+});
+
+
 
 module.exports=router  

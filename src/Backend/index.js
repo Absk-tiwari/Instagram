@@ -42,13 +42,13 @@ socket.on('connection', conn => {
       } else {
         // new or unrecoverable session
          users.set(socket.username, conn.id)
-         const myObject = Object.fromEntries(users);
+         const myObject = Object.keys(Object.fromEntries(users));
          socket.emit('init',  [myObject] )
-         console.log(users)
+         console.log(myObject)
       }
 
       conn.on('send', async(data) => {
-        console.log('message by '+socket.username ,data)
+        console.log('By '+socket.username+' to '+data.to)
         let target = data.to 
         target = users.get(target)
         let dataobj = {from: socket.username, content:data.content, at:Date.now(), read:false}

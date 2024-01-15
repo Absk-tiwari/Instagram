@@ -99,9 +99,20 @@ const PostState = (props) => {
       data.then(re=>{return ab=re})
       return ab;
     }
+
+    const createPost = async(obj) => {
+      let resp = await fetch(`http://localhost:1901/api/post/create`,{
+        method:'POST',
+        headers:headers(),
+        body:JSON.stringify(obj)
+      })
+      return resp.status?true:false
+      
+     }
+
   return (
     <>
-      <PostContext.Provider value={{posts,getMyposts}}>
+      <PostContext.Provider value={{posts,getMyposts,createPost}}>
         {props.children}
       </PostContext.Provider>
     </>

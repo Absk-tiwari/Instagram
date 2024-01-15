@@ -21,7 +21,13 @@ const ProfileState = (props) => {
             headers:headers(),
             body:JSON.stringify({users:usernames})
         })
-        return await users.json();
+        let userdata = await users.json();
+        for(let i=0;i<userdata.length;i++){
+            if(userdata[i].username===data[i]._id){
+                userdata[i].unread = data[i].unread
+            }
+        }
+        return userdata
    }
 
     const profiles = [
@@ -108,8 +114,16 @@ const ProfileState = (props) => {
         }
     }
 
+    const updateChat = async(me,username) => {
+        let resp = await fetch('http://localhost:1901/api/messages/update',{
+            method:'POST',
+            headers:headers(),
+            body:JSON.stringify({me,username})
+        })
+        return resp.status ? true :false
+    }
   return (
-    <ProfileContext.Provider value={{profiles, LoggedIn, chats, getChats,getChatsOf,searchUser}}>
+    <ProfileContext.Provider value={{profiles, LoggedIn, chats, getChats,getChatsOf,searchUser,updateChat}}>
         {props.children}
     </ProfileContext.Provider>
   )

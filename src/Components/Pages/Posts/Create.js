@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import headers from '../../../APIs/Headers';
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
+import PostContext from '../../../Contexts/Profiles/PostContext';
 
 const Create = () => {
-  const host = 'http://127.0.0.1:1901';
   const navigator = useNavigate()
-  const [post, setPost] = useState('')
+  const {createPost}= useContext(PostContext);
+  const [post, setPost] = useState('');
   const [fields, setfields] = useState({caption : '', location:''})
 
   useEffect(()=>{
@@ -25,24 +25,10 @@ const Create = () => {
       caption:     fields.caption,
       location:    fields.location
     }
-      try {
-        const resp = await fetch(`${host}/api/post/create`,{
-            method : 'POST',
-            headers : headers(),
-            body : JSON.stringify(body)
-        });
-        const response = await resp.json();
-        if(response.status){
-            // Save the auth token 
-            alert('was quite good!')
-            navigator('/home')
-        }else{
-            alert('not good!')
-            console.log(response)
-        }
-      } catch (e) {
-          alert(e.message)        
-      }
+    let resp = createPost(body) 
+    if(resp){
+      navigator('/home')
+    }
   }
   return (
     <>

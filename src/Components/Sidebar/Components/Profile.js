@@ -33,11 +33,14 @@ const Profile = () => {
       document.querySelector('#root').classList.remove('addCover')
     }
   })
-  let posted
+  getMyposts()
   useEffect(()=>{
-    posted = getMyposts()
-    console.log(posted)
-  },[]);
+    let posted =[]
+    // .then(res=>{
+    //   posted = res
+    //   console.log(posted)
+    // })
+  },[active]);
 
   return (
     <>
@@ -66,10 +69,10 @@ const Profile = () => {
               <strong>{LoggedIn.posts}</strong> posts
             </div>
             <div className="col-sm-4 stats">
-              <strong >{LoggedIn.followers}</strong> followers
+              <strong >{user.followers}</strong> followers
             </div>
             <div className="col-sm-4 stats">
-              <strong>{LoggedIn.following}</strong> following
+              <strong>{user.following}</strong> following
             </div>
           </div>
           <div className="row">

@@ -10,7 +10,7 @@ let output = { status : true }
 // yet to be tested
 router.get('/', fetchuser, async(req, res) =>{
     try {
-        const posts = await Post.find({}).limit(15).toArray();
+        const posts = await Post.find({user_id:req.body.id})
         return res.json(posts);
     } catch (e) {
         error.message = e.message
