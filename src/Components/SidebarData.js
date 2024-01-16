@@ -12,7 +12,7 @@ export const SidebarData = [
   {
     title: "Home",
     icon: <img className="icons" src={Home} alt="not found" />,
-    link: "/home",
+    link: "/",
   },
   {
     title: "Search",

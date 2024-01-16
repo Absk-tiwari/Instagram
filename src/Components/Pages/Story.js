@@ -65,7 +65,7 @@ const Story = () => {
         <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
         </svg>  
          
-        <Link className='fs-2 exit' style={{position:'absolute', top:'3%', left:'80%'}} to={'/home'}><i className='btn btn-close' style={{ color:'white'}}></i></Link>
+        <Link className='fs-2 exit' style={{position:'absolute', top:'3%', left:'80%'}} to={'/'}><i className='btn btn-close' style={{ color:'white'}}></i></Link>
     </div>
       );
     } 

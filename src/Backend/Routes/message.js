@@ -32,15 +32,22 @@ router.post('/', fetchuser, async(req, res) =>{
         let conv =[]
         for(let item of result){
              if(item._id!==username){
-                let content = await Message.find({read:false}).select('content')
-                console.log(content.length)
-                if(content.length==1){
-                    item.unread = content.length
-                }else if(content.length > 1){
-                    item.unread = `${content.length} unread messages`
-                }else{
-                    item.unread = false
-                }
+                let one = item._id+'_'+username
+                let two = username +'_'+item._id
+                let data = await Message.find({            
+                  $or : [
+                    { connectionID:one},
+                    { connectionID:two}
+                  ]
+                }).select('content read from -_id');
+
+                let lastInd = data.length -1
+                let lastMessage = data[lastInd].content
+                let lastMessageFrom = data[lastInd].from
+                let reads = data.filter(it=>{return it.read===false});
+                item.last = reads && Object.keys(reads).length > 1 ?`${Object.keys(reads).length} new messages`:lastMessage
+                item.unread = Object.keys(reads).length ? true :false
+                item.from = lastMessageFrom
                 conv.push(item)
              }
         }
@@ -48,6 +55,7 @@ router.post('/', fetchuser, async(req, res) =>{
         // result.filter(item=>{
         //      return item._id!==username
         // }) 
+        console.log(conv)
         return res.json(conv);
     } catch (e) {
         error.message = e.message

@@ -27,7 +27,10 @@ const Create = () => {
     }
     let resp = createPost(body) 
     if(resp){
-      navigator('/home')
+      setTimeout(() => {
+        window.location.reload()
+        navigator('/')
+      }, 1500);
     }
   }
   return (

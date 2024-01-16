@@ -25,43 +25,14 @@ const ProfileState = (props) => {
         for(let i=0;i<userdata.length;i++){
             if(userdata[i].username===data[i]._id){
                 userdata[i].unread = data[i].unread
+                userdata[i].last = data[i].last
+                userdata[i].from = data[i].from
             }
         }
         return userdata
    }
 
-    const profiles = [
-        {
-            pfp : pfp,
-            username : 'testing.user',
-            url : '',
-            name : 'Mr.Testing'
-        },
-        {
-            pfp : pfp,
-            username : 'testing.user2',
-            url : '',
-            name : 'Mr.Testing'
-        },
-        {
-            pfp : pfp,
-            username : 'testing.user3',
-            url : '',
-            name : 'Mr.Testing'
-        },
-        {
-            pfp : pfp,
-            username : 'testing.user4',
-            url : '',
-            name : 'Mr.Testing'
-        },
-        {
-            pfp : pfp,
-            username : 'testing.user5',
-            url : 'hastings',
-            name : 'Mr.Testings'
-        },
-    ];
+    const profiles = [];
 
         const LoggedIn = {
             pfp ,
@@ -83,21 +54,8 @@ const ProfileState = (props) => {
 
         let data = await res.json()
         return data;
-    }
-    const chats = [
-        {
-            pfp : pfp,
-            username : 'te.sting8398',
-            url : '',
-            name : 'Deployment'
-        },
-        {
-            pfp : pfp,
-            username : 'absk.tiwari',
-            url : '',
-            name : 'Abhishek'
         }
-    ];
+    const chats = [];
 
     const searchUser = async (param)=>{
         try{

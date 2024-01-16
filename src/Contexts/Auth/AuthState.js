@@ -19,7 +19,7 @@ const AuthState=(props)=>{
             if(response.status){
                 // Save the auth token 
                 localStorage.setItem('token', response.authToken);
-                navigator('/home')
+                navigator('/')
             }else{
                 alert(response.message)
                 console.log(response)

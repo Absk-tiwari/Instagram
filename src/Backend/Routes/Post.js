@@ -25,17 +25,19 @@ router.post('/create', fetchuser, async(req, res) =>{
     try {
         const user = await User.findById(req.body.id).select('-password')
         if(user){
-            const post = Post.create({
+            let obj = {
                 user_id : user._id,
                 username : user.username,
                 name : user.name,
                 content : req.body.postContent,
                 caption : req.body.caption,
                 location : req.body.location,
-            })
+            }
+            const post = await Post.create(obj)
 
             if(post){
                 output.message ='Posted'
+                output.post = obj
                 return res.json(output);
             }
         }
@@ -53,7 +55,7 @@ router.post('/create', fetchuser, async(req, res) =>{
 // yet to be tested
 router.get('/getuserPosts', fetchuser, async(req, res) =>{
     try { 
-        const posts = await Post.findById(req.body.id);
+        const posts = await Post.find({user_id: req.body.id});
         return res.json(posts);
     } catch (e) {
         error.message = e.message

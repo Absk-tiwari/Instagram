@@ -5,14 +5,14 @@ import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
 import ProfileContext from "../../../Contexts/Profiles/ProfileContext";
-import PostContext from "../../../Contexts/Profiles/PostContext";
 
 const Profile = () => {
   const [active, setStat] = useState(1);
   const {LoggedIn} = useContext(ProfileContext);
-  const {getMyposts} = useContext(PostContext);
   let user = localStorage.getItem('userLogin')
   user = JSON.parse(user)
+  let posts  = localStorage.getItem('myPosts')
+  posts = JSON.parse(posts)
   const preview = (e) => {
     let div = document.createElement("div"); 
     div.classList.add('randomDiv') ;
@@ -33,14 +33,8 @@ const Profile = () => {
       document.querySelector('#root').classList.remove('addCover')
     }
   })
-  getMyposts()
-  useEffect(()=>{
-    let posted =[]
-    // .then(res=>{
-    //   posted = res
-    //   console.log(posted)
-    // })
-  },[active]);
+ 
+  
 
   return (
     <>
@@ -66,7 +60,7 @@ const Profile = () => {
 
           <div className="row">
             <div className="col-sm-3 stats">
-              <strong>{LoggedIn.posts}</strong> posts
+              <strong>{posts.length}</strong> posts
             </div>
             <div className="col-sm-4 stats">
               <strong >{user.followers}</strong> followers

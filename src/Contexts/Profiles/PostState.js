@@ -90,29 +90,43 @@ const PostState = (props) => {
         method:'GET',
         headers:headers()
       })
-      return resp.json()
+      const data = await resp.json()
+      return data;
     };
 
+    let myPosts = []
     function getMyposts(){
-      let data= personalPosts()
-      let ab 
-      data.then(re=>{return ab=re})
-      return ab;
+      let data = personalPosts()
+      data.then(item=>{
+        if(item){
+          for(let i of item){
+            myPosts.push(i)
+          }
+        }
+        localStorage.setItem('myPosts',JSON.stringify(myPosts))
+      }) 
     }
-
+    getMyposts()
     const createPost = async(obj) => {
       let resp = await fetch(`http://localhost:1901/api/post/create`,{
         method:'POST',
         headers:headers(),
         body:JSON.stringify(obj)
       })
-      return resp.status?true:false
-      
+      if(resp.status){
+        let till = localStorage.getItem('myPosts')
+        till = JSON.parse(till)
+        till.push(resp.post)
+        localStorage.setItem('myPosts',JSON.stringify(till))
+        return true
+      }
+      return false
+
      }
 
   return (
     <>
-      <PostContext.Provider value={{posts,getMyposts,createPost}}>
+      <PostContext.Provider value={{posts,getMyposts,createPost, personalPosts,myPosts}}>
         {props.children}
       </PostContext.Provider>
     </>
