@@ -39,7 +39,7 @@ router.post('/', fetchuser, async(req, res) =>{
                     { connectionID:one},
                     { connectionID:two}
                   ]
-                }).select('content read from -_id');
+                }).select('content read from at -_id');
 
                 let lastInd = data.length -1
                 let lastMessage = data[lastInd].content
@@ -48,6 +48,10 @@ router.post('/', fetchuser, async(req, res) =>{
                 item.last = reads && Object.keys(reads).length > 1 ?`${Object.keys(reads).length} new messages`:lastMessage
                 item.unread = Object.keys(reads).length ? true :false
                 item.from = lastMessageFrom
+                item.at = data[lastInd].at
+                if(Object.keys(reads).length > 1){
+                    item.MessageOfSender = lastMessage
+                }
                 conv.push(item)
              }
         }
@@ -55,7 +59,6 @@ router.post('/', fetchuser, async(req, res) =>{
         // result.filter(item=>{
         //      return item._id!==username
         // }) 
-        console.log(conv)
         return res.json(conv);
     } catch (e) {
         error.message = e.message

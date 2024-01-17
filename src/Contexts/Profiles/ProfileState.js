@@ -27,6 +27,8 @@ const ProfileState = (props) => {
                 userdata[i].unread = data[i].unread
                 userdata[i].last = data[i].last
                 userdata[i].from = data[i].from
+                userdata[i].sender = data[i].MessageOfSender
+                userdata[i].at = data[i].at
             }
         }
         return userdata

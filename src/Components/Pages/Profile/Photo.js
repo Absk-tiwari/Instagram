@@ -6,15 +6,18 @@ const Photo = (props) => {
     const params = props.params;
     const [open, setmodal] = useState(false);
     const [state, setState]= useState(false);
+    const [src, setsrc]= useState(false);
+
     const toggleModal = (e) => {
       if(e.target.id==='modal' || e.target.classList.contains('postImg')) setmodal(!open)
  
     }
     const putContents = e => {
+      setsrc(e.target.currentSrc)
       // document.querySelector('.imgContainer').setAttribute('src', e.target.getAttribute('src'))
     }
     const post = {likes:'49', username:'absk.tiwari'}
-    useEffect(()=>{ console.log('chala ai?') },[]);
+    useEffect(()=>{ console.log('rendered ?') },[]);
 
   return (
     <div className="col-md-4 openModal posts-of-logged-in-user" key={params.index} onMouseOver={()=>setState(true)} style={{position:state && 'relative'}}  onMouseLeave={()=>setState(false)}>
@@ -27,7 +30,7 @@ const Photo = (props) => {
           <>
           <div className='container d-flex'>
             <div className='col-6' style={{position:'relative'}}>
-              <img src={ob} className='imgContainer' style={{maxHeight:'456px',marginRight:'24px', width:'-webkit-fill-available'}} alt='?'/>
+              <img src={src} className='imgContainer' style={{ height:'-webkit-fill-available',maxHeight:'456px',marginRight:'24px', width:'-webkit-fill-available',objectFit:'contain'}} alt='?'/>
             </div>
             <div className='col-6'>
               <div className='col-12 placeholder-glow mt-3 mx-2' style={{position:'relative'}}>

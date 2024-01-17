@@ -4,7 +4,7 @@ import {socket} from '../../../../socket'
 import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 
 function Chat(props) {
-  const {me,username} = props    
+  const {me,username,launch} = props    
   const {updateChat,getChatsOf} = useContext(ProfileContext)    
   const [msg, setMessage] = useState('')
   const [hasmsg, mark] = useState(false)
@@ -39,7 +39,9 @@ function Chat(props) {
       if(box.current){
         box.current.innerHTML = html
         document.getElementsByClassName('body')[0].scrollTop = document.getElementsByClassName('body')[0].scrollHeight
-        updateChat(me,username)
+        if(launch){
+          updateChat(me,username)
+        }
       }
     },2500);
   }
@@ -75,7 +77,7 @@ function Chat(props) {
     event.preventDefault()
     if(msg){
         let cstring = me+'_'+username
-        let data = {to:username,content:msg, cID:cstring}
+        let data = {from:me,to:username,content:msg, cID:cstring}
         socket.emit('send', data)
         setMessage('')
     }

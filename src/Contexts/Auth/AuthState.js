@@ -20,6 +20,7 @@ const AuthState=(props)=>{
                 // Save the auth token 
                 localStorage.setItem('token', response.authToken);
                 navigator('/')
+                window.location.reload()
             }else{
                 alert(response.message)
                 console.log(response)

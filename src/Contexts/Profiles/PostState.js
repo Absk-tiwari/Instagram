@@ -98,13 +98,15 @@ const PostState = (props) => {
     function getMyposts(){
       let data = personalPosts()
       data.then(item=>{
-        if(item){
+        if(!item.error && item.length){
           for(let i of item){
             myPosts.push(i)
           }
+        }else{
+          throw new Error('Maybe it\'s unauthorised!')
         }
         localStorage.setItem('myPosts',JSON.stringify(myPosts))
-      }) 
+      }).catch(err=>console.log(err)) 
     }
     getMyposts()
     const createPost = async(obj) => {

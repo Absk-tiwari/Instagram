@@ -27,9 +27,10 @@ let users = new Map();
 socket.use((req,next)=>{
   const handshakeData = req.request
   const username = handshakeData._query.username
+  console.log(username,' inside middleware');
   if(username){
-    // console.log(username);
     socket.username = username
+    console.log(socket.username,' after middleware');
     return next()
   }
   return next(new Error('Username missing'))
@@ -42,23 +43,23 @@ socket.on('connection', conn => {
       } else {
         // new or unrecoverable session
          users.set(socket.username, conn.id)
+         console.log(socket.username, conn.id)
          const myObject = Object.keys(Object.fromEntries(users));
          socket.emit('init',  [myObject] )
-         console.log(myObject)
       }
 
       conn.on('send', async(data) => {
-        console.log('By '+socket.username+' to '+data.to)
+        console.log('By '+data.from+' to '+data.to)
         let target = data.to 
         target = users.get(target)
-        let dataobj = {from: socket.username, content:data.content, at:Date.now(), read:false}
+        let dataobj = {from: data.from, content:data.content, at:Date.now(), read:false}
         
         if(target){
           socket.to(target).emit('receive', dataobj )
         }
         if(data.to){
           let saved = await Message.create({
-            from: socket.username,
+            from: data.from,
             to : data.to,
             content : data.content,
             connectionID : data.cID

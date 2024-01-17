@@ -18,7 +18,7 @@ const messageSchema = new mongoose.Schema({
     },
     at : {
         type : Date,
-        default : Date.now
+        default : Date.now()
     },
     read : {
         type : Boolean,

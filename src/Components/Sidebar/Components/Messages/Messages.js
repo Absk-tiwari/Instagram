@@ -12,6 +12,7 @@ const Messages = () => {
   const [isLoading, setLoading] = useState(false)
   const [opened, openedChat] = useState(false);
   const {searchUser,getChats} = useContext(ProfileContext);
+  const [launch,set] = useState(false)
   const mapref = useRef(null)
   let user = localStorage.getItem('userLogin')
   user = JSON.parse(user)
@@ -58,16 +59,17 @@ const Messages = () => {
       chatt = res;
       let html=''
         chatt.forEach(chat => { 
-            console.log(chat.from, chat.from!==user.username, user.username)
-            let should = onlines && onlines.includes(chat.username)?'Active now':chat.name;
-            html+=`<div class="row mt-3 openchat" style='cursor:pointer' data-username='${chat.username}' data-name='${chat.name}' >
-              <div class="col-sm-2" data-name='${chat.name}' data-username='${chat.username}'>
+ 
+            let active = onlines.includes(chat.username);
+            html+=`<div class="row mt-3 openchat" style='cursor:pointer' data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>
+              <div class="col-sm-2" data-name='${chat.name}' data-username='${chat.username}' style="position:relative" data-s='${chat.from!==user.username}'>
                 <img data-name='${chat.name}' data-username='${chat.username}'
-                  src='${profile}' style='height:50px' class="mx-auto rounded-circle" alt="" />
+                  src='${profile}' style='height:50px' class="mx-auto rounded-circle" alt="" data-s='${chat.from!==user.username}' />
+                  <h2 class="${active?'':'d-none'}" style="position:absolute;bottom:0px;left:50px;font-size:xxx-large;color:green;font-weight:900" data-s='${chat.from!==user.username}'>.</h2>
               </div>
-              <div class="col-sm-10 chatUser" data-username='${chat.username}' data-name='${chat.name}'>
-                <b data-username='${chat.username}' data-name='${chat.name}' >${chat.username}</b>
-                <p class="username ${chat.unread?'text-dark':'p'}" style='font-weight:${chat.unread && chat.from!==user.username?'700':'p'}' data-username='${chat.username}' data-name='${chat.name}'>${chat.unread && chat.from!==user.username? chat.last: should}</p>
+              <div class="col-sm-10 chatUser" data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>
+                <b data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>${chat.username}</b>
+                <p class="username ${chat.unread?'text-dark':'p'}" style='font-weight:${chat.unread && chat.from!==user.username?'700':'p'}' data-s='${chat.from!==user.username}' data-username='${chat.username}' data-name='${chat.name}'>${chat.from==user.username && chat.MessageOfSender? chat.MessageOfSender : chat.last} </p>
               </div>
             </div>`; 
         })
@@ -103,6 +105,8 @@ const Messages = () => {
     console.log(ele)
     let username = ele.dataset.username
     let name = ele.dataset.name
+    let fire = ele.dataset.s
+    set(fire)
     openedChat(true); 
     setUser({username,name})
     setmodal(false)
@@ -180,7 +184,7 @@ const Messages = () => {
                 Send message
               </button>
             </div>
-          </div> :  <Chat me={user.username} username={selectedUser.username} name={selectedUser.name}/>
+          </div> :  <Chat me={user.username} username={selectedUser.username} name={selectedUser.name} launch={launch}/>
          }
         </div>
       </div>
