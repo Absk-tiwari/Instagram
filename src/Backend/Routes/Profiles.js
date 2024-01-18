@@ -7,6 +7,28 @@ const fetchuser= require('../Middlewares/LoggedIn');
 let error = { status : false, message:'Something went wrong!' }
 let output = { status : true }
 
+router.post('/update',fetchuser, async(req,res)=>{
+    try {
+        const update = {
+            $set: {
+                read:true, // Update the 'value' field to a new value
+                // Add more fields to update as needed
+                profile:req.body.image,
+                bio : req.body.bio
+            },
+        };
+        let updated = await User.updateOne({_id:req.body.id},update)
+        if(updated){ 
+            let user = await User.findById(req.body.id)
+            return res.json(user)
+        }
+        return res.json(error)
+    } catch (err) {
+        error.message = err.message
+        return res.json(error)
+    }
+})
+
 // yet to be tested : Get profile details - login required 
 router.post('/getuser', fetchuser, async(req, res) =>{
     try {

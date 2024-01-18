@@ -1,5 +1,5 @@
 import { React, useContext, useState, useEffect } from "react";
-import obito from "../../../assets/icons/pfp.png";
+import obito from "../../../assets/icons/profile.png";
 import { Link } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
@@ -42,7 +42,7 @@ const Profile = () => {
       <div className="col-md-12 info-container">
         <div className="col-md-4">
           <div className="container">
-            <img src={obito} alt="not yet?" onClick={preview} />
+            <img src={user.profile??obito} alt="not yet?" style={{objectFit:'cover',width:'60%'}} onClick={preview} />
           </div>
         </div>
         <div className="col-md-8">
@@ -76,7 +76,7 @@ const Profile = () => {
           </div>
           <div className="row">
             <div className="col-sm-12">
-              <small>{LoggedIn.bio}</small>
+              <small>{user.bio??LoggedIn.bio}</small>
             </div>
           </div>
         </div>

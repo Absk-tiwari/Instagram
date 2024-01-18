@@ -11,7 +11,7 @@ let output = { status : true }
 // yet to be tested
 router.post('/', fetchuser, async(req, res) =>{
     try {
-        // await Message.deleteMany()
+        //await Message.deleteMany() // truncate data
         let username = req.body.username
         const result = await Message.aggregate([
             {
@@ -24,36 +24,38 @@ router.post('/', fetchuser, async(req, res) =>{
             },
             {
               $group: {
-                _id: '$from',
+                _id: '$connectionID',
                 count: { $sum: 1 },
               },
             },
         ]);
+        // console.log('message results',result)
         let conv =[]
         for(let item of result){
-             if(item._id!==username){
-                let one = item._id+'_'+username
-                let two = username +'_'+item._id
+ 
+                let [a,b] = (item._id).split('&')
+                let one = a+'&'+b
+                let two = b+'&'+a
                 let data = await Message.find({            
                   $or : [
                     { connectionID:one},
                     { connectionID:two}
                   ]
                 }).select('content read from at -_id');
-
                 let lastInd = data.length -1
                 let lastMessage = data[lastInd].content
                 let lastMessageFrom = data[lastInd].from
                 let reads = data.filter(it=>{return it.read===false});
+                console.log(reads.length)
                 item.last = reads && Object.keys(reads).length > 1 ?`${Object.keys(reads).length} new messages`:lastMessage
-                item.unread = Object.keys(reads).length ? true :false
+                item.read = Object.keys(reads).length ? false : true
                 item.from = lastMessageFrom
                 item.at = data[lastInd].at
-                if(Object.keys(reads).length > 1){
+                if(Object.keys(reads).length > 0){
                     item.MessageOfSender = lastMessage
                 }
                 conv.push(item)
-             }
+  
         }
         // let conv = 
         // result.filter(item=>{
@@ -74,9 +76,9 @@ router.post('/of', fetchuser, async(req, res) =>{
     try {
         // await Message.deleteMany()
         let cID = req.body.cID
-        let [fore,back] = cID.split('_')
-        let one = fore+'_'+back
-        let two = back+'_'+fore
+        let [fore,back] = cID.split('&')
+        let one = fore+'&'+back
+        let two = back+'&'+fore
         const result = await Message.find({
             $or : [
                { connectionID:one},
@@ -127,8 +129,8 @@ router.post('/update', fetchuser, async(req, res) =>{
     try {
         const me = req.body.me
         const username = req.body.username
-        let one = me+'_'+username
-        let two = username+'_'+me
+        let one = me+'&'+username
+        let two = username+'&'+me
 
         const filter = {
             $or: [

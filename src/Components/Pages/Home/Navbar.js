@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react"; 
 import StoryContext from "../../../Contexts/Stories/StoryContext";
 import Stories from "./Stories";
-import ob from '../../../assets/icons/itachi.jpg'
+import ob from '../../../assets/icons/profile.png'
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   const [Loaded, setLoader] = useState(true)
+  let user = localStorage.getItem('userLogin')
+  user = JSON.parse(user)
   const {stories, getStories} = useContext(StoryContext);
   const addToStory = ()=> {}
   useEffect(()=>{
@@ -21,7 +23,7 @@ const Navbar = () => {
     <>
       <nav className="navbar navbar-expand-lg mt-5 mx-4 navbar">
         <div style={{position:'relative',marginBottom:'15px'}} onClick={addToStory}>
-          <Link to={`/stories/itachi/view`} style={{marginBottom:`auto`}} ><Stories img={ob}/></Link>
+          <Link to={`/stories/itachi/view`} style={{marginBottom:`auto`}} ><Stories img={user.profile??ob}/></Link>
           <div className="userStory"><i className="fa fa-plus text-white" ></i></div>
         </div>
       { Loaded===false ?

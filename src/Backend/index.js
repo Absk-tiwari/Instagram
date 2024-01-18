@@ -27,10 +27,8 @@ let users = new Map();
 socket.use((req,next)=>{
   const handshakeData = req.request
   const username = handshakeData._query.username
-  console.log(username,' inside middleware');
   if(username){
     socket.username = username
-    console.log(socket.username,' after middleware');
     return next()
   }
   return next(new Error('Username missing'))
@@ -43,7 +41,6 @@ socket.on('connection', conn => {
       } else {
         // new or unrecoverable session
          users.set(socket.username, conn.id)
-         console.log(socket.username, conn.id)
          const myObject = Object.keys(Object.fromEntries(users));
          socket.emit('init',  [myObject] )
       }

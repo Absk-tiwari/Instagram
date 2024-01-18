@@ -26,7 +26,7 @@ const Messages = () => {
 
   let chatt;
   const init = async() => {
-    let data =  getChats(user.username)
+    let data = getChats(user.username)
     return await data.then(res=>{return res})  
   }
 
@@ -60,7 +60,8 @@ const Messages = () => {
       let html=''
         chatt.forEach(chat => { 
  
-            let active = onlines.includes(chat.username);
+            let active = (onlines && onlines.length) ? onlines[0].includes(chat.username) : false;
+            console.log('is active ? '+active + chat.username)
             html+=`<div class="row mt-3 openchat" style='cursor:pointer' data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>
               <div class="col-sm-2" data-name='${chat.name}' data-username='${chat.username}' style="position:relative" data-s='${chat.from!==user.username}'>
                 <img data-name='${chat.name}' data-username='${chat.username}'
@@ -69,7 +70,8 @@ const Messages = () => {
               </div>
               <div class="col-sm-10 chatUser" data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>
                 <b data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>${chat.username}</b>
-                <p class="username ${chat.unread?'text-dark':'p'}" style='font-weight:${chat.unread && chat.from!==user.username?'700':'p'}' data-s='${chat.from!==user.username}' data-username='${chat.username}' data-name='${chat.name}'>${chat.from==user.username && chat.MessageOfSender? chat.MessageOfSender : chat.last} </p>
+                <p class="username ${chat.read?'p':'text-dark'}" style='font-weight:${!chat.read && chat.from!==user.username?'700':'p'}' data-s='${chat.from!==user.username}' data-username='${chat.username}' data-name='${chat.name}'>${chat.from===user.username && chat.MessageOfSender? chat.MessageOfSender : chat.last} 
+                <small>${(chat.from===user.username)? (chat.read ? 'seen 2h ago' : 'sent 2h ago' ) :'2h'}</small></p>
               </div>
             </div>`; 
         })
@@ -105,7 +107,7 @@ const Messages = () => {
     console.log(ele)
     let username = ele.dataset.username
     let name = ele.dataset.name
-    let fire = ele.dataset.s
+    let fire =  JSON.parse(ele.dataset.s)
     set(fire)
     openedChat(true); 
     setUser({username,name})
@@ -131,11 +133,11 @@ const Messages = () => {
         let html=''
         results.then(res=>{
           res.forEach(result=>{
-           html += `<div style='height:60px;background-color:#e9ecef;border-radius:10px;width:300px;display:flex;margin-left:60px;margin-top:5px;padding-top:4px' class='open-searched' data-username='${result.username}' data-name='${result.name}'>
-              <img src='${profile}' class="mx-3 rounded-circle" style='height:52px' data-username='${result.username}' data-name='${result.name}' alt=""/>
-              <div class="d-block" style="" data-username='${result.username}' data-name='${result.username}'>
-                <b data-username='${result.username}' data-name='${result.name}'>${result.username}</b> <br/>
-                <small data-username='${result.username}' data-name='${result.name}'>${result.name}</small>
+           html += `<div style='height:60px;background-color:#e9ecef;border-radius:10px;width:300px;display:flex;margin-left:60px;margin-top:5px;padding-top:4px' class='open-searched' data-s='false' data-username='${result.username}' data-name='${result.name}'>
+              <img src='${profile}' class="mx-3 rounded-circle" style='height:52px' data-s='false' data-username='${result.username}' data-name='${result.name}' alt=""/>
+              <div class="d-block" style="" data-username='${result.username}' data-s='false' data-name='${result.username}'>
+                <b data-username='${result.username}' data-name='${result.name}' data-s='false'>${result.username}</b> <br/>
+                <small data-username='${result.username}' data-name='${result.name}' data-s='false'>${result.name}</small>
               </div>
             </div>`
           })

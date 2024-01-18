@@ -22,7 +22,7 @@ function Chat(props) {
   })
 
   const getChats = async() => {
-    let oldchats = await getChatsOf(me+'_'+username)
+    let oldchats = await getChatsOf(me+'&'+username)
     if(oldchats && oldchats.length){
       mark(true)
       setLoading(true)
@@ -76,7 +76,7 @@ function Chat(props) {
   const sendMessage = event => {
     event.preventDefault()
     if(msg){
-        let cstring = me+'_'+username
+        let cstring = me+'&'+username
         let data = {from:me,to:username,content:msg, cID:cstring}
         socket.emit('send', data)
         setMessage('')
