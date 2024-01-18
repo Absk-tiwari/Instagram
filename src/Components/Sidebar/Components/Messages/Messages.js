@@ -59,13 +59,11 @@ const Messages = () => {
       chatt = res;
       let html=''
         chatt.forEach(chat => { 
- 
             let active = (onlines && onlines.length) ? onlines[0].includes(chat.username) : false;
-            console.log('is active ? '+active + chat.username)
             html+=`<div class="row mt-3 openchat" style='cursor:pointer' data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>
               <div class="col-sm-2" data-name='${chat.name}' data-username='${chat.username}' style="position:relative" data-s='${chat.from!==user.username}'>
                 <img data-name='${chat.name}' data-username='${chat.username}'
-                  src='${profile}' style='height:50px' class="mx-auto rounded-circle" alt="" data-s='${chat.from!==user.username}' />
+                  src='${chat.profile??profile}' style='height:50px;width:50px!important' class="mx-auto rounded-circle" alt="" data-s='${chat.from!==user.username}' />
                   <h2 class="${active?'':'d-none'}" style="position:absolute;bottom:0px;left:50px;font-size:xxx-large;color:green;font-weight:900" data-s='${chat.from!==user.username}'>.</h2>
               </div>
               <div class="col-sm-10 chatUser" data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>

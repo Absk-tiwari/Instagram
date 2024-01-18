@@ -104,6 +104,7 @@ const PostState = (props) => {
           }
         }else{
           throw new Error('Maybe it\'s unauthorised!')
+          navigator('/')
         }
         localStorage.setItem('myPosts',JSON.stringify(myPosts))
       }).catch(err=>console.log(err)) 
