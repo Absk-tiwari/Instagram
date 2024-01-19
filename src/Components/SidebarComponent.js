@@ -219,7 +219,17 @@ function SidebarComponent() {
           </div>
         </div>
       </div>
+        <div role="alert" aria-live="assertive" aria-atomic="true" className="toast" data-autohide="false">
+          <div className="toast-header">
+            <strong className="mr-auto">Hello, world! </strong>
+            <small>11 mins ago</small>
+            <button type="button" className="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
       </div>
+      
     )
   );
 }

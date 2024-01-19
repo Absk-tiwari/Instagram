@@ -10,6 +10,7 @@ const Messages = () => {
   const [selectedUser,setUser] = useState({username:'',name:''})
   const [searchParam, setSearchParam] = useState('');
   const [isLoading, setLoading] = useState(false)
+  const [userDetail, setDetail] = useState({})
   const [opened, openedChat] = useState(false);
   const {searchUser,getChats} = useContext(ProfileContext);
   const [launch,set] = useState(false)
@@ -17,48 +18,44 @@ const Messages = () => {
   let user = localStorage.getItem('userLogin')
   user = JSON.parse(user)
   // let chats=[];
-  const [online , setOnline] = useState(false);
+  const [change , setchange] = useState(false);
   const [open, setmodal] = useState(false);
-  let messages = [];
-  const addMessage = (from, content) => {
-    !messages.some(msg=> msg.from=== from) && messages.push({from,content})
-  }
 
-  let chatt;
-  const init = async() => {
-    let data = getChats(user.username)
-    return await data.then(res=>{return res})  
+  const changeParent = newState => {
+    setchange(newState)
   }
-
+  var totalUsers=[]
  
   socket.on('receive',data=>{
-    localStorage.setItem('cstring',data.connectionID)
-    let from = data.from
-    let content = data.content
-    addMessage(from,content)
+    setchange(!change)
   })
   
-  socket.on('notification',data=>{
-    console.log(data)
-  }) 
+
   let onlines=[];
   socket.on('init',data=>{
-    setOnline(!online)
-    console.log('emit from socekt server..')
-    console.log(data)
+    setchange(!change)
     for(let it of data){
       onlines.push(it)
     }
   })
-  socket.on('flag',()=>setOnline(!online))
+  socket.on('flag',()=>    setchange(!change)
+)
   
   // console.log('the chats;',chats)
   useEffect(()=>{
-    let resp =  init()
+    const init = async() => {
+      let data = await getChats(user.username)
+      return data  
+    }
+    let resp = init()
     resp.then(res=>{ 
-      chatt = res;
+
       let html=''
-        chatt.forEach(chat => { 
+      if(!res){
+        console.log('should you be here?')
+      }else{
+        res.forEach(chat => { 
+          totalUsers[chat.username]=chat
             let active = (onlines && onlines.length) ? onlines[0].includes(chat.username) : false;
             html+=`<div class="row mt-3 openchat" style='cursor:pointer' data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>
               <div class="col-sm-2" data-name='${chat.name}' data-username='${chat.username}' style="position:relative" data-s='${chat.from!==user.username}'>
@@ -68,25 +65,29 @@ const Messages = () => {
               </div>
               <div class="col-sm-10 chatUser" data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>
                 <b data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>${chat.username}</b>
-                <p class="username ${chat.read?'p':'text-dark'}" style='font-weight:${!chat.read && chat.from!==user.username?'700':'p'}' data-s='${chat.from!==user.username}' data-username='${chat.username}' data-name='${chat.name}'>${chat.from===user.username && chat.MessageOfSender? chat.MessageOfSender : chat.last} 
+                <p class="username ${chat.read?'p':'text-dark'}" style='font-weight:${!chat.read && chat.from!==user.username?'700':'p'}' data-s='${chat.from!==user.username}' data-username='${chat.username}' data-name='${chat.name}'>${chat.from===user.username && chat.sender? chat.sender : chat.last} 
                 <small>${(chat.from===user.username)? (chat.read ? 'seen 2h ago' : 'sent 2h ago' ) :'2h'}</small></p>
               </div>
             </div>`; 
-        })
-        let el = document.getElementById('user-row-container')
-        if(el){
-          el.innerHTML = html
-        }
-        setTimeout(() => {          
+            console.log(chat.from, chat)
+      })
+
+      setTimeout(() => {          
+          let el = document.getElementById('user-row-container')
+          if(el){
+            el.innerHTML = html
+          }
           let classes = document.getElementsByClassName('openchat')
           for(let i of classes){
             i.addEventListener('click', openChat)
           }
         }, 2000);
+      }
     })
     console.log('rendered')
 
-  },[online])
+  } ,
+[change, onlines, user.username])
 
   
   const toggleModal = e => {   
@@ -102,12 +103,12 @@ const Messages = () => {
 
   const openChat = event => {
     let ele = event.target
-    console.log(ele)
     let username = ele.dataset.username
     let name = ele.dataset.name
     let fire =  JSON.parse(ele.dataset.s)
     set(fire)
     openedChat(true); 
+    setDetail(totalUsers[username])
     setUser({username,name})
     setmodal(false)
     setSearchParam('')
@@ -184,7 +185,7 @@ const Messages = () => {
                 Send message
               </button>
             </div>
-          </div> :  <Chat me={user.username} username={selectedUser.username} name={selectedUser.name} launch={launch}/>
+          </div> :  <Chat me={user.username} userImage={selectedUser.image} username={selectedUser.username} name={selectedUser.name} details={userDetail} launch={launch} update={changeParent} />
          }
         </div>
       </div>

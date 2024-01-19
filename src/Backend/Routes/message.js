@@ -46,7 +46,7 @@ router.post('/', fetchuser, async(req, res) =>{
                 let lastMessage = data[lastInd].content
                 let lastMessageFrom = data[lastInd].from
                 let reads = data.filter(it=>{return it.read===false});
-                console.log(reads.length)
+                console.log(reads.length , typeof reads)
                 item.last = reads && Object.keys(reads).length > 1 ?`${Object.keys(reads).length} new messages`:lastMessage
                 item.read = Object.keys(reads).length ? false : true
                 item.from = lastMessageFrom

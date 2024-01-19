@@ -6,18 +6,18 @@ import { useNavigate } from 'react-router';
 
 const ProfileState = (props) => {
     let navigator = useNavigate()
-     const getChats = async(username)=>{
+     const getChats = async(me)=>{
         let res = await fetch('http://localhost:1901/api/messages',{
             method:'POST',
             headers:headers(),
-            body:JSON.stringify({username})
+            body:JSON.stringify({username:me})
         })
 
         let data = await res.json();
         let usernames=[];
         data.forEach(ele => {
             let [user1, user2] = ele._id.split('&')
-            if(user1===username){
+            if(user1===me){
                 usernames.push(user2)
             }else{
                 usernames.push(user1)
@@ -29,9 +29,11 @@ const ProfileState = (props) => {
             body:JSON.stringify({users:usernames})
         })
         let userdata = await users.json();
-        for(let i=0;i < userdata.length;i++){
+        for(let i=0;i < userdata.length; i++){
             let [user1, user2] = data[i]._id.split('&')
-            let compUser = user1===username?user2:user1
+            let compUser = user1===me? user2: user1
+            console.log(compUser+' user inlist', 'resulted user should be in this - ' + userdata[i].username)
+            // userdata[i].username
             if(userdata[i].username===compUser){
                 userdata[i].read = data[i].read
                 userdata[i].last = data[i].last
@@ -40,7 +42,6 @@ const ProfileState = (props) => {
                 userdata[i].at = data[i].at
             }
         }
-        console.log(userdata)
         return userdata
    }
 
@@ -61,11 +62,11 @@ const ProfileState = (props) => {
             }
         }).catch(err=>alert(err.message))
    }
-    const profiles = [];
+        const  profiles= [] 
 
         const LoggedIn = {
             pfp ,
-            posts : profiles.length,
+            posts :0,
             username : 'te.sting8398',
             name : 'Deployment',
             bio : 'Future belongs to those who believe in beauty of their dreams',

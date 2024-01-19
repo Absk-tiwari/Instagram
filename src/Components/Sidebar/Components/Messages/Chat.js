@@ -4,7 +4,8 @@ import {socket} from '../../../../socket'
 import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 
 function Chat(props) {
-  const {me,username,launch} = props    
+  const {me,username,launch,update,details} = props   
+  const [parent,setParent] = useState(false)
   const {updateChat,getChatsOf} = useContext(ProfileContext)    
   const [msg, setMessage] = useState('')
   const [hasmsg, mark] = useState(false)
@@ -16,10 +17,6 @@ function Chat(props) {
     cursor:'pointer'
   }
    
-  socket.on('receive', data => {
-    localStorage.setItem('cstring', data.connectionID)
-    showMessage(data.content)
-  })
 
   const getChats = async() => {
     let oldchats = await getChatsOf(me+'&'+username)
@@ -61,7 +58,6 @@ function Chat(props) {
       // setTimeout(() => , 2400);      
   }
   socket.on('receive',data=>{
-    console.log('received')
     let content = data.content
     showMessage(content)
     // alert('you have a message '+data.content)
@@ -71,17 +67,23 @@ function Chat(props) {
     setLoading(true);
     mark(false);
     getChats().then(()=>setLoading(false));
+    setParent(!parent)
   },[username])
 
   const sendMessage = event => {
     event.preventDefault()
     if(msg){
-        let cstring = me+'&'+username
-        let data = {from:me,to:username,content:msg, cID:cstring}
-        socket.emit('send', data)
-        setMessage('')
+      let cstring = me+'&'+username
+      let data = {from:me,to:username,content:msg, cID:cstring}
+      socket.emit('send', data)
+      setMessage('')
     }
     showMessage(msg,false)
+    setParent(!parent)
+    update(parent)
+    if(launch){
+      updateChat(me,username)
+    }
   }
 
   return (
@@ -108,7 +110,7 @@ function Chat(props) {
                 <div className='hstack'>
                     <div className='col-9 hstack'>
                         <div className='img-container mx-5 col-1'>
-                            <img src={img} style={{height:'63px'}} className='rounded-circle' alt={username} />
+                            <img src={details.profile??img} style={{height:'63px',width:'63px'}} className='rounded-circle' alt={username} />
                         </div>
                         <div className='col-10' style={{paddingTop:'15px'}}>
                             <h3>{username}</h3>

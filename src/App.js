@@ -22,10 +22,15 @@ import Signup from "./Components/Pages/Auth/Signup";
 import ProfileSetting from "./Components/Pages/Settings/ProfileSetting";
 import AuthState from "./Contexts/Auth/AuthState"; 
 import respond from "./respond";
+import {socket} from './socket'
 function App() {
+  let notifications = []
   useEffect(() => {
     respond()
-  }, []);
+    socket.on('notification',data=>{
+      console.log(data)
+    })
+  }, [notifications]);
 
   return (
     <>
