@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import ProfileContext from '../../../Contexts/Profiles/ProfileContext'
-import Button from '../../StateComponents/Button';
 import Modal from '../../Modal';
 import LoadingBar from "react-top-loading-bar";
 

@@ -9,7 +9,7 @@ import headers from '../../APIs/Headers';
 
 const StoryState = (props) => {
     // eslint-disable-next-line
-    const host = 'http://127.0.0.1:1901';
+    const host = 'http://192.168.1.22:1901';
     const stories = [
         {
             sno:12,

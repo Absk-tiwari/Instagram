@@ -5,7 +5,7 @@ import headers from "../../APIs/Headers";
 const AuthState=(props)=>{
  
     let navigator = useNavigate();
-    const host = 'http://127.0.0.1:1901';
+    const host = 'http://192.168.1.22:1901';
 
     const login = async({username, password}) =>{
         try {

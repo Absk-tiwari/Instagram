@@ -32,9 +32,15 @@ router.post('/update',fetchuser, async(req,res)=>{
 // yet to be tested : Get profile details - login required 
 router.post('/getuser', fetchuser, async(req, res) =>{
     try {
-        const userid  = req.body.id; 
-        const user= await User.findById(userid).select('-password');
-        return res.json(user);
+        let userid  = req.body.id;  
+        if(req.body.username){
+             let user = await User.find({username:req.body.username}).select('-password') 
+             return res.json(user)
+        }else{
+             let user= await User.findById(userid).select('-password');
+             return await res.json(user) 
+        }
+
     } catch (e) {
         error.message = e.message
         return res.status(500).send(error)

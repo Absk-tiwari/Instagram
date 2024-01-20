@@ -1,10 +1,12 @@
-import { React, useContext, useState, useEffect } from "react";
+import { React, useContext, useEffect, useState } from "react";
 import obito from "../../../assets/icons/profile.png";
 import { Link } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
 import ProfileContext from "../../../Contexts/Profiles/ProfileContext";
+import Loader from "../../StateComponents/Loader";
+import headers from "../../../APIs/Headers";
 
 const Profile = () => {
   const [active, setStat] = useState(1);
@@ -13,7 +15,8 @@ const Profile = () => {
   user = JSON.parse(user)
   let posts  = localStorage.getItem('myPosts')
   posts = JSON.parse(posts)
-  const preview = (e) => {
+
+  const preview =  e => {
     let div = document.createElement("div"); 
     div.classList.add('randomDiv') ;
     const img = e.target
@@ -33,12 +36,30 @@ const Profile = () => {
       document.querySelector('#root').classList.remove('addCover')
     }
   })
- 
-  
+ const [loaded, setLoad] = useState(false)
+  useEffect(()=>{
+    let query = window.location.search
+    let term = query.split('?')
+    console.log(term)
+    term = term[1].split('=')[1]
+    const getUser= async(term)=>{
+      let data= await fetch('http://localhost:1901/api/profile/getuser',{
+        method:'POST',
+        headers:headers(),
+        body:JSON.stringify({username:term})
+      })
+      return await data.json()
+    }
+    console.log(getUser(term))
+    setTimeout(() => {
+      setLoad(true)
+    }, 5000);
+  },[])
 
   return (
     <>
-    <div className="page Profile" >
+    { loaded ?
+    (<div className="page Profile" >
       <div className="col-md-12 info-container">
         <div className="col-md-4">
           <div className="container">
@@ -60,7 +81,7 @@ const Profile = () => {
 
           <div className="row">
             <div className="col-sm-3 stats">
-              <strong>{posts.length}</strong> posts
+              <strong>{posts ? posts.length : 0}</strong> posts
             </div>
             <div className="col-sm-4 stats">
               <strong >{user.followers}</strong> followers
@@ -109,7 +130,8 @@ const Profile = () => {
         </div>
         
       </div>
-    </div>
+    </div>):<Loader height={200} left={350}/>
+  }
     </>
   );
 };

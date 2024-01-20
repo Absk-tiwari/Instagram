@@ -1,12 +1,14 @@
-import React  from "react";
+import React, {useContext, useEffect}  from "react";
 import PostHead from "./Components/PostHead";
 // eslint-disable-next-line
 import PostContext from "../../../Contexts/Profiles/PostContext";
 import PostFooter from "./Components/PostFooter";
 
 const Post = () => {
-  // const posts = useContext(PostContext);
-  const posts = {};
+ const {posts} = useContext(PostContext);
+ useEffect(()=>{
+  console.log('want posts ?',posts)
+ },[])
   return (
     <>
       { posts && posts.length > 0 ? 

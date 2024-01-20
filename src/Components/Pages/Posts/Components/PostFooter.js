@@ -11,8 +11,8 @@ const PostFooter = (props) => {
     <>
       <div className="row">
         <div className="col-sm-1">
-          <i className={`fa fa-heart${like ? " animate" : "-o"} mt-1`} style={{transition: "0.2s",fontSize: "25px",
-          color: like ?'red':''}} onClick={() =>reactPost(!like)} title={like?'Unlike':'Like'}></i>
+          <i className={`fa${!like ? '-regular': ''} fa-heart${like ? ' animate': ''} mt-1`} style={{transition: "0.2s",fontSize: "25px",
+          color: like ? 'red':''}} onClick={() =>reactPost(!like)} title={like?'Unlike':'Like'}></i>
         </div>
         <div className="col-sm-1">
            <svg aria-label="Comment" className="_8-yf5 " color="#262626" fill="#262626" 

@@ -1,11 +1,11 @@
-import React, {useState, useContext ,useEffect} from "react";
+import React from "react";
 import camera from "../../../assets/icons/camera.png";
 import Photo from "./Photo";
 
 const UserPosts = () => {
-  const [active, set] = useState(false)
-  let user = localStorage.getItem('userLogin')
-  user = JSON.parse(user)
+  //const [active, set] = useState(false)
+  // let user = localStorage.getItem('userLogin')
+  // user = JSON.parse(user)
   let myPosts = localStorage.getItem('myPosts');
   myPosts = JSON.parse(myPosts)
   const style = {
@@ -20,13 +20,7 @@ const UserPosts = () => {
   //   console.log(id);
   //   document.querySelector(`#${id}`).classList.remove('d-none');
   // }; 
- 
-  setTimeout(() => {
-    if(active){  
-    }
-    console.log(myPosts)
-    console.log('executed')
-  }, 12000);
+  
     return (
       <>
         {!myPosts? (

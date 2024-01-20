@@ -110,7 +110,7 @@ function Chat(props) {
                 <div className='hstack'>
                     <div className='col-9 hstack'>
                         <div className='img-container mx-5 col-1'>
-                            <img src={details.profile??img} style={{height:'63px',width:'63px'}} className='rounded-circle' alt={username} />
+                            <img src={details && details.profile?details.profile:img} style={{height:'63px',width:'63px'}} className='rounded-circle' alt={username} />
                         </div>
                         <div className='col-10' style={{paddingTop:'15px'}}>
                             <h3>{username}</h3>
