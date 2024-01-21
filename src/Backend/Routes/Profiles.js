@@ -1,5 +1,6 @@
 const  express = require("express");
 const User=require('../Models/User');
+const Post=require('../Models/Post');
 const BlockedUser =require('../Models/BlockedUser');
 const router = express.Router();
 const fetchuser= require('../Middlewares/LoggedIn');
@@ -7,12 +8,15 @@ const fetchuser= require('../Middlewares/LoggedIn');
 let error = { status : false, message:'Something went wrong!' }
 let output = { status : true }
 
+router.get('/test', async(req,res)=>{
+    let data = await Post.find().select('content -_id')
+    return   res.json(data)
+})
+
 router.post('/update',fetchuser, async(req,res)=>{
     try {
         const update = {
             $set: {
-                read:true, // Update the 'value' field to a new value
-                // Add more fields to update as needed
                 profile:req.body.image,
                 bio : req.body.bio
             },
@@ -38,7 +42,7 @@ router.post('/getuser', fetchuser, async(req, res) =>{
              return res.json(user)
         }else{
              let user= await User.findById(userid).select('-password');
-             return await res.json(user) 
+             return  res.json(user) 
         }
 
     } catch (e) {
@@ -88,7 +92,6 @@ router.post('/block', fetchuser, async (req,res) => {
 router.post('/users',fetchuser,async(req,res)=>{
     try{
         let users = req.body.users
-         console.log(users)
         let fetchedUsers = await User.find({username:{ $in: users } })
 
         return res.json(fetchedUsers);
@@ -115,5 +118,6 @@ router.post('/search',fetchuser,async(req,res)=>{
         return res.json({message:e.message})
     }
 })
+
 
 module.exports = router   

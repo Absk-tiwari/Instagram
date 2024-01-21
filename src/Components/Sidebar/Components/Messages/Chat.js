@@ -80,7 +80,10 @@ function Chat(props) {
     }
     showMessage(msg,false)
     setParent(!parent)
-    update(parent)
+    console.log(update)
+    if(update){ 
+      update(parent)
+    }
     if(launch){
       updateChat(me,username)
     }

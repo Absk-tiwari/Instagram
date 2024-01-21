@@ -2,12 +2,13 @@ import React from "react";
 import camera from "../../../assets/icons/camera.png";
 import Photo from "./Photo";
 
-const UserPosts = () => {
+const UserPosts = (props) => {
+  const posts = props.posts
   //const [active, set] = useState(false)
   // let user = localStorage.getItem('userLogin')
   // user = JSON.parse(user)
-  let myPosts = localStorage.getItem('myPosts');
-  myPosts = JSON.parse(myPosts)
+  // let myPosts = localStorage.getItem('myPosts');
+  // myPosts = JSON.parse(myPosts)
   const style = {
     height: "4%",
     width: "7%",
@@ -23,7 +24,7 @@ const UserPosts = () => {
   
     return (
       <>
-        {!myPosts? (
+        {!posts? (
           <div id="menu1" className={`container`}>
             <br />
   
@@ -41,9 +42,9 @@ const UserPosts = () => {
         ) : (
           <div className="container" style={{ overflowY: "scroll" }}>
           <div className="row d-flex">
-            {myPosts && myPosts.map((post) => {
+            {posts && posts.map((post,index) => {
                   return ( 
-                    <Photo key={post.user_id} params={{index:post.user_id,username:post.username,content:post.content, likes:4 }}/>
+                    <Photo key={index} params={{index:post._id,username:post.username,content:post.content, likes:post.likes??4 }}/>
                     );
                   })
             }

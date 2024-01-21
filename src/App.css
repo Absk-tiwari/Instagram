@@ -110,10 +110,10 @@ img.icons {
   font-weight: 700;
 }
 .postImg {
-  margin: 0px !important;
+  margin: 4px !important;
   padding: 0px !important;
-  width: -webkit-fill-available;
-  height: -webkit-fill-available;
+  width: 23vw;
+  height: 33vh;
   z-index: 1;
 }
 .postImg:hover {
@@ -136,6 +136,8 @@ img.icons {
   padding: 30px; 
   border-color: linear-gradient(to right, red, orange);
   border-radius: 50%;
+  background-position-x:center;
+  background-size: cover;
 }
 
 .profileRow {
@@ -150,11 +152,11 @@ img {
 }
 
 .pfpicture {
-  margin-top: 10px;
   height: 50px;
   width: 50px;
   border-radius: 100%;
   background-color: aliceblue;
+  object-fit: cover;
 }
 .card {
   position: static!important;
@@ -250,7 +252,7 @@ img {
   /* background-color:burlywood; */
   margin: 0;
   /* margin-inline:0px; */
-  height: 35%;
+  height: 38%;
   display: flex;
   border-bottom: 1px solid darkgray;
 }
@@ -345,10 +347,7 @@ i {
   border-bottom: 2px solid darkgray;
 }
 .offcanvas-body .notification {
-  border-bottom: 1px solid darkgray;
-  border-right: 1px solid darkgray;
-  border-bottom-right-radius: 10px;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 .offcanvas-backdrop.show {
   opacity: 0 !important;
@@ -383,7 +382,7 @@ i {
 
 .random {
   height: 60vh;
-  width: 60vh;
+  width: 60vh!important;
   border-radius: 50%;
 }
 .form-control:focus {

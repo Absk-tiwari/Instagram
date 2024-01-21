@@ -2,7 +2,7 @@ import React from 'react'
 
 const Stories = (props) => {
   return (
-    <div className='story' style={{backgroundImage:`url(${props.img??''}`, backgroundRepeat:'round'}} > </div>
+    <div className='story' style={{backgroundImage:`url(${props.img??''}`}} > </div>
   )
 }
 

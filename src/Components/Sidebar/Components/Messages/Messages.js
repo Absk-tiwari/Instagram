@@ -6,12 +6,14 @@ import Loader from "../../../StateComponents/Loader";
 import { socket } from '././../../../../socket';
 import Chat from '../Messages/Chat'
 import profile from '../../../../assets/icons/profile.png'
+import headers from "../../../../APIs/Headers";
 const Messages = () => {
   const [selectedUser,setUser] = useState({username:'',name:''})
   const [searchParam, setSearchParam] = useState('');
   const [isLoading, setLoading] = useState(false)
   const [userDetail, setDetail] = useState({})
   const [opened, openedChat] = useState(false);
+  const [searched, setResults] = useState([])
   const {searchUser,getChats} = useContext(ProfileContext);
   const [launch,set] = useState(false)
   const mapref = useRef(null)
@@ -115,41 +117,24 @@ const Messages = () => {
   }
 
   
-  let results;
   const searchChatUser = e => {
     setLoading(true)
     e.preventDefault();
-    console.log(searchParam)
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   setSearchParam('')
-    // }, 3000);
-    if(searchParam.length>3){
-      results= searchUser(searchParam)
+  
+    if(searchParam.length > 3){
+      fetch('http://192.168.119.154:1901/api/profile/search',{
+                method:'POST',
+                headers:headers(),
+                body:JSON.stringify({param:searchParam})
+      }).then(res=>{
+        return res.json()
+      }).then(data=>{
+        setResults(data)
+        console.log(data)
+        setTimeout(()=>setLoading(false),2000)
+      })
     }
-    if(results){
-        setLoading(false);
-        let html=''
-        results.then(res=>{
-          res.forEach(result=>{
-           html += `<div style='height:60px;background-color:#e9ecef;border-radius:10px;width:300px;display:flex;margin-left:60px;margin-top:5px;padding-top:4px' class='open-searched' data-s='false' data-username='${result.username}' data-name='${result.name}'>
-              <img src='${profile}' class="mx-3 rounded-circle" style='height:52px' data-s='false' data-username='${result.username}' data-name='${result.name}' alt=""/>
-              <div class="d-block" style="" data-username='${result.username}' data-s='false' data-name='${result.username}'>
-                <b data-username='${result.username}' data-name='${result.name}' data-s='false'>${result.username}</b> <br/>
-                <small data-username='${result.username}' data-name='${result.name}' data-s='false'>${result.name}</small>
-              </div>
-            </div>`
-          })
-          document.getElementById('searchChat').innerHTML += html
-          
-          let classes = document.getElementsByClassName('open-searched')
-          if(classes){
-            for(let el of classes){
-              el.addEventListener('click', openChat)
-            }
-          }
-        })
-    }
+ 
   }
 
   return (
@@ -206,7 +191,20 @@ const Messages = () => {
               <span className="placeholder col-1" style={{height:'40px',width:'40px',borderRadius:'50%'}}></span>&nbsp;
               <span className="placeholder col-3"></span> <br/>
               <span className="placeholder col-6"></span>
-            </p>): ''}
+            </p>):             
+            (searchParam && searched.length ? searched.map((user,index)=>{
+              return (<div style={{height:"60px",backgroundColor:"#e9ecef",borderRadius:'10px',width:'300px',display:'flex',marginLeft:'60px',marginTop:'5px',paddingTop:'4px'}} className='open-searched' data-s={false} data-username={user.username} key={index} data-name={user.name} onClick={openChat}>
+              <img src={user.profile??profile} class="mx-3 pfpicture" data-s={false} data-username={user.username} data-name={user.name} onClick={openChat} alt=""/>
+              <div class="d-block" data-username={user.username} data-s='false' data-name={user.username} onClick={openChat}>
+                <b data-username={user.username} data-name={user.name} data-s='false' onClick={openChat}>{user.username}</b> <br/>
+                <small data-username={user.username} data-name={user.name} data-s='false' onClick={openChat}>{user.name}</small>
+              </div>
+            </div>)
+            }):(
+             searchParam.length ? ( 
+                <b className="mx-3">No results found..</b>  
+                ):''
+            ))}
           </div>
         </>
       </Modal>

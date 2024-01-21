@@ -23,11 +23,15 @@ import ProfileSetting from "./Components/Pages/Settings/ProfileSetting";
 import AuthState from "./Contexts/Auth/AuthState"; 
 import respond from "./respond";
 import {socket} from './socket'
+import Test from "./Components/Test";
 function App() {
   let notifications = []
   useEffect(() => {
     respond()
     socket.on('notification',data=>{
+      console.log(data)
+    })
+    socket.on('init',data=>{
       console.log(data)
     })
   }, [notifications]);
@@ -50,6 +54,7 @@ function App() {
                   <Route exact path="/search" element={<Search />} />
                   <Route exact path="/explore" element={<Explore />} />
                   <Route exact path="/messages" element={<Messages />} />
+                  <Route exact path="/test" element={<Test />} />
                   <Route
                     exact
                     path="/notifications"

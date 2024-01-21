@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router';
 const ProfileState = (props) => {
     let navigator = useNavigate()
      const getChats = async(me)=>{
-        let res = await fetch('http://localhost:1901/api/messages',{
+        let res = await fetch('http://192.168.119.154:1901/api/messages',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({username:me})
@@ -23,7 +23,7 @@ const ProfileState = (props) => {
                 usernames.push(user1)
             }
         });
-        let users =await fetch('http://localhost:1901/api/profile/users',{
+        let users =await fetch('http://192.168.119.154:1901/api/profile/users',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({users:usernames})
@@ -48,7 +48,7 @@ const ProfileState = (props) => {
    const updateProfile = async(formData, image) => {
     console.log(formData)
         formData.image = image
-        fetch('http://localhost:1901/api/profile/update',{
+        fetch('http://192.168.119.154:1901/api/profile/update',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify(formData)
@@ -76,7 +76,7 @@ const ProfileState = (props) => {
         };
  
         const getChatsOf = async(cID) => {
-        let res = await fetch('http://localhost:1901/api/messages/of',{
+        let res = await fetch('http://192.168.119.154:1901/api/messages/of',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({cID})
@@ -89,7 +89,7 @@ const ProfileState = (props) => {
 
     const searchUser = async (param)=>{
         try{
-            let resp = await fetch('http://localhost:1901/api/profile/search',{
+            let resp = await fetch('http://192.168.119.154:1901/api/profile/search',{
                 method:'POST',
                 headers:headers(),
                 body:JSON.stringify({param})
@@ -103,7 +103,7 @@ const ProfileState = (props) => {
     }
 
     const updateChat = async(me,username) => {
-        let resp = await fetch('http://localhost:1901/api/messages/update',{
+        let resp = await fetch('http://192.168.119.154:1901/api/messages/update',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({me,username})

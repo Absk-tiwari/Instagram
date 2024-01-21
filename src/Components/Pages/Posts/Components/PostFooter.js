@@ -1,18 +1,37 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import headers from "../../../../APIs/Headers";
 
 const PostFooter = (props) => {
   const { post } = props;
   const { alt } = props;
+  const [likes, setLikes ]= useState(props.likes)
   const [like, reactPost] = useState(false);
   const [save, savePost] = useState(false);
+
+  const updatePost = (value,type,postID)=> {
+    reactPost(!like)    
+    fetch('http://192.168.119.154:1901/api/post/update',{
+      method : 'POST',
+      headers: headers(),
+      body:JSON.stringify({value:value,type:type,postID:postID})
+    }).then(res=>{
+      return res.json()
+    }).then(data=>{
+      if(data.status){
+        setLikes(parseInt(likes)+1)
+      }else{
+        reactPost(!like)
+      }
+    })
+  }
 
   return (
     <>
       <div className="row">
         <div className="col-sm-1">
           <i className={`fa${!like ? '-regular': ''} fa-heart${like ? ' animate': ''} mt-1`} style={{transition: "0.2s",fontSize: "25px",
-          color: like ? 'red':''}} onClick={() =>reactPost(!like)} title={like?'Unlike':'Like'}></i>
+          color: like ? 'red':''}} onClick={() =>updatePost(likes,like,post.index)} title={like?'Unlike':'Like'}></i>
         </div>
         <div className="col-sm-1">
            <svg aria-label="Comment" className="_8-yf5 " color="#262626" fill="#262626" 
@@ -47,7 +66,7 @@ const PostFooter = (props) => {
         </div>}
       </div>
 
-      <p className="d-flex mt-2">{post.likes} likes</p>
+      <p className="d-flex mt-2">{likes} likes</p>
 
       { alt.details && <div className="row" style={{ lineHeight: "4.2px" }}>
         <div className="col-md-12 mt-1 d-flex">

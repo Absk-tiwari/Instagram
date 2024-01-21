@@ -1,20 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../App.css";
 import { SidebarData } from "./SidebarData";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router";
 import More from "../assets/icons/more.png";
 import obito from "../assets/icons/obito.jpg";
+import profile from "../assets/icons/profile.png";
 import Modal from "./Modal";
 import Button from "./StateComponents/Button";
 import LoadingBar from "react-top-loading-bar";
+import headers from "../APIs/Headers";
+import Notifications from "./Sidebar/Components/Notifications";
 
 function SidebarComponent() {
   const location = useLocation();
   const [term, setTerm] = useState("");
   const [open, setmodal] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState([]);
   const [formtriggered, setTriggered] = useState(true);
+  const [searched, setResults] = useState([])
+  const [isLoading, setLoading] = useState(false)
+  const searchbox = useRef(null)
   let navigator = useNavigate();
   const toggleModal = (e) => {
     if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
@@ -54,7 +60,13 @@ function SidebarComponent() {
 
   const [progress,setProgress] = useState(0)
 
-  const refer = (e) => {
+  const gotoProfile = username => {
+    let tgetElem = document.getElementById(username)
+    tgetElem.click()
+    setTerm('')
+    document.querySelector(".close").click();
+  }
+  const refer = e => {
     setProgress(100) 
     if (e.target.dataset.refer !== "/search")
       document.querySelector(".close").click();
@@ -66,7 +78,7 @@ function SidebarComponent() {
     }
   };
 
-  const removeItem = (index) => {
+  const removeItem = index => {
     if (index !== "all") {
       search.splice(index, 1);
       localStorage.setItem("searched", JSON.stringify(search));
@@ -76,16 +88,22 @@ function SidebarComponent() {
     setTriggered(!formtriggered);
   };
 
-  const searchUser = async (e) => {
-    e.preventDefault();
-
-    if (search.length) {
-      localStorage.setItem("searched", JSON.stringify([...search, ...[term]]));
-    } else {
-      localStorage.setItem("searched", JSON.stringify([term]));
-    }
-    setTriggered(!formtriggered);
-    setTerm("");
+  const searchUser = (term) => {
+    setLoading(true)
+    console.log('going to search the term - ',term) 
+      fetch('http://192.168.119.154:1901/api/profile/search',{
+                method:'POST',
+                headers:headers(),
+                body:JSON.stringify({param:term})
+      }).then(res=>{
+        return res.json()
+      }).then(data=>{
+        setResults(data)
+        console.log(data)
+        setTimeout(()=>setLoading(false),2000)
+      })
+ 
+    // setTerm("");
   };
   return (
     !["/login", "/signup"].includes(location.pathname) && (
@@ -174,17 +192,8 @@ function SidebarComponent() {
         <div className="offcanvas-header header-notification">
           <h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">Notifications </h5>
         </div>
-        <div className="offcanvas-body">
-          <div className="row notification">
-            <div className="hstack list-item gap-3">
-              <img src={obito} alt="not yet?" className="rounded-circle col-md-2" />
-              <p className="text-dark text-wrap">
-                <strong>User</strong> Started following you
-              </p>
-              <small className="text-secondary">2h</small>
-              <Button text={'follow'} alt={'following'}/>
-            </div>
-          </div>
+        <div className="offcanvas-body"> 
+          <Notifications/>
         </div>
       </div>
       <div
@@ -198,24 +207,45 @@ function SidebarComponent() {
         <div className="offcanvas-body">
           <div className="row"> 
               <form className="hstack gap-3" onSubmit={searchUser}>
-                <input name="username" value={term} onChange={(e)=>{setTerm(e.target.value);}} className="form-control searchbox" placeholder="Search"/><button type="submit" className="btn d-none"></button>
+                <input name="username" value={term} onChange={(e)=>{setTerm(e.target.value);searchUser(term)}} className="form-control searchbox" ref={searchbox} placeholder="Search"/><button type="submit" className="btn d-none"/>
               </form> 
           </div>
           <hr/>
           <div className="row">
+          {isLoading===true ?
+            (<p className="placeholder-glow mb-3 mt-3 mx-2">
+              <span className="placeholder col-1" style={{height:'40px',width:'40px',borderRadius:'50%'}}></span>&nbsp;
+              <span className="placeholder col-3"></span> <br/>
+              <span className="placeholder col-6"></span>
+            </p>):             
+            (term && searched.length ? searched.map((user,index)=>{
+              return (
+              <div style={{height:"60px",backgroundColor:"#f8f8f8",borderRadius:'10px',width:'93%',display:'flex',marginLeft:'14px',marginTop:'5px',paddingTop:'4px'}} className='open-searched' data-username={user.username} key={index} onClick={()=>gotoProfile(user.username)}>
+              <img src={user.profile??profile} className="mx-2 pfpicture" data-s={false} data-username={user.username}  onClick={()=>gotoProfile(user.username)} alt=""/>
+              <div className="d-block" data-username={user.username} onClick={()=>gotoProfile(user.username)}>
+                <b data-username={user.username}  onClick={()=>gotoProfile(user.username)}>{user.username}</b> <br/>
+                <small data-username={user.username}  onClick={()=>gotoProfile(user.username)}>{user.name}</small>
+                <Link to={`/profile?username=${user.username}`} className={` d-none`} id={`${user.username}`} /> 
+              </div>
+            </div>)
+            }): term.length ?  <b className="mx-3">No results found..</b> :(
+              <>
             <div className="mt-2 d-flex list-item"> 
-              <b>Recent</b>  {search.length!==0 && <p className="text-primary offset-md-8" style={{cursor:'pointer'}}onClick={()=>removeItem('all')}>Clear all</p> }
+              <b>Recent</b>  {search.length  ? <p className="text-primary offset-md-8" style={{cursor:'pointer'}}onClick={()=>removeItem('all')}>Clear all</p>:'' }
             </div>
             <div className="mt-2">
               {search && search.map((item,key) => {
                
-                return <li key={key} className="nav-link mx-3 mt-3 d-flex lh-1">
-                  <p className="col-md-11">{item}</p>
+                return <li key={key} className="nav-link mx-3 mt-3 d-flex lh-1" onClick={()=>{ setTerm(item);searchUser(item)}}>
+                  <p className="col-md-11" onClick={()=>{ setTerm(item);searchUser(item)} }>{item}</p>
                   <i className="btn btn-close" onClick={() => removeItem(search.indexOf(item)) }></i>
                 </li>
 
               })}
             </div>
+              </>
+            )
+             )}
           </div>
         </div>
       </div>

@@ -7,15 +7,21 @@ import UserTagged from "../../Pages/Profile/UserTagged";
 import ProfileContext from "../../../Contexts/Profiles/ProfileContext";
 import Loader from "../../StateComponents/Loader";
 import headers from "../../../APIs/Headers";
+import Chat from '../Components/Messages/Chat'
+import { socket } from "../../../socket";
 
 const Profile = () => {
   const [active, setStat] = useState(1);
+  const [chatopened, setupChat] = useState(false)
   const {LoggedIn} = useContext(ProfileContext);
-  let user = localStorage.getItem('userLogin')
-  user = JSON.parse(user)
-  let posts  = localStorage.getItem('myPosts')
-  posts = JSON.parse(posts)
-
+  let use = localStorage.getItem('userLogin')
+  use = JSON.parse(use)
+  const [user, setUser] = useState([])
+  let posted  = localStorage.getItem('myPosts')
+  posted = JSON.parse(posted)
+  const [posts, setPost] = useState(posted)
+  const [react, setReact] = useState(false)
+  
   const preview =  e => {
     let div = document.createElement("div"); 
     div.classList.add('randomDiv') ;
@@ -36,47 +42,99 @@ const Profile = () => {
       document.querySelector('#root').classList.remove('addCover')
     }
   })
+
+  const reaction =  (act,targetUsername)  => {
+    let type = act ? 'follow':'unfollow'
+    console.log(act,targetUsername,type)
+    fetch('http://192.168.119.154:1901/api/post/update',{
+      method:'POST',
+      headers:headers(),
+      body:JSON.stringify({type,targetUsername})
+    }).then(res=>{
+      return res.json()
+    }).then(status=>{
+      console.log(status)
+      if(status.status){
+        console.log('you should notify them now!')
+        let data={
+          type: 'follow',
+          for: targetUsername,
+          icon: user.profile??obito,
+          user : use.username,
+          at : Date.now()
+        }
+        socket.emit('notify',data)
+      }
+
+    })
+    setReact(act)
+  }
+ 
  const [loaded, setLoad] = useState(false)
   useEffect(()=>{
     let query = window.location.search
-    let term = query.split('?')
-    console.log(term)
-    term = term[1].split('=')[1]
-    const getUser= async(term)=>{
-      let data= await fetch('http://localhost:1901/api/profile/getuser',{
+    console.log(query)
+    if(query){ 
+      let term = query.split('?')
+      term = term[1].split('=')[1]
+      fetch('http://192.168.119.154:1901/api/profile/getuser',{
         method:'POST',
         headers:headers(),
         body:JSON.stringify({username:term})
+      }).then(res=>{
+        return res.json();
+      }).then(data=>{
+        setUser(data[0]??[])
+        setLoad(true)
+        if(data[0]){
+          fetch('http://192.168.119.154:1901/api/post/getPostsOf',{
+            method:'POST',
+            headers:headers(),
+            body:JSON.stringify({username:data[0].username})
+          }).then(res=>{
+            return res.json()
+          }).then(data=>{
+            console.log('posts of queried user',data)
+            setPost(data)
+          })
+        }
       })
-      return await data.json()
-    }
-    console.log(getUser(term))
-    setTimeout(() => {
+    }else{
       setLoad(true)
-    }, 5000);
-  },[])
-
+      setUser(use)
+    }
+    
+    return ()=>{
+      setPost(posted)
+      setUser([])
+    }
+  },[ ])
   return (
     <>
-    { loaded ?
-    (<div className="page Profile" >
+    { loaded ? chatopened ? (
+      <>
+      <Chat me={use.username} userImage={user.profile??obito} username={user.username} name={user.name} details={user} launch={false} />
+      </>
+    ):(<div className="page Profile" >
       <div className="col-md-12 info-container">
         <div className="col-md-4">
           <div className="container">
-            <img src={user.profile??obito} alt="not yet?" style={{objectFit:'cover',width:'60%'}} onClick={preview} />
+            <img src={user && user.profile?user.profile:obito} alt="not yet?" style={{objectFit:'cover',width:'60%'}} onClick={preview} />
           </div>
         </div>
         <div className="col-md-8">
 
           <div className="row">
             <div className="col-md-6">
-              <h4>{user.username}</h4>
+              <h4>{user.username??'Instagram User'}</h4>
             </div>
-            <div className="col-md-6">
+            {user && use.username===user.username?
+            (<div className="col-md-6">
               <Link to={'/edit-profile'} className="btn editprofile text-decoration-none text-dark fw-bold btn-secondary">
                 Edit Profile
                </Link>
             </div>
+            ):''}
           </div>
 
           <div className="row">
@@ -97,13 +155,25 @@ const Profile = () => {
           </div>
           <div className="row">
             <div className="col-sm-12">
-              <small>{user.bio??LoggedIn.bio}</small>
+              <small>{user.bio??''}</small>
             </div>
           </div>
+          { (use.username !==user.username)? (
+            <div className="row" style={{marginBottom:'30px'}}>
+                <div className={`col-sm-4 ${react? 'editprofile':'btn-primary'} btn mx-1 fw-bold`} onClick={()=>reaction(!react,user.username)}>
+                  {react? 'Following':'Follow'}
+                </div>
+                <div className="col-sm-4 editprofile btn mx-3 fw-bold" onClick={()=> setupChat(!chatopened)}>
+                  Message
+                </div>
+            </div>
+          ):!Object.entries(use).length ? ('Ye User poori tarah se kaalpanik hai, Iska vastavikta se koi taalukaat nhi hai'):''}
+
         </div>
       </div>
-
-      <div className="container p-section">
+            
+      {  user.username &&
+        <div className="container p-section">
 
         <ul className="nav align-items-center justify-content-center text-center" style={{ border: "none" }} >
           <li className="text-secondary" onClick={() => setStat(1) } >
@@ -111,11 +181,14 @@ const Profile = () => {
               <i className="fa fa-table text-secondary mx-1"></i> POSTS
             </Link>
           </li>
-          <li className="text-secondary" onClick={() => setStat(2) } >
-            <Link className={`nav-link text-dark ${active === 2 && "active"}`} >
-              <i className="fa fa-bookmark-o text-secondary mx-2"></i> SAVED
-            </Link>
-          </li>
+          { use.username===user.username && 
+              (<li className="text-secondary" onClick={() => setStat(2) } >
+                <Link className={`nav-link text-dark ${active === 2 && "active"}`} >
+                  <i className="fa fa-bookmark-o text-secondary mx-2"></i> SAVED
+                </Link>
+              </li>
+          )}
+          
           <li className="text-secondary" onClick={() => setStat(3) } >
             <Link className={`nav-link text-dark ${active === 3 && "active"}`} >
               <i className="fa fa-tags text-secondary mx-1"></i> TAGGED
@@ -124,13 +197,18 @@ const Profile = () => {
         </ul>
 
         <div className="tab-content">
-          {active === 1 && <UserPosts /> }
-          {active === 2 && <Saved /> }
+        { loaded ?
+          (<>
+          {active === 1 && <UserPosts posts={posts} /> }
+          {active === 2 && use.username!==user.username ? <Saved />:'' }
           {active === 3 && <UserTagged /> }
+          </>):(<Loader height={100} left={350}/>)
+        }
         </div>
         
-      </div>
-    </div>):<Loader height={200} left={350}/>
+      </div>}
+    </div>
+    ):<Loader height={200} left={350}/>
   }
     </>
   );

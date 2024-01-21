@@ -6,7 +6,7 @@ const loggedIn= (req, res , next)=> {
         const token = req.header('auth-token'); 
        // console.log(token);
         if(!token){
-            res.status(401).send({error: 'Please authenticate using correct token'})
+            return res.status(401).send({error: 'Please authenticate using correct token'})
         }
         const data = jwt.verify(token, JWT_SECRET);
         //  console.log(data.user);
@@ -14,7 +14,7 @@ const loggedIn= (req, res , next)=> {
         next();
         
     }catch(err){
-        res.send({error : 'Action denied auth-token not correct or is unavailable!'})
+        return res.end({error : 'Action denied auth-token not correct or is unavailable!'})
     }
 }
 module.exports = loggedIn;
