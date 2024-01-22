@@ -76,25 +76,17 @@ socket.on('connection', conn => {
         let obj ={}
         if(data.type){
           switch (data.type) {
-            case 'follow':
-                obj.label = `<img src='${data.icon}' class='pfpicture' />`
-                obj.message = `<b>${data.user}</b> started following you` 
+            case 'follow': obj.message = `<b>${data.user}</b> started following you` 
               break;
-            case 'like': 
-                obj.icon = `<img src='${data.icon}' class='rounded-circle col-md-2' />` 
-                obj.message = `<b>${data.user}</b> liked your post` 
+            case 'like': obj.message = `<b>${data.user}</b> liked your post` 
               break;
-            case 'follow-request':
-                obj.icon = `<img src='${data.icon}' class='pfpicture' />` 
-                obj.message = `<b>${data.user}</b> has requested to follow you` 
+            case 'follow-request': obj.message = `<b>${data.user}</b> has requested to follow you` 
               break;
           }
           obj.read = false
-        }
-        console.log(data.for, users.get(data.for) , users)
+        } 
         let target = users.get(data.for)
-        if(target){
-          console.log(data.for, target)
+        if(target){ 
             socket.to(target).emit('notification', obj)
         }
         await Notification.create({
@@ -108,8 +100,7 @@ socket.on('connection', conn => {
     conn.on('disconnect',(s)=>{
       users.delete(socket.username)
       console.log('disconnected...'+s)
-      console.log(users)
-    })
+     })
     socket.on('reconnect', (attemptNumber) => {
         console.log(`User reconnected (${attemptNumber} attempts):`, conn.id);
     });port

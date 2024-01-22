@@ -55,15 +55,17 @@ const Profile = () => {
     }).then(status=>{
       console.log(status)
       if(status.status){
-        console.log('you should notify them now!')
-        let data={
-          type: 'follow',
-          for: targetUsername,
-          icon: user.profile??obito,
-          user : use.username,
-          at : Date.now()
+        if(type === 'follow'){
+          console.log('you should notify them now!')
+          let data={
+            type: 'follow',
+            for: targetUsername,
+            icon: user.profile??obito,
+            user : use.username,
+            at : Date.now()
+          }
+          socket.emit('notify',data)
         }
-        socket.emit('notify',data)
       }
 
     })
@@ -84,9 +86,10 @@ const Profile = () => {
       }).then(res=>{
         return res.json();
       }).then(data=>{
-        setUser(data[0]??[])
+        console.log(data)
+        setUser(data ??[])
         setLoad(true)
-        if(data[0]){
+        if(data){
           fetch('http://192.168.119.154:1901/api/post/getPostsOf',{
             method:'POST',
             headers:headers(),
@@ -108,7 +111,7 @@ const Profile = () => {
       setPost(posted)
       setUser([])
     }
-  },[ ])
+  },[])
   return (
     <>
     { loaded ? chatopened ? (

@@ -2,6 +2,7 @@ const  express = require("express");
 const User=require('../Models/User');
 const Post=require('../Models/Post');
 const BlockedUser =require('../Models/BlockedUser');
+const Followers =require('../Models/Followers');
 const router = express.Router();
 const fetchuser= require('../Middlewares/LoggedIn');
 
@@ -37,13 +38,14 @@ router.post('/update',fetchuser, async(req,res)=>{
 router.post('/getuser', fetchuser, async(req, res) =>{
     try {
         let userid  = req.body.id;  
+        let user= await User.findById(userid).select('-password');
         if(req.body.username){
-             let user = await User.find({username:req.body.username}).select('-password') 
-             return res.json(user)
-        }else{
-             let user= await User.findById(userid).select('-password');
-             return  res.json(user) 
-        }
+            let tgetUser = await User.findOne({username:req.body.username}).select('-password') 
+            let isFollowing = await Followers.findOne({of:tgetUser.username,username:user.username}).select('_id')
+            return res.json(tgetUser)
+        } 
+        return  res.json(user) 
+        
 
     } catch (e) {
         error.message = e.message

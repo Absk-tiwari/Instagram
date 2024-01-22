@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { socket } from '../../../socket';
 import headers from '../../../APIs/Headers';
 import Button from '../../StateComponents/Button';
-
+import logo from '../../../assets/logo.png'
 const Notifications = () => {
   let [notifications,set] = useState([])
   const [ting , ring] = useState(false)
   socket.on('notification',data=>{
     console.log(data)
     set([...notifications, data])
-    ring(!ting)
+    ring(true)
   })
  
   useEffect(() => { 
@@ -27,7 +27,7 @@ const Notifications = () => {
     { notifications.map((item,index)=>{   
          return (<div className="notification" key={index} style={{height:"70px",backgroundColor:"#f8f8f8",borderRadius:'10px',width:'100%',display:'flex', marginTop:'5px',paddingTop:'4px'}}>
             <div className="hstack list-item gap-3">
-              <img src={item.label} alt="?" className="rounded-circle pfpicture mx-2" />
+              <img src={item.label??logo} alt="?" className="rounded-circle pfpicture mx-2" />
               <p className="text-dark text-wrap" style={{paddingTop:'13px'}} dangerouslySetInnerHTML={{ __html: item.message}} />
               <small className="text-secondary">2h</small>
               <Button text={'follow'} alt={'following'}/>

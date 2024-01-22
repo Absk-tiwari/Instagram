@@ -103,7 +103,14 @@ router.post('/update', fetchuser, async(req, res) =>{
             return res.json(error)
         }
         if(req.body.type=='unfollow'){
-            console.log(req.body)
+ 
+            let deleted = await Followers.deleteOne({of:req.body.targetUsername, username:thisUser.username })
+            if(deleted){  
+                console.log(req.body.targetUsername, thisUser.username, deleted)
+                let updated = await User.updateOne({username:req.body.targetUsername}, {$inc : {followers:-1}} )
+                if(updated) return res.json(output)
+            }
+            return res.end(500).json(error)
         }
         const update = {
             $set: set
