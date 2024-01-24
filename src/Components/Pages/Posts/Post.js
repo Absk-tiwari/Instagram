@@ -1,13 +1,20 @@
-import React, {useContext, useEffect}  from "react";
+import React, {  useEffect, useState}  from "react";
 import PostHead from "./Components/PostHead";
-// eslint-disable-next-line
-import PostContext from "../../../Contexts/Profiles/PostContext";
 import PostFooter from "./Components/PostFooter";
+import headers from "../../../APIs/Headers";
 
 const Post = () => {
- const {posts} = useContext(PostContext);
+const [posts, setPosts] = useState([])
  useEffect(()=>{
   console.log('want posts ?',posts)
+  fetch('http://localhost:1901/api/post',{
+    method:'GET',
+    headers:headers
+  }).then(res=>{
+    return res.json()
+  }).then(data=>{
+    setPosts(data)
+  })
  },[])
   return (
     <>
@@ -23,7 +30,7 @@ const Post = () => {
             </div>
             <div className="card-footer">
               <PostFooter
-                post={{ likes: post.likes, username: post.username }} alt={{details:true}}
+                post={{ likes: post.likes, username: post.username,caption:post.caption }} alt={{details:true}}
               />
             </div>
           </div>

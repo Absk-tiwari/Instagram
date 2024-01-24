@@ -41,8 +41,12 @@ router.post('/getuser', fetchuser, async(req, res) =>{
         let user= await User.findById(userid).select('-password');
         if(req.body.username){
             let tgetUser = await User.findOne({username:req.body.username}).select('-password') 
-            let isFollowing = await Followers.findOne({of:tgetUser.username,username:user.username}).select('_id')
-            return res.json(tgetUser)
+            let isFollowing 
+            if(tgetUser.followers){
+                isFollowing = await Followers.findOne({of:tgetUser.username,username:user.username}).select('username') 
+                console.log(isFollowing)
+            }
+            return res.json({user:tgetUser, isFollowing:isFollowing??0})
         } 
         return  res.json(user) 
         

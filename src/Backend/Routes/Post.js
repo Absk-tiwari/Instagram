@@ -10,9 +10,9 @@ let error = { status : false, message:'Something went wrong!' }
 let output = { status : true }
 
 // yet to be tested
-router.get('/', fetchuser, async(req, res) =>{
+router.get('/',   async(req, res) =>{
     try {
-        const posts = await Post.find({user_id:req.body.id})
+        const posts = await Post.find()
         return res.json(posts);
     } catch (e) {
         error.message = e.message
@@ -88,7 +88,7 @@ router.post('/update', fetchuser, async(req, res) =>{
             set.$inc = {likes:1}
         }
         if(req.body.type=='unlike'){
-            set.$inc = {likes:1}
+            set.$inc = {likes:-1}
         }
         if(req.body.type=='follow'){
             let updateset = { $inc: { followers: 1} } 

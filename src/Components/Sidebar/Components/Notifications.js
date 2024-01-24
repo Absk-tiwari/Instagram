@@ -7,7 +7,7 @@ const Notifications = () => {
   let [notifications,set] = useState([])
   const [ting , ring] = useState(false)
   socket.on('notification',data=>{
-    console.log(data)
+    console.log('new notification', data)
     set([...notifications, data])
     ring(true)
   })
@@ -21,7 +21,6 @@ const Notifications = () => {
       })   
     }
   }, [ting]);
-  console.log('notifications loaded',notifications)
   return (
     <>
     { notifications.map((item,index)=>{   

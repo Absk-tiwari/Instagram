@@ -8,13 +8,14 @@ import Chat from '../Messages/Chat'
 import profile from '../../../../assets/icons/profile.png'
 import headers from "../../../../APIs/Headers";
 const Messages = () => {
+  const [totalChats, setChats] = useState([])
   const [selectedUser,setUser] = useState({username:'',name:''})
   const [searchParam, setSearchParam] = useState('');
   const [isLoading, setLoading] = useState(false)
   const [userDetail, setDetail] = useState({})
   const [opened, openedChat] = useState(false);
   const [searched, setResults] = useState([])
-  const {searchUser,getChats} = useContext(ProfileContext);
+  const {getChats} = useContext(ProfileContext);
   const [launch,set] = useState(false)
   const mapref = useRef(null)
   let user = localStorage.getItem('userLogin')
@@ -30,6 +31,7 @@ const Messages = () => {
  
   socket.on('receive',data=>{
     setchange(!change)
+    console.log(data.message)
   })
   
 
@@ -42,54 +44,22 @@ const Messages = () => {
   })
   socket.on('flag',()=>    setchange(!change)
 )
-  
-  // console.log('the chats;',chats)
+   
   useEffect(()=>{
     const init = async() => {
       let data = await getChats(user.username)
       return data  
     }
     let resp = init()
-    resp.then(res=>{ 
-
-      let html=''
+    resp.then(res=>{  
       if(!res){
-        console.log('should you be here?')
-      }else{
-        res.forEach(chat => { 
-          totalUsers[chat.username]=chat
-            let active = (onlines && onlines.length) ? onlines[0].includes(chat.username) : false;
-            html+=`<div class="row mt-3 openchat" style='cursor:pointer' data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>
-              <div class="col-sm-2" data-name='${chat.name}' data-username='${chat.username}' style="position:relative" data-s='${chat.from!==user.username}'>
-                <img data-name='${chat.name}' data-username='${chat.username}'
-                  src='${chat.profile??profile}' style='height:50px;width:50px!important' class="mx-auto rounded-circle" alt="" data-s='${chat.from!==user.username}' />
-                  <h2 class="${active?'':'d-none'}" style="position:absolute;bottom:0px;left:50px;font-size:xxx-large;color:green;font-weight:900" data-s='${chat.from!==user.username}'>.</h2>
-              </div>
-              <div class="col-sm-10 chatUser" data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>
-                <b data-username='${chat.username}' data-name='${chat.name}' data-s='${chat.from!==user.username}'>${chat.username}</b>
-                <p class="username ${chat.read?'p':'text-dark'}" style='font-weight:${!chat.read && chat.from!==user.username?'700':'p'}' data-s='${chat.from!==user.username}' data-username='${chat.username}' data-name='${chat.name}'>${chat.from===user.username && chat.sender? chat.sender : chat.last} 
-                <small>${(chat.from===user.username)? (chat.read ? 'seen 2h ago' : 'sent 2h ago' ) :'2h'}</small></p>
-              </div>
-            </div>`; 
-            console.log(chat.from, chat)
-      })
-
-      setTimeout(() => {          
-          let el = document.getElementById('user-row-container')
-          if(el){
-            el.innerHTML = html
-          }
-          let classes = document.getElementsByClassName('openchat')
-          for(let i of classes){
-            i.addEventListener('click', openChat)
-          }
-        }, 2000);
-      }
-    })
-    console.log('rendered')
-
+        console.log('do you mean no chats?')
+      }else{ 
+        setChats(res)
+      } 
+    })  
   } ,
-[change, onlines, user.username])
+[change, getChats, user.username])
 
   
   const toggleModal = e => {   
@@ -130,7 +100,6 @@ const Messages = () => {
         return res.json()
       }).then(data=>{
         setResults(data)
-        console.log(data)
         setTimeout(()=>setLoading(false),2000)
       })
     }
@@ -155,7 +124,26 @@ const Messages = () => {
             <strong>Messages</strong>
             <strong className="text-secondary offset-5 px-4">Requests</strong>
           </div>
-          <div id="user-row-container"/>
+          <div id="user-row-container"> 
+          {totalChats && totalChats.map((chatuser,index)=>{
+            let active = (onlines && onlines.length) ? onlines[0].includes(user.username) : false;
+            return (
+            <div key={index} className="row mt-3 openchat" style={{cursor:'pointer'}} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>
+              <div className="col-sm-2" data-name={chatuser.name} data-username={chatuser.username} style={{position:"relative"}} data-s={chatuser.from!==user.username} onClick={openChat}>
+                  <img data-name={chatuser.name} data-username={chatuser.username}
+                  src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt="" data-s={chatuser.from!==user.username}  onClick={openChat} />
+                  <h2 className={active?'':'d-none'} style={{position:'absolute',bottom:'0px',left:'50px',fontSize:'xxx-large',color:'green',fontWeight:900}} data-s={chatuser.from!==user.username}  onClick={openChat}>.</h2>
+              </div>
+              <div className={`col-sm-10 chatUser`} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>
+                <b data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>{chatuser.username}</b>
+                <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} data-s={chatuser.from!==user.username} data-username={chatuser.username} data-name={chatuser.name} onClick={openChat}>{chatuser.from===user.username && chatuser.sender? chatuser.sender : chatuser.last} 
+                <small onClick={openChat}>{(chatuser.from===user.username)? (chatuser.read ? ' seen 2h ago' : ' sent 2h ago' ) :'2h'}</small></p>
+              </div>
+            </div> 
+            )
+            })
+          }
+          </div>
         </div>
         <div className="col-md-8 chat-open-screen" style={{ overflowY: "hidden" }}>
          { !opened ? <div className="text-center d-flex justify-content-center align-items-center min-vh-100">

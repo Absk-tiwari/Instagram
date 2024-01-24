@@ -66,13 +66,13 @@ const PostFooter = (props) => {
         </div>}
       </div>
 
-      <p className="d-flex mt-2">{likes} likes</p>
+      {likes && (<p className="d-flex mt-2">{likes} likes</p>) }
 
-      { alt.details && <div className="row" style={{ lineHeight: "4.2px" }}>
+      { alt.details && <div className={`row ${!likes && 'mt-2'}`} style={{ lineHeight: "4.2px" }}>
         <div className="col-md-12 mt-1 d-flex">
           <b><Link className={'text-dark text-decoration-none'} to={"/profile?user="}
             >{post.username}</Link></b>
-          &nbsp;<p> This is the truth &#128516;</p>
+          &nbsp;<p>{post.caption??' This is the truth'} &#128516;</p>
         </div>
         <div className="col-md-12">
           <span className="text-secondary">View all comments</span>

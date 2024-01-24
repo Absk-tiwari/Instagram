@@ -3,7 +3,6 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { useEffect } from "react";
 import Home from "./Components/Pages/Home/Home";
 import Messages from "./Components/Sidebar/Components/Messages/Messages";
 import Search from "./Components/Sidebar/Components/Search";
@@ -21,20 +20,8 @@ import Login from "./Components/Pages/Auth/Login";
 import Signup from "./Components/Pages/Auth/Signup";
 import ProfileSetting from "./Components/Pages/Settings/ProfileSetting";
 import AuthState from "./Contexts/Auth/AuthState"; 
-import respond from "./respond";
-import {socket} from './socket'
 import Test from "./Components/Test";
 function App() {
-  let notifications = []
-  useEffect(() => {
-    respond()
-    socket.on('notification',data=>{
-      console.log(data)
-    })
-    socket.on('init',data=>{
-      console.log(data)
-    })
-  }, [notifications]);
 
   return (
     <>

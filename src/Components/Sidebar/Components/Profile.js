@@ -1,10 +1,9 @@
-import { React, useContext, useEffect, useState } from "react";
+import { React, useEffect, useState } from "react";
 import obito from "../../../assets/icons/profile.png";
 import { Link } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
-import ProfileContext from "../../../Contexts/Profiles/ProfileContext";
 import Loader from "../../StateComponents/Loader";
 import headers from "../../../APIs/Headers";
 import Chat from '../Components/Messages/Chat'
@@ -13,7 +12,6 @@ import { socket } from "../../../socket";
 const Profile = () => {
   const [active, setStat] = useState(1);
   const [chatopened, setupChat] = useState(false)
-  const {LoggedIn} = useContext(ProfileContext);
   let use = localStorage.getItem('userLogin')
   use = JSON.parse(use)
   const [user, setUser] = useState([])
@@ -46,7 +44,7 @@ const Profile = () => {
   const reaction =  (act,targetUsername)  => {
     let type = act ? 'follow':'unfollow'
     console.log(act,targetUsername,type)
-    fetch('http://192.168.119.154:1901/api/post/update',{
+    fetch('http://localhost:1901/api/post/update',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({type,targetUsername})
@@ -79,7 +77,7 @@ const Profile = () => {
     if(query){ 
       let term = query.split('?')
       term = term[1].split('=')[1]
-      fetch('http://192.168.119.154:1901/api/profile/getuser',{
+      fetch('http://localhost:1901/api/profile/getuser',{
         method:'POST',
         headers:headers(),
         body:JSON.stringify({username:term})
@@ -87,13 +85,16 @@ const Profile = () => {
         return res.json();
       }).then(data=>{
         console.log(data)
-        setUser(data ??[])
         setLoad(true)
-        if(data){
-          fetch('http://192.168.119.154:1901/api/post/getPostsOf',{
+        if(data && data.hasOwnProperty('user')){
+          setUser(data.user)
+          if(data.isFollowing){
+            setReact(true)
+          }
+          fetch('http://localhost:1901/api/post/getPostsOf',{
             method:'POST',
             headers:headers(),
-            body:JSON.stringify({username:data[0].username})
+            body:JSON.stringify({username:data.user.username})
           }).then(res=>{
             return res.json()
           }).then(data=>{
@@ -111,7 +112,7 @@ const Profile = () => {
       setPost(posted)
       setUser([])
     }
-  },[])
+  },[react])
   return (
     <>
     { loaded ? chatopened ? (
