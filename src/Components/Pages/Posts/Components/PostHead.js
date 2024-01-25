@@ -1,7 +1,6 @@
 import React  from 'react';
 import { Link } from "react-router-dom";
 import pfp from '../../../../assets/icons/profile.png'
-import PostUser from './PostUser';
 import Button from "../../../StateComponents/Button";
 
 const PostHead = (props) => { 

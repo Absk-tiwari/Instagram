@@ -3,23 +3,27 @@ import { Link } from "react-router-dom";
 import headers from "../../../../APIs/Headers";
 
 const PostFooter = (props) => {
+  let me = JSON.parse(localStorage.getItem('userLogin'))
   const { post } = props;
   const { alt } = props;
-  const [likes, setLikes ]= useState(props.likes)
-  const [like, reactPost] = useState(false);
+  const [likes, setLikes ]= useState(post.likes.length)
+  const [like, reactPost] = useState(post.likes.includes(me._id));
   const [save, savePost] = useState(false);
-
-  const updatePost = (value,type,postID)=> {
+  console.log(post.likes)
+  const updatePost = ( type,postID)=> {
+    type = type?'unlike':'like'
+    console.log(type, postID)
     reactPost(!like)    
     fetch('http://192.168.119.154:1901/api/post/update',{
       method : 'POST',
       headers: headers(),
-      body:JSON.stringify({value:value,type:type,postID:postID})
+      body:JSON.stringify({ type:type,postID:postID})
     }).then(res=>{
       return res.json()
     }).then(data=>{
       if(data.status){
-        setLikes(parseInt(likes)+1)
+        if(type==='like') setLikes(parseInt(likes)+1)
+        else setLikes(parseInt(likes)-1)
       }else{
         reactPost(!like)
       }
@@ -31,7 +35,7 @@ const PostFooter = (props) => {
       <div className="row">
         <div className="col-sm-1">
           <i className={`fa${!like ? '-regular': ''} fa-heart${like ? ' animate': ''} mt-1`} style={{transition: "0.2s",fontSize: "25px",
-          color: like ? 'red':''}} onClick={() =>updatePost(likes,like,post.index)} title={like?'Unlike':'Like'}></i>
+          color: like ? 'red':''}} onClick={() =>updatePost(like,post.id)} title={like?'Unlike':'Like'}></i>
         </div>
         <div className="col-sm-1">
            <svg aria-label="Comment" className="_8-yf5 " color="#262626" fill="#262626" 

@@ -19,9 +19,9 @@ const [posts, setPosts] = useState([])
   return (
     <>
       { posts && posts.length > 0 ? 
-        posts.map( post => {
+        posts.map( (post,index) => {
         return (
-          <div className="col-md-8 post card mt-5" key={post.username}>
+          <div className="col-md-8 post card mt-5" key={index}>
             <div className="card-header profileHead">
               <PostHead post={post} />
             </div>
@@ -30,7 +30,7 @@ const [posts, setPosts] = useState([])
             </div>
             <div className="card-footer">
               <PostFooter
-                post={{ likes: post.likes, username: post.username,caption:post.caption }} alt={{details:true}}
+                post={{ id:post._id, likes: post.likes, username: post.username,caption:post.caption }} alt={{details:true}}
               />
             </div>
           </div>
