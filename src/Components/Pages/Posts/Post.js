@@ -6,7 +6,6 @@ import headers from "../../../APIs/Headers";
 const Post = () => {
 const [posts, setPosts] = useState([])
  useEffect(()=>{
-  console.log('want posts ?',posts)
   fetch('http://localhost:1901/api/post',{
     method:'GET',
     headers:headers
@@ -29,9 +28,7 @@ const [posts, setPosts] = useState([])
               <img className="postContent" src={post.content} alt="." />
             </div>
             <div className="card-footer">
-              <PostFooter
-                post={{ id:post._id, likes: post.likes, username: post.username,caption:post.caption }} alt={{details:true}}
-              />
+              <PostFooter post={post} alt={{details:true}}/>
             </div>
           </div>
         );

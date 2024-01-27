@@ -44,7 +44,6 @@ router.post('/getuser', fetchuser, async(req, res) =>{
             let isFollowing 
             if(tgetUser.followers){
                 isFollowing = await Followers.findOne({of:tgetUser.username,username:user.username}).select('username') 
-                console.log(isFollowing)
             }
             return res.json({user:tgetUser, isFollowing:isFollowing??0})
         } 
@@ -70,7 +69,6 @@ router.post('/block', fetchuser, async (req,res) => {
             if(err){
                 return res.json(error)
             }
-            console.log(res)
             fetchedUsers = res;
         })
        
@@ -110,7 +108,6 @@ router.post('/users',fetchuser,async(req,res)=>{
 router.post('/search',fetchuser,async(req,res)=>{
     try{
         let term = req.body.param
-         console.log(term)
         let fetchedUsers = await User.find({
             $or: [
                 { name: { $regex: term, $options: 'i' } }, // Case-insensitive search

@@ -1,20 +1,28 @@
 const mongoose=require('mongoose'); 
 const NotificationSchema= new mongoose.Schema({     
+    type : {
+        type : String, 
+    }, 
     for : {
         type : String,
         required : true  
     }, 
     label : {
         type : String,
-        default : null,
     }, 
     message : {
         type : String,
         required : true,
     }, 
+    from:{
+        type:String,
+    },
     read : {
         type: Boolean,
         default : false
+    },
+    about : {
+        type: String,
     },
     at : {
         type: Date,

@@ -4,7 +4,7 @@ import {socket} from '../../../../socket'
 import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 
 function Chat(props) {
-  const {me,username,launch,update,details} = props   
+  const {me,username,launch,update,details} = props    
   const [parent,setParent] = useState(false)
   const {updateChat,getChatsOf} = useContext(ProfileContext)    
   const [msg, setMessage] = useState('')
@@ -17,7 +17,11 @@ function Chat(props) {
     cursor:'pointer'
   }
    
-
+  const OnKeyUp = event => {
+    setMessage(event.target.value)
+    let res = {is:me,to:username}
+    socket.emit('typing', res)
+  }
   const getChats = async() => {
     let oldchats = await getChatsOf(me+'&'+username)
     if(oldchats && oldchats.length){
@@ -80,7 +84,6 @@ function Chat(props) {
     }
     showMessage(msg,false)
     setParent(!parent)
-    console.log(update)
     if(update){ 
       update(parent)
     }
@@ -113,7 +116,7 @@ function Chat(props) {
                 <div className='hstack'>
                     <div className='col-9 hstack'>
                         <div className='img-container mx-5 col-1'>
-                            <img src={details && details.profile?details.profile:img} style={{height:'63px',width:'63px'}} className='rounded-circle' alt={username} />
+                            <img src={details && details[0].profile?details[0].profile:img} style={{height:'63px',width:'63px'}} className='rounded-circle' alt={username} />
                         </div>
                         <div className='col-10' style={{paddingTop:'15px'}}>
                             <h3>{username}</h3>
@@ -140,7 +143,7 @@ function Chat(props) {
             </section>
             <section className='footer mt-4'>
                 <form className='hstack' onSubmit={sendMessage} style={{position:'relative'}}>
-                    <input type='text' className='chat-input' name='message' value={msg} onChange={e=>{setMessage(e.target.value)}} />
+                    <input type='text' className='chat-input' name='message' value={msg} onChange={OnKeyUp} onFocusOut={()=>socket.emit('stopped',{is:me,to:username})} />
                     <span style={{left:'3%',position:'absolute'}}>
                       <i className="fa-regular fs-3 fa-face-smile"/>
                     </span>

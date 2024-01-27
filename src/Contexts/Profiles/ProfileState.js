@@ -47,7 +47,6 @@ const ProfileState = (props) => {
    }
 
    const updateProfile = async(formData, image) => {
-    console.log(formData)
         formData.image = image
         fetch('http://localhost:1901/api/profile/update',{
             method:'POST',
@@ -99,7 +98,7 @@ const ProfileState = (props) => {
                 return resp.json()
             }
         }catch(e){
-            console.log(e.message)
+            return e.message
         }
     }
 

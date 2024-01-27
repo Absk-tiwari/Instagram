@@ -43,7 +43,6 @@ router.post('/signup',[
         return res.json(output);
         
     } catch (e) {
-        console.log(e)
         error.message = e.message
         return res.status(500).json(error)        
     }
@@ -82,7 +81,6 @@ router.post('/login',[
         
     } catch (e) {
         error.message = e.message
-        console.log(e)
         return res.status(500).json(error)        
     }
 });
@@ -95,7 +93,6 @@ router.get('/getuser', fetchuser, async(req, res) =>{
         return res.json(user) 
     } catch (e) {
         error.message = e.message
-        console.log(e)
         return res.status(500).json(error)     
     }
     }

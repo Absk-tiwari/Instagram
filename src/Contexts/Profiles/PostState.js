@@ -86,7 +86,7 @@ const PostState = (props) => {
   ];
 
     const personalPosts = async() => {
-      let resp = await fetch('http://192.168.119.154:1901/api/post/getuserPosts',{
+      let resp = await fetch('http://localhost:1901/api/post/getuserPosts',{
         method:'GET',
         headers:headers()
       })
@@ -111,7 +111,7 @@ const PostState = (props) => {
     }
     getMyposts()
     const createPost = async(obj) => {
-      let resp = await fetch(`http://192.168.119.154:1901/api/post/create`,{
+      let resp = await fetch(`http://localhost:1901/api/post/create`,{
         method:'POST',
         headers:headers(),
         body:JSON.stringify(obj)

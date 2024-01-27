@@ -3,34 +3,29 @@ import Modal from '../../Modal';
 import ob from '../../../assets/icons/itachi.jpg'
 import PostFooter from '../Posts/Components/PostFooter';
 const Photo = (props) => {
-    const params = props.params;
+    const post = props.post;
     const [open, setmodal] = useState(false);
     const [state, setState]= useState(false);
     const [src, setsrc]= useState(false);
 
     const toggleModal = (e) => {
       if(e.target.id==='modal' || e.target.classList.contains('postImg')) setmodal(!open)
- 
     }
-    const putContents = e => {
-      setsrc(e.target.currentSrc)
-      // document.querySelector('.imgContainer').setAttribute('src', e.target.getAttribute('src'))
-    }
-    const post = {likes:'49', username:'absk.tiwari'}
-    useEffect(()=>{ console.log('rendered ?') },[]);
+    const putContents = e => setsrc(e.target.currentSrc) 
+    useEffect(()=>{},[]);
 
   return (
-    <div className="col-md-4 openModal posts-of-logged-in-user" key={params.index} onMouseOver={()=>setState(true)} style={{position:state && 'relative'}}  onMouseLeave={()=>setState(false)}>
-        <img className="postImg" key={params.username} onClick={(e)=>{setmodal(!open); putContents(e)}} src={params.content} alt="not yet?" data-content={params.likes} />
+    <div className="col-md-4 openModal posts-of-logged-in-user" key={post.index} onMouseOver={()=>setState(true)} style={{position:state && 'relative'}}  onMouseLeave={()=>setState(false)}>
+        <img className="postImg" key={post.username} onClick={(e)=>{setmodal(!open); putContents(e)}} src={post.content} alt="?" data-content={post.likes} />
         <div className={`text-center ${!state && 'd-none'} hstack gap-2 text-white hovered`}> 
             <i className='fa fa-heart mb-3 fs-5'></i>
-            <p >{params.likes}</p>
+            <p >{post.likes?post.likes.length:0}</p>
         </div>
         <Modal isOpen={open} dimens={{height:500 ,width:920 }} onClose={toggleModal}>
           <>
           <div className='container d-flex'>
             <div className='col-6' style={{position:'relative'}}>
-              <img src={src} className='imgContainer' style={{ height:'-webkit-fill-available',maxHeight:'456px',marginRight:'24px', width:'-webkit-fill-available',objectFit:'contain'}} alt='?'/>
+              <img src={src} className='imgContainer' style={{ height:'-webkit-fill-available',maxHeight:'456px',marginRight:'24px', width:'-webkit-fill-available',objectFit:'contain'}} alt=''/>
             </div>
             <div className='col-6'>
               <div className='col-12 placeholder-glow mt-3 mx-2' style={{position:'relative'}}>

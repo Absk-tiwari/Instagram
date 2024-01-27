@@ -16,7 +16,7 @@ const PostSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    likes:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Liked'}],
+    likes:[{ type: String}],
     caption:{
         type : String,
         default : null,

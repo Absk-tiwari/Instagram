@@ -3,6 +3,7 @@ const express=require('express');
 const cors = require('cors');
 const io = require('socket.io')
 const Message = require('./Models/Message')
+const User=require('./Models/User');
 const Notification = require('./Models/Notification')
 connection();
 const app=express();
@@ -23,7 +24,7 @@ app.use('/api/notifications', require('./Routes/notifiy'));
 app.get('/',(req,res)=> res.send('Hello abhishek!'));
 
 const server = app.listen(port);
-const socket = io(server,{cors:'http://192.168.119.154:3306'})
+const socket = io(server,{cors:'http://localhost:3306'})
 
 let users = new Map();
 socket.use((req,next)=>{
@@ -39,17 +40,18 @@ socket.on('connection', conn => {
       
       if (conn.recovered) {
         // recovery was successful: socket.id, socket.rooms and socket.data were restored
-        console.log('recovered id is '+ conn.id)
       } else {
         // new or unrecoverable session
          users.set(socket.username, conn.id)
          const myObject = Object.keys(Object.fromEntries(users));
-         socket.emit('init',  [myObject] )
-         console.log(users);
+         socket.emit('init', myObject)
+         console.log('connected users -',myObject)
       }
 
+      conn.on('users',()=>{ 
+        socket.emit('init',Object.keys(Object.fromEntries(users)))
+      })
       conn.on('send', async(data) => {
-        console.log('By '+data.from+' to '+data.to)
         let target = data.to 
         target = users.get(target)
         let dataobj = {from: data.from, content:data.content, at:Date.now(), read:false}
@@ -72,38 +74,79 @@ socket.on('connection', conn => {
         }
       })
 
+      conn.on('typing',data=>{
+        socket.to(users.get(data.to)).emit('isTyping',data.is)
+      })
+
+      conn.on('stopped', data => {
+        socket.to(users.get(data.to)).emit('hasStopped',data.is)
+      })
+
       conn.on('notify', async(data) => {
         let obj ={}
         if(data.type){
           switch (data.type) {
-            case 'follow': obj.message = `<b>${data.user}</b> started following you` 
+            case 'follow':{ obj.message = `<b>${data.user}</b> started following you` ;}
               break;
-            case 'like': obj.message = `<b>${data.user}</b> liked your post` 
+            case 'like':{ obj.message = `<b>${data.user}</b> liked your post`;}
               break;
-            case 'follow-request': obj.message = `<b>${data.user}</b> has requested to follow you` 
+            case 'follow-request':{ obj.message = `<b>${data.user}</b> has requested to follow you`; }
               break;
           }
           obj.read = false
         } 
         let target = users.get(data.for)
-        if(target){ 
+        
+        if(data.user){
+          if(data.type==='follow')
+          {
+            let sender = await User.findOne({username:data.user}).select('profile -_id')          
+            obj.label = sender.profile
+          }else{
+            obj.label = data.label
+          }
+          await Notification.create({
+            label: obj.label,
+            type: data.type,
+            for: data.for,
+            from:data.user,
+            message: obj.message,  
+            about: data.about,  
+          });
+          obj.about = data.about
+          if(target) {
             socket.to(target).emit('notification', obj)
+          }
         }
-        await Notification.create({
-          label: data.icon,
-          for: data.for,
-          message: obj.message 
-        });
+      })
 
+      conn.on('remNotified', async(data)=>{
+        let set={}
+        if(data.type){
+          if(data.type==='follow'){
+            set.type= 'follow',
+            set.about = data.user
+            set.for = data.for
+          }
+          if(data.type==='like'){
+            set.type = 'like'
+            set.about = data.about,
+            set.for = data.for
+          }
+          let done = await Notification.deleteOne(set);
+          if(!done){
+            socket.to(users.get(data.user)).emit('error','couldnt remove the notification')
+          }else{
+            socket.to(users.get(data.for)).emit('unnotify',data)
+          }  
+        }
       })
     
-    conn.on('disconnect',(s)=>{
+    conn.on('disconnect',()=>{
       users.delete(socket.username)
-      console.log('disconnected...'+s)
      })
     socket.on('reconnect', (attemptNumber) => {
-        console.log(`User reconnected (${attemptNumber} attempts):`, conn.id);
-    });port
+    });
 
 
 })

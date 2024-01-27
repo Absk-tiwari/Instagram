@@ -12,8 +12,7 @@ import { socket } from "../../../socket";
 const Profile = () => {
   const [active, setStat] = useState(1);
   const [chatopened, setupChat] = useState(false)
-  let use = localStorage.getItem('userLogin')
-  use = JSON.parse(use)
+  let me = JSON.parse(localStorage.getItem('userLogin')) 
   const [user, setUser] = useState([])
   let posted  = localStorage.getItem('myPosts')
   posted = JSON.parse(posted)
@@ -43,7 +42,6 @@ const Profile = () => {
 
   const reaction =  (act,targetUsername)  => {
     let type = act ? 'follow':'unfollow'
-    console.log(act,targetUsername,type)
     fetch('http://localhost:1901/api/post/update',{
       method:'POST',
       headers:headers(),
@@ -51,21 +49,25 @@ const Profile = () => {
     }).then(res=>{
       return res.json()
     }).then(status=>{
-      console.log(status)
       if(status.status){
+        let data={
+          type: 'follow',
+          for: targetUsername,
+          icon: user.profile??obito,
+          user : me.username ,
+          about:me.username,
+          message : `<b>${me.username}</b> started following you` 
+        }
+        
         if(type === 'follow'){
-          console.log('you should notify them now!')
-          let data={
-            type: 'follow',
-            for: targetUsername,
-            icon: user.profile??obito,
-            user : use.username,
-            at : Date.now()
+          if(data.user!==data.for){
+            socket.emit('notify',data)
           }
-          socket.emit('notify',data)
+        }else{
+          socket.emit('remNotified',data)
         }
       }
-
+      
     })
     setReact(act)
   }
@@ -73,7 +75,6 @@ const Profile = () => {
  const [loaded, setLoad] = useState(false)
   useEffect(()=>{
     let query = window.location.search
-    console.log(query)
     if(query){ 
       let term = query.split('?')
       term = term[1].split('=')[1]
@@ -84,7 +85,6 @@ const Profile = () => {
       }).then(res=>{
         return res.json();
       }).then(data=>{
-        console.log(data)
         setLoad(true)
         if(data && data.hasOwnProperty('user')){
           setUser(data.user)
@@ -98,14 +98,22 @@ const Profile = () => {
           }).then(res=>{
             return res.json()
           }).then(data=>{
-            console.log('posts of queried user',data)
             setPost(data)
           })
         }
       })
     }else{
       setLoad(true)
-      setUser(use)
+      setUser(me)
+      fetch('http://localhost:1901/api/post/getPostsOf',{
+            method:'POST',
+            headers:headers(),
+            body:JSON.stringify({username:me.username})
+      }).then(res=>{
+        return res.json()
+      }).then(data=>{
+        setPost(data)
+      })
     }
     
     return ()=>{
@@ -117,7 +125,7 @@ const Profile = () => {
     <>
     { loaded ? chatopened ? (
       <>
-      <Chat me={use.username} userImage={user.profile??obito} username={user.username} name={user.name} details={user} launch={false} />
+      <Chat me={me.username} userImage={user.profile??obito} username={user.username} name={user.name} details={user} launch={false} />
       </>
     ):(<div className="page Profile" >
       <div className="col-md-12 info-container">
@@ -132,7 +140,7 @@ const Profile = () => {
             <div className="col-md-6">
               <h4>{user.username??'Instagram User'}</h4>
             </div>
-            {user && use.username===user.username?
+            {user && me.username===user.username?
             (<div className="col-md-6">
               <Link to={'/edit-profile'} className="btn editprofile text-decoration-none text-dark fw-bold btn-secondary">
                 Edit Profile
@@ -162,7 +170,7 @@ const Profile = () => {
               <small>{user.bio??''}</small>
             </div>
           </div>
-          { (use.username !==user.username)? (
+          { (me.username !==user.username)? (
             <div className="row" style={{marginBottom:'30px'}}>
                 <div className={`col-sm-4 ${react? 'editprofile':'btn-primary'} btn mx-1 fw-bold`} onClick={()=>reaction(!react,user.username)}>
                   {react? 'Following':'Follow'}
@@ -171,7 +179,7 @@ const Profile = () => {
                   Message
                 </div>
             </div>
-          ):!Object.entries(use).length ? ('Ye User poori tarah se kaalpanik hai, Iska vastavikta se koi taalukaat nhi hai'):''}
+          ):!Object.entries(me).length ? ('Ye User poori tarah se kaalpanik hai, Iska vastavikta se koi taalukaat nhi hai'):''}
 
         </div>
       </div>
@@ -185,7 +193,7 @@ const Profile = () => {
               <i className="fa fa-table text-secondary mx-1"></i> POSTS
             </Link>
           </li>
-          { use.username===user.username && 
+          { me.username===user.username && 
               (<li className="text-secondary" onClick={() => setStat(2) } >
                 <Link className={`nav-link text-dark ${active === 2 && "active"}`} >
                   <i className="fa fa-bookmark-o text-secondary mx-2"></i> SAVED
@@ -204,7 +212,7 @@ const Profile = () => {
         { loaded ?
           (<>
           {active === 1 && <UserPosts posts={posts} /> }
-          {active === 2 && use.username!==user.username ? <Saved />:'' }
+          {active === 2 && me.username!==user.username ? <Saved />:'' }
           {active === 3 && <UserTagged /> }
           </>):(<Loader height={100} left={350}/>)
         }

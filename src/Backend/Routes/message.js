@@ -29,7 +29,6 @@ router.post('/', fetchuser, async(req, res) =>{
               },
             },
         ]);
-        // console.log('message results',result)
         let conv =[]
         for(let item of result){
  
@@ -46,7 +45,6 @@ router.post('/', fetchuser, async(req, res) =>{
                 let lastMessage = data[lastInd].content
                 let lastMessageFrom = data[lastInd].from
                 let reads = data.filter(it=>{return it.read===false});
-                console.log(reads.length , typeof reads)
                 item.last = reads && Object.keys(reads).length > 1 ?`${Object.keys(reads).length} new messages`:lastMessage
                 item.read = Object.keys(reads).length ? false : true
                 item.from = lastMessageFrom
@@ -55,7 +53,6 @@ router.post('/', fetchuser, async(req, res) =>{
                     item.MessageOfSender = lastMessage
                 }
                 conv.push(item)
-  
         }
         // let conv = 
         // result.filter(item=>{
@@ -86,7 +83,6 @@ router.post('/of', fetchuser, async(req, res) =>{
             ]
         }).select('from content');
           
-        console.log(result);
         return res.json(result);
 
     } catch (e) {

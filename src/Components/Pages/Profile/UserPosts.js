@@ -44,7 +44,7 @@ const UserPosts = (props) => {
           <div className="row d-flex">
             {posts && posts.map((post,index) => {
                   return ( 
-                    <Photo key={index} params={{index:post._id,username:post.username,content:post.content, likes:post.likes??4 }}/>
+                    <Photo key={index} post={post}/>
                     );
                   })
             }

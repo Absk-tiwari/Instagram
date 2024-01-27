@@ -4,15 +4,12 @@ function Test() {
    const [photos, set] =  useState([])
 
    useEffect(()=>{
-    console.log('rendered:')
-    fetch('http://192.168.119.154:1901/api/profile/test').then(res=>{
+    fetch('http://localhost:1901/api/profile/test').then(res=>{
         return res.json()
     }).then(data=>{
         set(data)
-        console.log(data)
     })
     return ()=>{
-        console.log('i m gone')
         set([])
     }
    },[])

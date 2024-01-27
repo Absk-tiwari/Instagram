@@ -1,7 +1,6 @@
 const  express = require("express");
 const Post=require('../Models/Post');
 const User=require('../Models/User');
-const Liked=require('../Models/Liked');
 const router = express.Router();
 const fetchuser= require('../Middlewares/LoggedIn');
 const Comment = require("../Models/Comments");
@@ -80,20 +79,19 @@ router.post('/update', fetchuser, async(req, res) =>{
     try { 
         let set={}
         let thisUser = await User.findById(req.body.id).select('username profile -_id')
-        console.log(thisUser,req.body.targetUsername)
         if(req.body.type==='comment'){
             let comments = await Comment.find({_id:req.body.postID})
             return res.json(comments)            
         }
         if(req.body.type==='like'){
-            set = {$push:{likes:req.body.id}}
+            set = {$push:{likes:thisUser.username}}
         }
         if(req.body.type==='unlike'){
-            set = {$pull:{likes:req.body.id}}
+            set = {$pull:{likes:thisUser.username}}
         }
         if(req.body.type==='follow'){
-            let updateset = { $inc: { followers: 1} } 
-            const updated = await User.updateOne({username:req.body.targetUsername}, updateset)
+            await User.updateOne({_id:req.body.id}, {$inc:{following:1}})
+            const updated = await User.updateOne({username:req.body.targetUsername},{ $inc:{ followers: 1} })
             if(updated){
                 await Followers.create({
                     of : req.body.targetUsername,    
@@ -104,10 +102,9 @@ router.post('/update', fetchuser, async(req, res) =>{
             return res.json(error)
         }
         if(req.body.type==='unfollow'){
- 
+            await User.updateOne({_id:req.body.id}, {$inc:{following:-1}})
             let deleted = await Followers.deleteOne({of:req.body.targetUsername, username:thisUser.username })
             if(deleted){  
-                console.log(req.body.targetUsername, thisUser.username, deleted)
                 let updated = await User.updateOne({username:req.body.targetUsername}, {$inc : {followers:-1}} )
                 if(updated) return res.json(output)
             }
@@ -115,23 +112,6 @@ router.post('/update', fetchuser, async(req, res) =>{
         }
  
         let updated = await Post.updateOne({_id:req.body.postID},set)
-        if(req.body.type==='like'){
-           let added= await Liked.create({
-                by:req.body.id,
-                post_id:req.body.postID
-            });
-           if(!added){
-             error.message='couldn\'t add the like'
-             return res.json(error)
-           }
-        }
-        if(req.body.type==='unlike'){
-            let rem= await Liked.deleteOne({by:req.body.user,post_id:req.body.postID});
-            if(!rem){
-               error.message='couldn\'t remove like'
-               return res.json(error)
-            }
-        }
         if(updated){  
             output.message = 'Went straight.'
             return res.json(output)
@@ -149,7 +129,7 @@ router.post('/addComment', fetchuser, async(req, res) =>{
         let thisUser = await User.findById(req.body.id).select('username -_id')
         let added = await Comment.create({
             from:thisUser.username,
-            for:req.body.username,
+            for:req.body.postID,
             content:req.body.comment
         })
            

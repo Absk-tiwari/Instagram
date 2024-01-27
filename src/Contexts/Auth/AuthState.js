@@ -5,7 +5,7 @@ import headers from "../../APIs/Headers";
 const AuthState=(props)=>{
  
     let navigator = useNavigate();
-    const host = 'http://192.168.119.154:1901';
+    const host = 'http://localhost:1901';
 
     const login = async({username, password}) =>{
         try {
@@ -20,15 +20,14 @@ const AuthState=(props)=>{
                 // Save the auth token 
                 localStorage.setItem('token', response.authToken);
                 navigator('/')
-                window.location.reload()
+                setTimeout(() => window.location.reload(), 2500);
             }else{
                 alert(response.message)
-                console.log(response)
             }
 
         } catch (err) {
             alert(err.message);
-            console.log(err)
+            (err)
         }
     }
 
@@ -46,7 +45,6 @@ const AuthState=(props)=>{
                 alert(resp.message)
             }
         } catch (error) {
-            console.log(error);         
         }
     }
 
@@ -60,7 +58,6 @@ const AuthState=(props)=>{
             return resp;
             
         } catch (err){
-            console.log(err)
         }
     }
     

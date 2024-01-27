@@ -13,7 +13,6 @@ router.get('/', fetchuser, async(req, res) =>{
         //await Message.deleteMany() // truncate data
         let userid = req.body.id
         let user = await User.findById(userid).select('username -_id')
-        console.log(user)
         const resp = await Notification.find({for:user.username}) 
         return res.json(resp);
 
@@ -41,7 +40,6 @@ router.post('/of', fetchuser, async(req, res) =>{
             ]
         }).select('from content');
           
-        console.log(result);
         return res.json(result);
 
     } catch (e) {

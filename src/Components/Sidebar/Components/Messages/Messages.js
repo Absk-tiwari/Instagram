@@ -8,6 +8,7 @@ import Chat from '../Messages/Chat'
 import profile from '../../../../assets/icons/profile.png'
 import headers from "../../../../APIs/Headers";
 const Messages = () => {
+  const [isTyping ,setTyping] = useState([])
   const [totalChats, setChats] = useState([])
   const [selectedUser,setUser] = useState({username:'',name:''})
   const [searchParam, setSearchParam] = useState('');
@@ -18,34 +19,33 @@ const Messages = () => {
   const {getChats} = useContext(ProfileContext);
   const [launch,set] = useState(false)
   const mapref = useRef(null)
-  let user = localStorage.getItem('userLogin')
-  user = JSON.parse(user)
+  let user = JSON.parse(localStorage.getItem('userLogin'))
   // let chats=[];
   const [change , setchange] = useState(false);
+  const [onlines , setOnline] = useState([]);
   const [open, setmodal] = useState(false);
 
-  const changeParent = newState => {
-    setchange(newState)
-  }
-  var totalUsers=[]
+  const changeParent = newState => setchange(newState)
  
   socket.on('receive',data=>{
     setchange(!change)
-    console.log(data.message)
   })
-  
-
-  let onlines=[];
-  socket.on('init',data=>{
-    setchange(!change)
-    for(let it of data){
-      onlines.push(it)
-    }
-  })
-  socket.on('flag',()=>    setchange(!change)
-)
    
+  socket.on('init',data=>{  
+    setOnline(data)
+  })
+  socket.on('flag',()=>setchange(!change))
+  socket.on('isTyping', who=>{
+    setTyping([...isTyping, who])
+    setchange(!change)
+  }) 
+
+  socket.on('hasStopped', who => {
+    let now = isTyping.filter(them=>them!==who)
+    setTyping(now)
+  })
   useEffect(()=>{
+    socket.emit('users')
     const init = async() => {
       let data = await getChats(user.username)
       return data  
@@ -59,7 +59,7 @@ const Messages = () => {
       } 
     })  
   } ,
-[change, getChats, user.username])
+[ getChats, user.username])
 
   
   const toggleModal = e => {   
@@ -80,7 +80,8 @@ const Messages = () => {
     let fire =  JSON.parse(ele.dataset.s)
     set(fire)
     openedChat(true); 
-    setDetail(totalUsers[username])
+    let thisUser = totalChats.filter(chat=>chat.username===username)
+    setDetail(thisUser)
     setUser({username,name})
     setmodal(false)
     setSearchParam('')
@@ -92,7 +93,7 @@ const Messages = () => {
     e.preventDefault();
   
     if(searchParam.length > 3){
-      fetch('http://192.168.119.154:1901/api/profile/search',{
+      fetch('http://localhost:1901/api/profile/search',{
                 method:'POST',
                 headers:headers(),
                 body:JSON.stringify({param:searchParam})
@@ -109,16 +110,11 @@ const Messages = () => {
   return (
     <>
       <div className="page d-flex">
-        <div
-          className="col-md-4 user-row" ref={mapref} 
-          style={{height: "100vh",overflowY: "scroll",borderRight: "1px solid lightgray"}}
-        >
+        <div className="col-md-4 user-row" ref={mapref} >
           <div className="hstack gap-5 mt-5">
             <h4 className="text-dark">{user.username}</h4>
-            <i
-              className="fa fa-edit fs-2 offset-sm-4 openModal"
-              title="write a message " onClick={toggleModal}
-            ></i>
+            <i className="fa fa-edit fs-2 offset-sm-4 openModal"
+              title="write a message" onClick={toggleModal} /> 
           </div>
           <div className="hstack mt-4 mb-3">
             <strong>Messages</strong>
@@ -126,18 +122,18 @@ const Messages = () => {
           </div>
           <div id="user-row-container"> 
           {totalChats && totalChats.map((chatuser,index)=>{
-            let active = (onlines && onlines.length) ? onlines[0].includes(user.username) : false;
+            let active = (onlines && onlines.length) ? onlines.includes(chatuser.username) : false;
             return (
             <div key={index} className="row mt-3 openchat" style={{cursor:'pointer'}} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>
               <div className="col-sm-2" data-name={chatuser.name} data-username={chatuser.username} style={{position:"relative"}} data-s={chatuser.from!==user.username} onClick={openChat}>
                   <img data-name={chatuser.name} data-username={chatuser.username}
-                  src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt="" data-s={chatuser.from!==user.username}  onClick={openChat} />
-                  <h2 className={active?'':'d-none'} style={{position:'absolute',bottom:'0px',left:'50px',fontSize:'xxx-large',color:'green',fontWeight:900}} data-s={chatuser.from!==user.username}  onClick={openChat}>.</h2>
+                  src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt="" data-s={chatuser.from!==user.username} onClick={openChat}/>
+                  <h2 className={active?'online':'d-none'} data-s={chatuser.from!==user.username} onClick={openChat}>.</h2>
               </div>
               <div className={`col-sm-10 chatUser`} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>
                 <b data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>{chatuser.username}</b>
-                <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} data-s={chatuser.from!==user.username} data-username={chatuser.username} data-name={chatuser.name} onClick={openChat}>{chatuser.from===user.username && chatuser.sender? chatuser.sender : chatuser.last} 
-                <small onClick={openChat}>{(chatuser.from===user.username)? (chatuser.read ? ' seen 2h ago' : ' sent 2h ago' ) :'2h'}</small></p>
+                <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} data-s={chatuser.from!==user.username} data-username={chatuser.username} data-name={chatuser.name} onClick={openChat}>{isTyping.includes(chatuser.username)?'typing...':(chatuser.from===user.username && chatuser.sender? chatuser.sender : chatuser.last)} 
+                {!isTyping.includes(chatuser.username) && <small onClick={openChat}>{(chatuser.from===user.username)? (chatuser.read ? ' seen 2h ago' : ' sent 2h ago' ) :'2h'}</small>}</p>
               </div>
             </div> 
             )
@@ -145,7 +141,7 @@ const Messages = () => {
           }
           </div>
         </div>
-        <div className="col-md-8 chat-open-screen" style={{ overflowY: "hidden" }}>
+        <div className="col-md-8 chat-open-screen">
          { !opened ? <div className="text-center d-flex justify-content-center align-items-center min-vh-100">
             <div className="container text-center d-block">
               <img src={msg} alt="?" style={style} className="rounded-circle" />
@@ -181,7 +177,8 @@ const Messages = () => {
               <span className="placeholder col-6"></span>
             </p>):             
             (searchParam && searched.length ? searched.map((user,index)=>{
-              return (<div style={{height:"60px",backgroundColor:"#e9ecef",borderRadius:'10px',width:'300px',display:'flex',marginLeft:'60px',marginTop:'5px',paddingTop:'4px'}} className='open-searched' data-s={false} data-username={user.username} key={index} data-name={user.name} onClick={openChat}>
+              return (
+              <div className='open-searched' data-s={false} data-username={user.username} key={index} data-name={user.name} onClick={openChat}>
               <img src={user.profile??profile} class="mx-3 pfpicture" data-s={false} data-username={user.username} data-name={user.name} onClick={openChat} alt=""/>
               <div class="d-block" data-username={user.username} data-s='false' data-name={user.username} onClick={openChat}>
                 <b data-username={user.username} data-name={user.name} data-s='false' onClick={openChat}>{user.username}</b> <br/>

@@ -11,12 +11,9 @@ const Create = () => {
   useEffect(()=>{
     let posted = localStorage.getItem('posted');
     setPost(posted)
-    //localStorage.removeItem('posted')
   },[post])
 
-  const onchange = e => {
-    setfields({...fields, [e.target.name]:e.target.value})
-  }
+  const onchange = e => setfields({...fields, [e.target.name]:e.target.value})
 
   const handleSubmit = async(event) =>{
     event.preventDefault()
@@ -28,9 +25,8 @@ const Create = () => {
     let resp = createPost(body) 
     if(resp){
       setTimeout(() => {
-        window.location.reload()
         navigator('/')
-      }, 1500);
+      }, 2500);
     }
   }
   return (

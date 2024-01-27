@@ -12,18 +12,8 @@ const CommentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    likes:{
-        type:String,
-        required:true
-    },  
-    created_at : {
-        type : Date,
-        default : Date.now
-    },
-    deleted : {
-        type : Boolean,
-        default:false
-    }
+    likes:[{type:String}],  
+    at : {type : Date,default : Date.now()}
 });
 const Comment= mongoose.model('Comment', CommentSchema);
 

@@ -6,15 +6,20 @@ import logo from '../../../assets/logo.png'
 const Notifications = () => {
   let [notifications,set] = useState([])
   const [ting , ring] = useState(false)
-  socket.on('notification',data=>{
-    console.log('new notification', data)
+  socket.on('notification', data =>{
     set([...notifications, data])
+    ring(!ting)
+  })
+  socket.on('unnotify', resp=>{
+    let alt = notifications.filter(item=>{ return item.about !== resp.about })
+    set(alt)
     ring(true)
   })
+  socket.on('init',data=>console.log('connections',data))
  
   useEffect(() => { 
     if(ting===false){
-      fetch('http://192.168.119.154:1901/api/notifications',{
+      fetch('http://localhost:1901/api/notifications',{
         headers:headers()
       }).then(res=> {return res.json()}).then(data=>{
         set(data);
@@ -23,16 +28,17 @@ const Notifications = () => {
   }, [ting]);
   return (
     <>
-    { notifications.map((item,index)=>{   
-         return (<div className="notification" key={index} style={{height:"70px",backgroundColor:"#f8f8f8",borderRadius:'10px',width:'100%',display:'flex', marginTop:'5px',paddingTop:'4px'}}>
-            <div className="hstack list-item gap-3">
-              <img src={item.label??logo} alt="?" className="rounded-circle pfpicture mx-2" />
-              <p className="text-dark text-wrap" style={{paddingTop:'13px'}} dangerouslySetInnerHTML={{ __html: item.message}} />
-              <small className="text-secondary">2h</small>
-              <Button text={'follow'} alt={'following'}/>
-            </div>
-          </div>)
-    })}
+    {notifications.length && notifications.map((item,index)=>{   
+      return (
+      <div className="notification" key={index} >
+              <div className="hstack list-item gap-3">
+                <img src={item.label??logo} alt="?" className="rounded-circle pfpicture mx-2" />
+                <p className="text-dark text-wrap notify-text" dangerouslySetInnerHTML={{ __html: item.message}} />
+                <small className="text-secondary">2h</small>
+                <Button text={'follow'} alt={'following'}/>
+              </div>
+      </div>
+      )})}
     </>
   )
 }

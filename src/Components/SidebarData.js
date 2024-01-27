@@ -7,7 +7,7 @@ import Reels from "../assets/icons/reels.png";
 import Notifications from "../assets/icons/notifications.png";
 import Create from "../assets/icons/create.png";
 import Profile from "../assets/icons/profile.png";
-
+const me = JSON.parse(localStorage.getItem('userLogin'))
 export const SidebarData = [
   {
     title: "Home",
@@ -56,7 +56,7 @@ export const SidebarData = [
   },
   {
     title: "Profile",
-    icon: <img className="icons" src={Profile} alt="not found" />,
+    icon: <img className="pfpicture" src={me.profile??Profile} style={{height:'30px',width:'30px'}} alt="" />,
     link: "/profile",
   },
 ];
