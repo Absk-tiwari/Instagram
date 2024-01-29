@@ -125,10 +125,19 @@ function SidebarComponent() {
                   {val.link === "/notifications" && <span className="arrived">.</span>}
                 </div>
                 {val.link === "/notifications" || val.link === "/search" ? (
+                  <>
                   <Link id="title" to={val.link} onClick={val.title === "Create" && submit}
                     data-refer={val.link} data-bs-toggle="offcanvas" data-bs-target={val.modal} >
                    {val.title} 
                   </Link>
+                 {val.link === "/notifications" && <div className="likenotif">
+                    <div className="rectangle">
+                      <div className="heart"></div>
+                      <div className="number"></div>
+                    </div>
+                    <div className="square"></div>
+                  </div>}
+                  </>
                 ) : (
                   <Link id="title" to={val.link} onClick={val.title === "Create" && submit} data-refer={val.link} >
                     {val.title}

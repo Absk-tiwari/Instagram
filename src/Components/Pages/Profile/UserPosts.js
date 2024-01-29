@@ -4,27 +4,16 @@ import Photo from "./Photo";
 
 const UserPosts = (props) => {
   const posts = props.posts
-  //const [active, set] = useState(false)
-  // let user = localStorage.getItem('userLogin')
-  // user = JSON.parse(user)
-  // let myPosts = localStorage.getItem('myPosts');
-  // myPosts = JSON.parse(myPosts)
+  
   const style = {
     height: "4%",
     width: "7%",
     border: "2px solid black ",
     borderStyle: "rounded",
   };
-  // eslint-disable-next-line
-  //  console.log(posts);
-  // const getContent = id => { 
-  //   console.log(id);
-  //   document.querySelector(`#${id}`).classList.remove('d-none');
-  // }; 
-  
     return (
       <>
-        {!posts? (
+        {posts && posts.length===0? (
           <div id="menu1" className={`container`}>
             <br />
   

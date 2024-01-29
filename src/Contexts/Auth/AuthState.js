@@ -26,8 +26,7 @@ const AuthState=(props)=>{
             }
 
         } catch (err) {
-            alert(err.message);
-            (err)
+            alert(err.message); 
         }
     }
 
@@ -41,10 +40,12 @@ const AuthState=(props)=>{
             const resp = await json.json();
             if(resp.status){
                 navigator('/login')
+                return resp;
             }else{
                 alert(resp.message)
             }
         } catch (error) {
+            console.log(error.message);
         }
     }
 

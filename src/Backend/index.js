@@ -124,13 +124,13 @@ socket.on('connection', conn => {
         let set={}
         if(data.type){
           if(data.type==='follow'){
-            set.type= 'follow',
+            set.type= 'follow'
             set.about = data.user
             set.for = data.for
           }
           if(data.type==='like'){
             set.type = 'like'
-            set.about = data.about,
+            set.about = data.about
             set.for = data.for
           }
           let done = await Notification.deleteOne(set);

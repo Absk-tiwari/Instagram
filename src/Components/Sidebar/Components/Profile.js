@@ -14,9 +14,7 @@ const Profile = () => {
   const [chatopened, setupChat] = useState(false)
   let me = JSON.parse(localStorage.getItem('userLogin')) 
   const [user, setUser] = useState([])
-  let posted  = localStorage.getItem('myPosts')
-  posted = JSON.parse(posted)
-  const [posts, setPost] = useState(posted)
+  const [posts, setPost] = useState([])
   const [react, setReact] = useState(false)
   
   const preview =  e => {
@@ -116,10 +114,7 @@ const Profile = () => {
       })
     }
     
-    return ()=>{
-      setPost(posted)
-      setUser([])
-    }
+    
   },[react])
   return (
     <>

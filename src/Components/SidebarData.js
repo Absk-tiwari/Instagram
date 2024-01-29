@@ -56,7 +56,7 @@ export const SidebarData = [
   },
   {
     title: "Profile",
-    icon: <img className="pfpicture" src={me.profile??Profile} style={{height:'30px',width:'30px'}} alt="" />,
+    icon: <img className="pfpicture" src={me && me.profile?me.profile :Profile} style={{height:'30px',width:'30px'}} alt="" />,
     link: "/profile",
   },
 ];

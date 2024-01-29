@@ -16,10 +16,10 @@ const Photo = (props) => {
 
   return (
     <div className="col-md-4 openModal posts-of-logged-in-user" key={post.index} onMouseOver={()=>setState(true)} style={{position:state && 'relative'}}  onMouseLeave={()=>setState(false)}>
-        <img className="postImg" key={post.username} onClick={(e)=>{setmodal(!open); putContents(e)}} src={post.content} alt="?" data-content={post.likes} />
+        <img className="postImg" key={post.username} onClick={(e)=>{setmodal(!open); putContents(e)}} src={post && post.content} alt="?" data-content={post && post.likes} />
         <div className={`text-center ${!state && 'd-none'} hstack gap-2 text-white hovered`}> 
             <i className='fa fa-heart mb-3 fs-5'></i>
-            <p >{post.likes?post.likes.length:0}</p>
+            <p >{post && post.likes?post.likes.length:0}</p>
         </div>
         <Modal isOpen={open} dimens={{height:500 ,width:920 }} onClose={toggleModal}>
           <>
