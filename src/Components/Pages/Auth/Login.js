@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import AuthContext from "../../../Contexts/Auth/AuthContext";
 import LoadingBar from "react-top-loading-bar";
 import Loader from "../../StateComponents/Loader";
+import {toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 const Login = () => {
   const [progress, setProgress] = useState(0)
   const {login } = useContext(AuthContext) 
@@ -15,6 +18,7 @@ const Login = () => {
     e.preventDefault();
     setTimeout(() => {
       login(fields)
+      toast.success('logged in')
     }, 4000);
     setLoading(!isLoading)
   }
@@ -24,6 +28,7 @@ const Login = () => {
   return (
     <>
       <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
+      <ToastContainer position='top-center' autoClose={5000} hideProgressBar={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='dark' />           
        <div className="container-fluid justify-contents-center">
         <div className="container d-flex mt-5">
           <div className="col-md-5 offset-4 mt-3">

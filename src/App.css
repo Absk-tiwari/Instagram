@@ -346,10 +346,13 @@ i {
 .header-notification {
   border-bottom: 2px solid darkgray;
 }
+.read{
+  background-color: white!important;
+}
 .offcanvas-body .notification {
   margin-bottom: 5px;
   height:70px;
-  background-color: #f8f8f8;
+  background-color: #e5e5e5;
   border-radius: 10px;
   width: 100%;
   display: flex;
@@ -671,7 +674,7 @@ section.body{
 .heart:before,.heart:after {
   content: "";
   background-color: white;
-  width: 14px;
+  width: 12px;
   height: 11px;
   border-radius: 50%;
   position: absolute;
@@ -688,24 +691,16 @@ section.body{
 }
 
 .number {
-  width: 2px;
-  height: 20px;
-  background-color: white;
+  position: absolute;
+  color: white; 
+  width: 10px;
+  height: 20px; 
   right: 10px;
-  top: 10px;
-  filter: blur(0.1em);
+  top: 3px;
+  /* filter: blur(0.1em); */
 }
 
-.number:after {
-  content: "";
-  width: 2px;
-  height: 20px;
-  background-color: white;
-  position: absolute;
-  transform: rotate(50deg);
-  right: 23px;
-  top: -1px;
-}
+ 
 
 @keyframes beat {
   0% {transform: scale(1) rotate(-45deg);}
@@ -723,10 +718,10 @@ section.body{
 
 @keyframes jump {
   0% {top: 0px;}
-  6% {top: -50px;}
+  6% {top: -20px;}
   20% {top: 0px;}
   50% {top: 0px;}
-  56% {top: -50px;}
+  56% {top: -20px;}
   70% {top: 0px;}
   100% {top: 0px;}
 }

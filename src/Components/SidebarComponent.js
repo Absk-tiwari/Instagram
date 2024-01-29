@@ -11,6 +11,7 @@ import headers from "../APIs/Headers";
 import Notifications from "./Sidebar/Components/Notifications";
 
 function SidebarComponent() {
+  let [hasRead,read] = useState(false)
   const location = useLocation();
   const [term, setTerm] = useState("");
   const [open, setmodal] = useState(false);
@@ -52,7 +53,14 @@ function SidebarComponent() {
     }
   }
   const submit = () => document.getElementById("create").click();
-  
+  const markRead = () => fetch('http://localhost:1901/api/notifications/read',{
+    headers:headers()
+  }).then(res=>res.json()).then(resp=>{
+    if(resp.status){
+      read(true)
+      document.querySelector('.likenotif').classList.add('d-none')
+    }
+  })
 
   const [progress,setProgress] = useState(0)
 
@@ -126,14 +134,14 @@ function SidebarComponent() {
                 </div>
                 {val.link === "/notifications" || val.link === "/search" ? (
                   <>
-                  <Link id="title" to={val.link} onClick={val.title === "Create" && submit}
+                  <Link id="title" to={val.link} onClick={val.title === "Create" ? submit: markRead}
                     data-refer={val.link} data-bs-toggle="offcanvas" data-bs-target={val.modal} >
                    {val.title} 
                   </Link>
                  {val.link === "/notifications" && <div className="likenotif">
                     <div className="rectangle">
                       <div className="heart"></div>
-                      <div className="number"></div>
+                      <div className="number">4</div>
                     </div>
                     <div className="square"></div>
                   </div>}
@@ -191,7 +199,7 @@ function SidebarComponent() {
           <h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">Notifications </h5>
         </div>
         <div className="offcanvas-body"> 
-          <Notifications/>
+          <Notifications read={hasRead}/>
         </div>
       </div>
       <div

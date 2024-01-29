@@ -36,11 +36,13 @@ const Messages = () => {
   })
   socket.on('flag',()=>setchange(!change))
   socket.on('isTyping', who=>{
+    console.log(who+' is typing ..')
     setTyping([...isTyping, who])
     setchange(!change)
   }) 
 
   socket.on('hasStopped', who => {
+    console.log(who+' hasStopped typing')
     let now = isTyping.filter(them=>them!==who)
     setTyping(now)
   })

@@ -50,6 +50,15 @@ router.post('/of', fetchuser, async(req, res) =>{
 
 
 // has been tested and worked 
+router.get('/read', fetchuser, async(req, res) =>{
+    let user = await User.findById(req.body.id).select('username -_id')
+    let read = await Notification.updateMany({for:user.username},{$set: {read:true}});
+    if(read){
+        output.message = 'You just read all the notifications'
+        return res.json(output)
+    }
+    return res.json(error)
+})
 
 router.post('/create', fetchuser, async(req, res) =>{
     try {
