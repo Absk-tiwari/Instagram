@@ -8,20 +8,20 @@ const Photo = (props) => {
     const [state, setState]= useState(false);
     const [src, setsrc]= useState(false);
 
-    const toggleModal = (e) => {
+    const toggle = e => {
       if(e.target.id==='modal' || e.target.classList.contains('postImg')) setmodal(!open)
     }
     const putContents = e => setsrc(e.target.currentSrc) 
     useEffect(()=>{},[]);
 
   return (
-    <div className="col-md-4 openModal posts-of-logged-in-user" key={post.index} onMouseOver={()=>setState(true)} style={{position:state && 'relative'}}  onMouseLeave={()=>setState(false)}>
+    <div className="col-md-4 col-lg-4 col-sm-4 openModal posts-of-logged-in-user" key={post.index} onMouseOver={()=>setState(true)} style={{position:state && 'relative'}}  onMouseLeave={()=>setState(false)}>
         <img className="postImg" key={post.username} onClick={(e)=>{setmodal(!open); putContents(e)}} src={post && post.content} alt="?" data-content={post && post.likes} />
-        <div className={`text-center ${!state && 'd-none'} hstack gap-2 text-white hovered`}> 
-            <i className='fa fa-heart mb-3 fs-5'></i>
+        <div className={`text-center ${!state && 'd-none'} hstack gap-2 mx-4 text-white hovered`}> 
+            <i className='fa fa-heart mb-3 fs-5'/>
             <p >{post && post.likes?post.likes.length:0}</p>
         </div>
-        <Modal isOpen={open} dimens={{height:500 ,width:920 }} onClose={toggleModal}>
+        <Modal isOpen={open} dimens={{height:500 ,width:920 }} onClose={toggle}>
           <>
           <div className='container d-flex'>
             <div className='col-6' style={{position:'relative'}}>
@@ -39,20 +39,20 @@ const Photo = (props) => {
               </div>
               <div className="col-12 card-body mx-2">
                 <p className="card-title placeholder-glow mb-3">
-                  <span className="placeholder col-6"></span>
+                  <span className="placeholder col-6"/> 
                 </p>
                 <p className="card-text placeholder-glow">
-                  <span className="placeholder col-7"></span>
-                  <span className="placeholder col-6"></span>
-                  <span className="placeholder col-7"></span>
-                  <span className="placeholder col-6"></span>
-                  <span className="placeholder col-8"></span>
+                  <span className="placeholder col-7"/>
+                  <span className="placeholder col-6"/>
+                  <span className="placeholder col-7"/>
+                  <span className="placeholder col-6"/>
+                  <span className="placeholder col-8"/>
                 </p>
                 <p className="card-body placeholder-glow">
-                  <span className='placeholder col-2'></span>
-                  <span className='placeholder col-11'></span>
-                  <span className='placeholder col-10'></span>
-                  <span className='placeholder col-5'></span>
+                  <span className='placeholder col-2'/>
+                  <span className='placeholder col-11'/>
+                  <span className='placeholder col-10'/>
+                  <span className='placeholder col-5'/>
                 </p>
               </div>
             </div>

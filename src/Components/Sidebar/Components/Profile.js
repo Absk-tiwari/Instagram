@@ -73,9 +73,14 @@ const Profile = () => {
  const [loaded, setLoad] = useState(false)
   useEffect(()=>{
     let query = window.location.search
+    let term
     if(query){ 
-      let term = query.split('?')
+      term = query.split('?')
       term = term[1].split('=')[1]
+    }else{
+      term = JSON.parse(localStorage.getItem('userLogin'))
+      term = term.username
+    }
       fetch('http://localhost:1901/api/profile/getuser',{
         method:'POST',
         headers:headers(),
@@ -100,21 +105,7 @@ const Profile = () => {
           })
         }
       })
-    }else{
-      setLoad(true)
-      setUser(me)
-      fetch('http://localhost:1901/api/post/getPostsOf',{
-            method:'POST',
-            headers:headers(),
-            body:JSON.stringify({username:me.username})
-      }).then(res=>{
-        return res.json()
-      }).then(data=>{
-        setPost(data)
-      })
-    }
-    
-    
+     
   },[react])
   return (
     <>
@@ -184,22 +175,22 @@ const Profile = () => {
 
         <ul className="nav align-items-center justify-content-center text-center" style={{ border: "none" }} >
           <li className="text-secondary" onClick={() => setStat(1) } >
-            <Link className={`nav-link text-dark ${active === 1 && "active"}`} >
+            <span className={`nav-link text-dark ${active === 1 && "active"}`} >
               <i className="fa fa-table text-secondary mx-1"></i> POSTS
-            </Link>
+            </span>
           </li>
           { me.username===user.username && 
               (<li className="text-secondary" onClick={() => setStat(2) } >
-                <Link className={`nav-link text-dark ${active === 2 && "active"}`} >
+                <span className={`nav-link text-dark ${active === 2 && "active"}`} >
                   <i className="fa fa-bookmark-o text-secondary mx-2"></i> SAVED
-                </Link>
+                </span>
               </li>
           )}
           
           <li className="text-secondary" onClick={() => setStat(3) } >
-            <Link className={`nav-link text-dark ${active === 3 && "active"}`} >
+            <span className={`nav-link text-dark ${active === 3 && "active"}`} >
               <i className="fa fa-tags text-secondary mx-1"></i> TAGGED
-            </Link>
+            </span>
           </li>
         </ul>
 

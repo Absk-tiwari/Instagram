@@ -57,7 +57,7 @@ function SidebarComponent() {
     headers:headers()
   }).then(res=>res.json()).then(resp=>{
     if(resp.status){
-      read(true)
+      read(!hasRead)
       document.querySelector('.likenotif').classList.add('d-none')
     }
   })
@@ -130,15 +130,15 @@ function SidebarComponent() {
                onClick={refer} data-refer={val.link} >
                 <div id="icon" style={{ height: "20px" }} data-refer={val.link}>
                   {val.icon}
-                  {val.link === "/notifications" && <span className="arrived">.</span>}
+                  {val.link === "/notifications" && <span className="arrived d-none">.</span>}
                 </div>
                 {val.link === "/notifications" || val.link === "/search" ? (
                   <>
-                  <Link id="title" to={val.link} onClick={val.title === "Create" ? submit: markRead}
+                  <Link id="title" to={val.link} onClick={val.title === "Create" ? submit: val.link==='/notifications' && markRead}
                     data-refer={val.link} data-bs-toggle="offcanvas" data-bs-target={val.modal} >
                    {val.title} 
                   </Link>
-                 {val.link === "/notifications" && <div className="likenotif">
+                 {val.link === "/notifications" && <div className="likenotif d-none">
                     <div className="rectangle">
                       <div className="heart"></div>
                       <div className="number">4</div>

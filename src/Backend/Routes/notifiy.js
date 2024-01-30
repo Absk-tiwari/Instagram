@@ -13,7 +13,7 @@ router.get('/', fetchuser, async(req, res) =>{
         //await Message.deleteMany() // truncate data
         let userid = req.body.id
         let user = await User.findById(userid).select('username -_id')
-        const resp = await Notification.find({for:user.username}) 
+        const resp = await Notification.find({for:user.username}).sort({at: -1})
         return res.json(resp);
 
     } catch (e) {

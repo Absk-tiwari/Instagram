@@ -105,14 +105,22 @@ socket.on('connection', conn => {
           }else{
             obj.label = data.label
           }
-          await Notification.create({
-            label: obj.label,
-            type: data.type,
-            for: data.for,
-            from:data.user,
-            message: obj.message,  
-            about: data.about,  
-          });
+          // await Notification.deleteMany();
+          try{
+            // let there = await Notification.find({message:obj.message,for:data.for,about:data.about})
+            // if(!there){
+              await Notification.create({
+                label: obj.label,
+                type: data.type,
+                for: data.for,
+                from:data.user,
+                message: obj.message,  
+                about: data.about,  
+              });
+            // }
+          }catch(exc){
+            console.log(exc)
+          }
           obj.about = data.about
           if(target) {
             socket.to(target).emit('notification', obj)

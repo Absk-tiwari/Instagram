@@ -82,7 +82,7 @@ const PostFooter = (props) => {
         </div>}
       </div>
 
-      {likes && (<p className="d-flex mt-2">{likes} likes</p>) }
+      {likes ? (<p className="d-flex mt-2">{likes===1? likes+' like': likes+' likes'}</p>) :''}
 
       <div className={`row ${!likes && 'mt-2'}`} style={{ lineHeight: "4.2px" }}>
         <div className="col-md-12 mt-1 d-flex">
