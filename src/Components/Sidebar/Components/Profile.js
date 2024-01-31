@@ -46,8 +46,8 @@ const Profile = () => {
       body:JSON.stringify({type,targetUsername})
     }).then(res=>{
       return res.json()
-    }).then(status=>{
-      if(status.status){
+    }).then(resp=>{
+      if(resp.status){
         let data={
           type: 'follow',
           for: targetUsername,
@@ -56,6 +56,7 @@ const Profile = () => {
           about:me.username,
           message : `<b>${me.username}</b> started following you` 
         }
+        setReact(act)
         
         if(type === 'follow'){
           if(data.user!==data.for){
@@ -67,7 +68,6 @@ const Profile = () => {
       }
       
     })
-    setReact(act)
   }
  
  const [loaded, setLoad] = useState(false)

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import {toast} from 'react-toastify'
 import { useNavigate } from 'react-router';
 import PostContext from '../../../Contexts/Profiles/PostContext';
 
@@ -26,6 +27,7 @@ const Create = () => {
     if(resp){
       setTimeout(() => {
         navigator('/')
+        toast.success('Posted')
       }, 2500);
     }
   }

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import {toast, ToastContainer } from 'react-toastify'
 import "../App.css";
 import { SidebarData } from "./SidebarData";
 import { Link, useLocation } from "react-router-dom";
@@ -43,7 +44,9 @@ function SidebarComponent() {
 
       fileReader.onload = function (e) {
         localStorage.setItem('posted', e.target.result)
-        setTimeout(() => navigator('/createPost'), 3000);
+        setTimeout(() => {
+          navigator('/createPost')
+        }, 3000);
       };
 
       // Read the file as text, binary, etc. depending on your needs
@@ -106,7 +109,7 @@ function SidebarComponent() {
         return res.json()
       }).then(data=>{
         setResults(data)
-        setTimeout(()=>setLoading(false),2000)
+        setTimeout(()=>setLoading(false),500)
       })
   }
 
@@ -115,7 +118,7 @@ function SidebarComponent() {
       <div className="custom-sidebar">
         <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
         <div className="custom-logo">
-          
+        <ToastContainer position='top-center' autoClose={5000} hideProgressBar={true} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover theme='dark' />
           <svg aria-label="Instagram" fill="currentColor" height="40" role="img" viewBox="32 4 113 32" width="130" >
             <title>Instagram</title>
             <path clipRule="evenodd"

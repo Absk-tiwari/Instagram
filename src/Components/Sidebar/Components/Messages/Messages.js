@@ -24,9 +24,9 @@ const Messages = () => {
   const [change , setchange] = useState(false);
   const [onlines , setOnline] = useState([]);
   const [open, setmodal] = useState(false);
-
+  const [dump, putMessage] = useState([])
   const changeParent = newState => setchange(newState)
- 
+  let tillMessages={};
   socket.on('receive',data=>{
     setchange(!change)
   })
@@ -58,6 +58,13 @@ const Messages = () => {
         console.log('do you mean no chats?')
       }else{ 
         setChats(res)
+        for(let i of res){
+          let key = i.username
+          let key2 = i.username+'_seen'
+          tillMessages[key] = i.last          
+          tillMessages[key2] = i.read?' seen':' sent'          
+        }
+        putMessage(tillMessages)        
       } 
     })  
   } ,
@@ -134,8 +141,8 @@ const Messages = () => {
               </div>
               <div className={`col-sm-10 chatUser`} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>
                 <b data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>{chatuser.username}</b>
-                <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} data-s={chatuser.from!==user.username} data-username={chatuser.username} data-name={chatuser.name} onClick={openChat}>{isTyping.includes(chatuser.username)?'typing...':(chatuser.from===user.username && chatuser.sender? chatuser.sender : chatuser.last)} 
-                {!isTyping.includes(chatuser.username) && <small onClick={openChat}>{(chatuser.from===user.username)? (chatuser.read ? ' seen 2h ago' : ' sent 2h ago' ) :'2h'}</small>}</p>
+                <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} data-s={chatuser.from!==user.username} data-username={chatuser.username} data-name={chatuser.name} onClick={openChat}>{isTyping.includes(chatuser.username)?'typing...':(chatuser.from===user.username && chatuser.sender? chatuser.sender : dump[chatuser.username])} 
+                {!isTyping.includes(chatuser.username) && <small onClick={openChat}>{(chatuser.from===user.username)? dump[chatuser.username+'_seen'] :'2h'}</small>}</p>
               </div>
             </div> 
             )
@@ -156,7 +163,7 @@ const Messages = () => {
                 Send message
               </button>
             </div>
-          </div> :  <Chat me={user.username} userImage={selectedUser.image} username={selectedUser.username} name={selectedUser.name} details={userDetail} launch={launch} update={changeParent} />
+          </div> :  <Chat me={user.username} userImage={selectedUser.image} username={selectedUser.username} name={selectedUser.name} details={userDetail} launch={launch} till={dump} changeMsg={putMessage} update={changeParent} />
          }
         </div>
       </div>

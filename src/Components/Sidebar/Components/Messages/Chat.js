@@ -4,7 +4,7 @@ import {socket} from '../../../../socket'
 import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 
 function Chat(props) {
-  const {me,username,launch,update,details} = props    
+  const {me,username,launch,update,till,changeMsg,details} = props    
   const [parent,setParent] = useState(false)
   const {updateChat,getChatsOf} = useContext(ProfileContext)    
   const [msg, setMessage] = useState('')
@@ -59,12 +59,14 @@ function Chat(props) {
         box.current.appendChild(div)
         document.getElementsByClassName('body')[0].scrollTop = document.getElementsByClassName('body')[0].scrollHeight
       }
-      // setTimeout(() => , 2400);      
   }
   socket.on('receive',data=>{
     let content = data.content
     showMessage(content)
-    // alert('you have a message '+data.content)
+    let added = till
+    added[username] = data.content
+    added[username+'_seen'] = ' just now'
+    changeMsg(added)
   })
   
   useEffect(()=>{
@@ -81,6 +83,10 @@ function Chat(props) {
       let data = {from:me,to:username,content:msg, cID:cstring}
       socket.emit('send', data)
       setMessage('')
+      let added = till
+      added[username] = msg
+      added[username+'_seen'] = ' sent just now'
+      changeMsg(added)
     }
     showMessage(msg,false)
     setParent(!parent)

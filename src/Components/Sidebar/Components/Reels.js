@@ -6,7 +6,7 @@ const Reels = () => {
     let vids = document.getElementsByTagName('video')
     for(let i=0; i<vids.length; i++){
       vids[i].addEventListener('dblclick', e=>{  e.preventDefault()
-        const like = document.querySelector('.fa-heart-o')
+        const like = document.querySelector('.fa-regular')
         if(like){
           like.click()
         }
@@ -29,7 +29,7 @@ const Reels = () => {
           Your browser does not support HTML video.
         </video>
         <div className='d-flex' style={{flexDirection:'column',position:'absolute',top:'55vh',left:'28vw'}}>
-          <i className={`fa fa-heart${like ? " animate" : "-o"}`} style={{transition: "0.2s",fontSize: "25px",
+          <i className={`${like ? ' fa':'fa-regular'} fa-heart${like ? ' animate':''}`} style={{transition: "0.2s",fontSize: "25px",
           color: like ?'red':'white'}} onClick={() =>reactPost(!like)}></i>
           <p className='text-white px-1'>34</p>
           <svg aria-label="Comment" className="_8-yf5 " style={icon} color="white" fill="white" 

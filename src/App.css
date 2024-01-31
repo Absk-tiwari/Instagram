@@ -604,7 +604,8 @@ section.body{
   display:flex;
   margin-left:60px;
   margin-top:5px;
-  padding-top:4px
+  padding-top:4px;
+  cursor:pointer
 }
 
 .chat-open-screen{
@@ -736,4 +737,7 @@ span.active{
 }
 li>span{
   cursor: pointer;
+}
+.navbar{
+  z-index: -1;
 }
