@@ -20,12 +20,12 @@ function Chat(props) {
     items: [],
   });
   const box = useRef(null)
-  const unsend = (from, id) => {
-    console.log(from,id)
-    fetch('http://localhost:1901/api/notifications/delete',{
+  const unsend = (from, _id) => {
+    console.log(from,_id)
+    fetch('http://localhost:1901/api/messages/delete',{
       method:'POST',
       headers:headers(),
-      body:JSON.stringify({id,of:from})
+      body:JSON.stringify({_id,of:from})
     }).then(res=>{
       return res.json()
     }).then(resp=>{

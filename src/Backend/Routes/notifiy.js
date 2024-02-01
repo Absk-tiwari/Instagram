@@ -9,7 +9,7 @@ let output = { status : true }
 
 // yet to be tested
 router.get('/delete', fetchuser, async(req, res) =>{
-    const resp = await Notification.deleteOne({_id:req.body.id})
+    const resp = await Notification.deleteOne({_id:req.body._id})
     if(resp){
         return res.json(output) 
     }

@@ -156,7 +156,7 @@ router.post('/update', fetchuser, async(req, res) =>{
 });
 
 router.post('/delete', fetchuser, async(req, res) =>{
-    const resp = await Message.deleteOne({_id:req.body.id,from:req.body.of})
+    const resp = await Message.deleteOne({_id:req.body._id})
     if(resp){
         return res.json(output)
     }

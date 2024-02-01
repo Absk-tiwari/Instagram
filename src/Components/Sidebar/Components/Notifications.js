@@ -17,11 +17,11 @@ const Notifications = (props) => {
     c:''
   });
 
-  const remove = id => {
-    console.log(id)
+  const remove = _id => {
+    console.log(_id)
     fetch('http://localhost:1901/api/notifications/delete',{
       headers:headers(),
-      body:JSON.stringify({id})
+      body:JSON.stringify({_id})
     }).then(res=>{
       return res.json()
     }).then(resp=>{
