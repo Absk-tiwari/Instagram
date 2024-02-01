@@ -8,6 +8,14 @@ let error = { status : false, message:'Something went wrong!' }
 let output = { status : true }
 
 // yet to be tested
+router.get('/delete', fetchuser, async(req, res) =>{
+    const resp = await Notification.deleteOne({_id:req.body.id})
+    if(resp){
+        return res.json(output) 
+    }
+    return res.json(error)
+})
+
 router.get('/', fetchuser, async(req, res) =>{
     try {
         //await Message.deleteMany() // truncate data

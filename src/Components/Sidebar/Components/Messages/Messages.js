@@ -7,6 +7,7 @@ import { socket } from '././../../../../socket';
 import Chat from '../Messages/Chat'
 import profile from '../../../../assets/icons/profile.png'
 import headers from "../../../../APIs/Headers";
+import ContextMenu from "../../../StateComponents/ContextMenu";
 const Messages = () => {
   const [isTyping ,setTyping] = useState([])
   const [totalChats, setChats] = useState([])
@@ -25,15 +26,37 @@ const Messages = () => {
   const [onlines , setOnline] = useState([]);
   const [open, setmodal] = useState(false);
   const [dump, putMessage] = useState([])
+  const [contextMenu, setContext] = useState({
+    isVisible: false,
+    x: 0,
+    y: 0,
+    items: [],
+  });
+
+  const deleteChat = () => {}
+  const block = () => {}
+
+  const onContext = event => {
+    console.log(event.target)
+    event.preventDefault()
+    const x = event.clientX 
+    const y = event.clientY 
+    setContext({
+      isVisible : true, 
+      x, y ,
+      items : [
+        {label:'Delete', onClick:()=>deleteChat(event.target.dataset.username)},
+        {label:'Block', class:'text-danger', onClick:()=>block(event.target.dataset.username)}
+      ]
+    })
+  }
   const changeParent = newState => setchange(newState)
   let tillMessages={};
   socket.on('receive',data=>{
     setchange(!change)
   })
    
-  socket.on('init',data=>{  
-    setOnline(data)
-  })
+
   socket.on('flag',()=>setchange(!change))
   socket.on('isTyping', who=>{
     console.log(who+' is typing ..')
@@ -47,6 +70,15 @@ const Messages = () => {
     setTyping(now)
   })
   useEffect(()=>{
+    socket.on('init',data=>{
+      console.log('how many>>?')
+      setOnline(data)
+    })
+    document.addEventListener('click',function(){
+        setContext({
+          isVisible : false,  
+        })
+    })
     socket.emit('users')
     const init = async() => {
       let data = await getChats(user.username)
@@ -118,6 +150,7 @@ const Messages = () => {
 
   return (
     <>
+      <ContextMenu {...contextMenu} />
       <div className="page d-flex">
         <div className="col-md-4 user-row" ref={mapref} >
           <div className="hstack gap-5 mt-5">
@@ -133,7 +166,7 @@ const Messages = () => {
           {totalChats && totalChats.map((chatuser,index)=>{
             let active = (onlines && onlines.length) ? onlines.includes(chatuser.username) : false;
             return (
-            <div key={index} className="row mt-3 openchat" style={{cursor:'pointer'}} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>
+            <div key={index} className="row mt-3 openchat" style={{cursor:'pointer'}} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onContextMenu={onContext} onClick={openChat}>
               <div className="col-sm-2" data-name={chatuser.name} data-username={chatuser.username} style={{position:"relative"}} data-s={chatuser.from!==user.username} onClick={openChat}>
                   <img data-name={chatuser.name} data-username={chatuser.username}
                   src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt="" data-s={chatuser.from!==user.username} onClick={openChat}/>

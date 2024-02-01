@@ -2,15 +2,61 @@ import React, { useEffect , useState,useContext, useRef } from 'react'
 import img from "../../../../assets/icons/profile.png" ;
 import {socket} from '../../../../socket'
 import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
+import ContextMenu from '../../../StateComponents/ContextMenu';
+import headers from '../../../../APIs/Headers';
 
 function Chat(props) {
   const {me,username,launch,update,till,changeMsg,details} = props    
-  const [parent,setParent] = useState(false)
-  const {updateChat,getChatsOf} = useContext(ProfileContext)    
-  const [msg, setMessage] = useState('')
-  const [hasmsg, mark] = useState(false)
-  const [loader, load] = useState(true)
+  const [parent,setParent] = useState(false) // reflection to parent
+  const {updateChat} = useContext(ProfileContext) // for target user api
+  const [chats, loadChats] = useState([]) // old chats
+  const [msg, setMessage] = useState('') // typing message
+  const [hasmsg, mark] = useState(false) // decide to initiate the convo
+  const [loader, load] = useState(true) // loader false will show fetched msgs 
+  const [contextMenu, setContext] = useState({
+    isVisible: false,
+    x: 0,
+    y: 0,
+    items: [],
+  });
   const box = useRef(null)
+  const unsend = (from, id) => {
+    console.log(from,id)
+    fetch('http://localhost:1901/api/notifications/delete',{
+      method:'POST',
+      headers:headers(),
+      body:JSON.stringify({id,of:from})
+    }).then(res=>{
+      return res.json()
+    }).then(resp=>{
+      if(resp.status){
+        document.querySelector('[data-id="'+id+'"]').remove()
+      }
+    });
+  }
+  const onContext = event => { 
+    let items
+    if(event.target.className==='other'){
+      items = [
+        {label:'Copy', onClick:()=>console.log('tried to copy')},
+        {label:'Delete', onClick:()=>unsend(event.target.dataset.from, event.target.dataset.id)}
+      ]
+    }else{
+      items = [
+        {label:'Copy', onClick:()=>console.log('tried to copy')},
+        {label:'Unsend', class:'text-danger', onClick:()=>unsend(event.target.dataset.from, event.target.dataset.id)}
+      ]
+    }
+    event.preventDefault()
+    const x = event.clientX 
+    const y = event.clientY 
+    setContext({
+      isVisible : true, 
+      x, y ,
+      items
+    })
+  }
+
   const iconStyle ={
     fontSize:'25px',
     marginLeft:'40px',
@@ -22,14 +68,7 @@ function Chat(props) {
     let res = {is:me,to:username}
     socket.emit('typing', res)
   }
-  const getChats = async() => {
-    let oldchats = await getChatsOf(me+'&'+username)
-    if(oldchats && oldchats.length){
-      mark(true)
-      setLoading(true)
-      printMessage(oldchats)
-    }
-  }
+ 
   const printMessage = msgArr => {
     let html=''
     msgArr.forEach(item=> { 
@@ -46,35 +85,66 @@ function Chat(props) {
       }
     },2500);
   }
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      if (box.current) {
+        box.current.scrollTop = box.current.scrollHeight;
+      }
+    },2500);
+  };
   const [isLoading, setLoading] = useState(false)
-  const showMessage = (msg,other=true) => {
-     
+  const showMessage = (msg,id,other=true) => {
+     let once = true
       let div = document.createElement('div')
       div.style.display='block'
       let p = document.createElement('p')
       p.innerText = msg
+      p.dataset.id = id
       p.className = other ? 'other': 'self'
       div.appendChild(p)
-      if(box.current ){
+      if(box.current && once){
         box.current.appendChild(div)
         document.getElementsByClassName('body')[0].scrollTop = document.getElementsByClassName('body')[0].scrollHeight
       }
   }
-  socket.on('receive',data=>{
-    let content = data.content
-    showMessage(content)
-    let added = till
-    added[username] = data.content
-    added[username+'_seen'] = ' just now'
-    changeMsg(added)
-  })
   
   useEffect(()=>{
     setLoading(true);
-    mark(false);
-    getChats().then(()=>setLoading(false));
+    document.addEventListener('click',function(){
+      setContext({
+        isVisible : false,  
+      })
+    })
+    socket.on('receive',data=>{
+      let content = data.content
+      showMessage(content,data._id)
+      let added = till
+      added[username] = data.content
+      added[username+'_seen'] = ' just now'
+      changeMsg(added)
+    }) 
+
+    mark(false); 
+    fetch('http://localhost:1901/api/messages/of',{
+            method:'POST',
+            headers:headers(),
+            body:JSON.stringify({cID:me+'&'+username})
+    }).then(res=>{
+      return res.json()
+    }).then(oldchats=>{
+      if(oldchats && oldchats.length){
+        loadChats(oldchats)
+        mark(true)
+      }
+      load(false) 
+      scrollToBottom()
+      if(launch){
+        updateChat(me,username)
+      }
+      setLoading(false)
+    })
     setParent(!parent)
-  },[username])
+  },[username,launch,me])
 
   const sendMessage = event => {
     event.preventDefault()
@@ -88,7 +158,7 @@ function Chat(props) {
       added[username+'_seen'] = ' sent just now'
       changeMsg(added)
     }
-    showMessage(msg,false)
+    showMessage(msg,'sd',false)
     setParent(!parent)
     if(update){ 
       update(parent)
@@ -100,6 +170,7 @@ function Chat(props) {
 
   return (
       <>
+      <ContextMenu {...contextMenu} />
       { isLoading===true ?
         <div className="col-12 card-body mx-2">
                 <p className="card-title placeholder-glow mb-5 mt-5 mx-5 d-flex" >
@@ -136,15 +207,19 @@ function Chat(props) {
                     </div>
                 </div>
             </section>
-            <section className='body' style={{height:'70vh'}}  >
+            <section className='body' style={{height:'70vh'}} ref={box} >
               {!hasmsg ? 
                 (<div className='spinner-container'>
                     <div style={{marginTop:'30vh', height:'100px'}}>
                       <p> Send a message to start the conversation</p>
                     </div>
-                </div>):loader && <div className='spinner-container' style={{marginLeft:'45%',marginTop:'30%',display:'block'}}>
-                      <div className='spinner' style={{height:'60px', width:'60px'}}/></div>}
-              <div className='container' id='container' ref={box}/>
+                </div>):loader && (<div className='spinner-container' style={{marginLeft:'45%',marginTop:'30%',display:'block'}}><div className='spinner' style={{height:'60px', width:'60px'}}/></div>)}
+
+              <div className='container' id='container' >
+                {chats && chats.length? chats.map((item, index)=>{ 
+                  return (<div key={index} style={{display:'block'}}><p data-from={item.from===me?me:username} className={item.from===me?'self':'other'} data-id={item._id} onContextMenu={onContext} >{item.content}</p></div>) 
+                }) :''}
+              </div>
 
             </section>
             <section className='footer mt-4'>

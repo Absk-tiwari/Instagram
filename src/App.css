@@ -741,3 +741,31 @@ li>span{
 .navbar{
   z-index: -1;
 }
+.cLI{
+  align-items: center;
+  display: grid; 
+  place-content: center;
+  font-weight: 500;
+}
+.cLI:hover{
+  background-color: #f3f3f3;
+}
+#contextMenu{
+  display:block;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  height: 70px!important;
+  border-radius: 8px 
+}
+
+#contextMenu div:first-child:hover {
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+}
+#contextMenu div:last-child:hover {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+ 

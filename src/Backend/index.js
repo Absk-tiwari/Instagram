@@ -56,9 +56,6 @@ socket.on('connection', conn => {
         target = users.get(target)
         let dataobj = {from: data.from, content:data.content, at:Date.now(), read:false}
         
-        if(target){
-          socket.to(target).emit('receive', dataobj )
-        }
         if(data.to){
           let saved = await Message.create({
             from: data.from,
@@ -68,8 +65,10 @@ socket.on('connection', conn => {
           })
           let notify = {content:'1 new message'}
           if(saved && target){
+            dataobj._id = saved._id
             notify.confirmation = 'Message is saved'
-            socket.to(target).emit('notification',notify) 
+            socket.to(data.from).emit('respond',notify)  
+            socket.to(target).emit('receive', dataobj )
           }
         }
       })
@@ -105,22 +104,17 @@ socket.on('connection', conn => {
           }else{
             obj.label = data.label
           }
-          // await Notification.deleteMany();
-          try{
-            // let there = await Notification.find({message:obj.message,for:data.for,about:data.about})
-            // if(!there){
-              await Notification.create({
-                label: obj.label,
-                type: data.type,
-                for: data.for,
-                from:data.user,
-                message: obj.message,  
-                about: data.about,  
-              });
-            // }
-          }catch(exc){
-            console.log(exc)
-          }
+   
+          let created = await Notification.create({
+            label: obj.label,
+            type: data.type,
+            for: data.for,
+            from:data.user,
+            message: obj.message,  
+            about: data.about,  
+          });
+     
+          obj._id = created._id
           obj.about = data.about
           if(target) {
             socket.to(target).emit('notification', obj)
@@ -145,6 +139,7 @@ socket.on('connection', conn => {
           if(!done){
             socket.to(users.get(data.user)).emit('error','couldnt remove the notification')
           }else{
+            console.log(done._id, 'this should be an id')
             socket.to(users.get(data.for)).emit('unnotify',data)
           }  
         }

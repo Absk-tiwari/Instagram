@@ -3,31 +3,78 @@ import { socket } from '../../../socket';
 import headers from '../../../APIs/Headers';
 import Button from '../../StateComponents/Button';
 import logo from '../../../assets/icons/profile.png'
+import ContextMenu from '../../StateComponents/ContextMenu';
 const Notifications = (props) => {
   const [read] = useState(props.read)
   let [notifications,set] = useState([]) 
   const [count, setCount] = useState(0)
   const [ting , ring] = useState(false)
-  
-  socket.on('notification', data =>{
-    let temp = notifications
-    temp.unshift(data)
-    set(temp)
-    setCount(count+1)
-    document.querySelector('.likenotif').classList.remove('d-none')
-    document.querySelector('.number').innerHTML = count
-    ring(!ting)
-  })
-  socket.on('unnotify', resp=>{
-    let alt = notifications.filter(item=>{ return item.about !== resp.about })
-    set(alt)
-    setCount(count-1)
-    ring(true)
-  })
-  socket.on('init',data=>console.log('connections',data))
- 
+  const [contextMenu, setContext] = useState({
+    isVisible: false,
+    x: 0,
+    y: 0,
+    items: [],
+    c:''
+  });
+
+  const remove = id => {
+    console.log(id)
+    fetch('http://localhost:1901/api/notifications/delete',{
+      headers:headers(),
+      body:JSON.stringify({id})
+    }).then(res=>{
+      return res.json()
+    }).then(resp=>{
+      if(resp.status){
+        let temp = notifications
+        temp = temp.filter(item=>item._id!==id)
+        set(temp)
+        setCount(count-1)  
+      }
+    });
+  }
+
+  const onContext = event => { 
+    console.log(event.target)
+    let items = [ 
+        {label:(<i className='fa fa-trash'></i>), class:'text-danger', onClick:()=>remove(event.target.dataset.id)}
+      ]
+    event.preventDefault()
+    const x = event.clientX 
+    const y = event.clientY 
+    setContext({
+      isVisible : true, 
+      x, y ,
+      items,
+      c:'70px'
+    })
+  }
+
   useEffect(() => { 
+  
+    socket.on('notification', data =>{
+      let temp = notifications
+      temp.unshift(data)
+      set(temp)
+      setCount(count+1)
+      document.querySelector('.likenotif').classList.remove('d-none')
+      document.querySelector('.number').innerHTML = count
+      ring(!ting)
+    })
+    socket.on('unnotify', resp=>{
+      let alt = notifications.filter(item=>{ return item.about !== resp.about })
+      set(alt)
+      setCount(count-1)
+      ring(true)
+    })
+    socket.on('init',data=>console.log('connections',data))
+   
     console.log('M I changing everytime u clicked?');
+    document.addEventListener('click',function(){
+      setContext({
+        isVisible : false,  
+      })
+    })
     if(ting===false){
       fetch('http://localhost:1901/api/notifications',{
         headers:headers()
@@ -62,14 +109,15 @@ const Notifications = (props) => {
   }, [ting,count,read,props.read]);
   return (
     <>
+    <ContextMenu {...contextMenu}  />
     {notifications.map((item,index)=>{   
       return (
-      <div className={`notification ${item.read===true && 'read'}`} key={index} >
-              <div className="hstack list-item gap-3">
-                <img src={item.label??logo} alt="?" className="rounded-circle pfpicture mx-2" />
-                <p className="text-dark text-wrap notify-text" dangerouslySetInnerHTML={{ __html: item.message}} />
-                <small className="text-secondary">2h</small>
-                {(item.message).includes('following') && <Button text={'follow'} alt={'following'}/>}
+      <div className={`notification ${item.read===true && 'read'}`}  data-id={item._id} key={index} onContextMenu={onContext} >
+              <div className="hstack list-item gap-3" data-id={item._id}>
+                <img src={item.label??logo} alt="?" className="rounded-circle pfpicture mx-2" data-id={item._id} />
+                <p className="text-dark text-wrap notify-text" dangerouslySetInnerHTML={{ __html: item.message}} data-id={item._id} />
+                <small data-id={item._id} className="text-secondary">2h</small>
+                {(item.message).includes('following') && <Button data-id={item._id} text={'follow'} alt={'following'}/>}
               </div>
       </div>
       )})}
