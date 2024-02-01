@@ -27,7 +27,7 @@ const Notifications = (props) => {
     }).then(resp=>{
       if(resp.status){
         let temp = notifications
-        temp = temp.filter(item=>item._id!==id)
+        temp = temp.filter(item=>item._id!==_id)
         set(temp)
         setCount(count-1)  
       }

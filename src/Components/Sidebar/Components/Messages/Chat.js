@@ -30,7 +30,7 @@ function Chat(props) {
       return res.json()
     }).then(resp=>{
       if(resp.status){
-        document.querySelector('[data-id="'+id+'"]').remove()
+        document.querySelector('[data-id="'+_id+'"]').remove()
       }
     });
   }
