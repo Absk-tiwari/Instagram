@@ -155,9 +155,38 @@ router.post('/update', fetchuser, async(req, res) =>{
     }
 });
 
-router.post('/delete', fetchuser, async(req, res) =>{
+router.post('/clear',fetchuser, async(req,res)=>{
+    const me = req.body.me
+    const username = req.body.username
+    let one = me+'&'+username
+    let two = username+'&'+me
+
+    const filter = {
+        $or: [
+            { connectionID: one },
+            { connectionID: two },
+        ],
+    };
+
+    let cleared = await Message.deleteMany(filter);
+    if(cleared){
+        output.message = 'cleared'
+        return res.json(output)
+    }
+    return res.json(error)
+})
+router.post('/unsend', fetchuser, async(req, res) =>{
     const resp = await Message.deleteOne({_id:req.body._id})
     if(resp){
+        return res.json(output)
+    }
+    return res.json(error)
+})
+
+router.post('/delete', fetchuser, async(req, res) =>{
+    const updated = await Message.updateOne({_id:req.body._id}, { $set: {deleted_by:req.body.me} })
+    if(updated){
+        output.message='deleted for you'
         return res.json(output)
     }
     return res.json(error)

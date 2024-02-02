@@ -24,9 +24,9 @@ const messageSchema = new mongoose.Schema({
         type : Boolean,
         default : false
     },
-    deleted : {
-        type : Boolean,
-        default:false
+    deleted_by : {
+        type : String,
+        default:null
     }
 });
 const Message= mongoose.model('Message', messageSchema);

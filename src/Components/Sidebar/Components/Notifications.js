@@ -18,8 +18,8 @@ const Notifications = (props) => {
   });
 
   const remove = _id => {
-    console.log(_id)
     fetch('http://localhost:1901/api/notifications/delete',{
+      method:'POST',
       headers:headers(),
       body:JSON.stringify({_id})
     }).then(res=>{
@@ -35,12 +35,19 @@ const Notifications = (props) => {
   }
 
   const onContext = event => { 
-    console.log(event.target)
+    let hasClass = event.target.getAttribute('class')
+    let elem
+    if(!hasClass){
+      elem = event.target.parentElement
+    }else{
+      elem = event.target
+    }
+    let _id = elem.dataset.id
     let items = [ 
-        {label:(<i className='fa fa-trash'></i>), class:'text-danger', onClick:()=>remove(event.target.dataset.id)}
+        {label:(<i className='fa fa-trash'/>), class:'text-danger', onClick:()=>remove(_id)}
       ]
     event.preventDefault()
-    const x = event.clientX 
+    const x = event.clientX - 250
     const y = event.clientY 
     setContext({
       isVisible : true, 

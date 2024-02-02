@@ -33,14 +33,29 @@ const Messages = () => {
     items: [],
   });
 
-  const deleteChat = () => {}
+  const deleteChat = (username) => {
+    if((username)){
+      let me = user.username
+      fetch(`http://localhost:1901/api/messages/clear`,{
+        method:'POST',
+        headers:headers(),
+        body:JSON.stringify({me,username})
+      }).then(res=>{
+        return res.json()
+      }).then(resp=>{
+        if(resp.status){
+          console.log('unlink from here')
+        }
+      })
+    }
+  }
   const block = () => {}
 
   const onContext = event => {
     console.log(event.target)
     event.preventDefault()
-    const x = event.clientX 
-    const y = event.clientY 
+    const x = event.clientX - 100
+    const y = event.clientY  
     setContext({
       isVisible : true, 
       x, y ,

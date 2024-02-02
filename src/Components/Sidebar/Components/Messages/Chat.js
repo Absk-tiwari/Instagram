@@ -22,7 +22,7 @@ function Chat(props) {
   const box = useRef(null)
   const unsend = (from, _id) => {
     console.log(from,_id)
-    fetch('http://localhost:1901/api/messages/delete',{
+    fetch('http://localhost:1901/api/messages/unsend',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({_id,of:from})
@@ -34,12 +34,27 @@ function Chat(props) {
       }
     });
   }
+
+  const remove = (me, _id) => {
+
+    fetch('http://localhost:1901/api/messages/delete',{
+      method:'POST',
+      headers:headers(),
+      body:JSON.stringify({me,_id,username})
+    }).then(res=>{
+      return res.json()
+    }).then(resp=>{
+      if(resp.status){
+        document.querySelector('[data-id="'+_id+'"]').remove()
+      }
+    })
+  }
   const onContext = event => { 
     let items
     if(event.target.className==='other'){
       items = [
         {label:'Copy', onClick:()=>console.log('tried to copy')},
-        {label:'Delete', onClick:()=>unsend(event.target.dataset.from, event.target.dataset.id)}
+        {label:'Delete', onClick:()=>remove(event.target.dataset.from, event.target.dataset.id)}
       ]
     }else{
       items = [
@@ -48,7 +63,7 @@ function Chat(props) {
       ]
     }
     event.preventDefault()
-    const x = event.clientX 
+    const x = event.clientX - 100
     const y = event.clientY 
     setContext({
       isVisible : true, 

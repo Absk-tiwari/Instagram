@@ -1,5 +1,7 @@
 const  express = require("express");
 const User=require('../Models/User');
+const Message=require('../Models/Message');
+const Post=require('../Models/Post');
 const Notification=require('../Models/Notification');
 const router = express.Router();
 const fetchuser= require('../Middlewares/LoggedIn');
@@ -8,9 +10,10 @@ let error = { status : false, message:'Something went wrong!' }
 let output = { status : true }
 
 // yet to be tested
-router.get('/delete', fetchuser, async(req, res) =>{
+router.post('/delete', fetchuser, async(req, res) =>{
     const resp = await Notification.deleteOne({_id:req.body._id})
     if(resp){
+        output.message = 'Notification deleted successfully' 
         return res.json(output) 
     }
     return res.json(error)
@@ -111,8 +114,7 @@ router.post('/update', fetchuser, async(req, res) =>{
           
         const update = {
             $set: {
-                read:true, // Update the 'value' field to a new value
-                // Add more fields to update as needed
+                read:true, // Updates the 'value' field
             },
         };
           
