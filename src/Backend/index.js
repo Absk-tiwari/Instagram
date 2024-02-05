@@ -63,13 +63,9 @@ socket.on('connection', conn => {
             content : data.content,
             connectionID : data.cID
           })
-          let notify = {content:'1 new message'}
-          if(saved && target){
-            dataobj._id = saved._id
-            notify.confirmation = 'Message is saved'
-            socket.to(data.from).emit('respond',notify)  
-            socket.to(target).emit('receive', dataobj )
-          }
+          dataobj._id = saved._id 
+          socket.to(users.get(data.from)).emit('putID',{on:data.putAt, exact:dataobj._id})  
+          socket.to(target).emit('receive', dataobj )
         }
       })
 

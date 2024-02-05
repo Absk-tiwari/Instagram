@@ -44,7 +44,7 @@ const Messages = () => {
         return res.json()
       }).then(resp=>{
         if(resp.status){
-          console.log('unlink from here')
+          setChats(totalChats.filter(c=>c.username!==username))
         }
       })
     }
@@ -86,7 +86,6 @@ const Messages = () => {
   })
   useEffect(()=>{
     socket.on('init',data=>{
-      console.log('how many>>?')
       setOnline(data)
     })
     document.addEventListener('click',function(){
@@ -111,7 +110,7 @@ const Messages = () => {
           tillMessages[key] = i.last          
           tillMessages[key2] = i.read?' seen':' sent'          
         }
-        putMessage(tillMessages)        
+        putMessage(tillMessages)     
       } 
     })  
   } ,
@@ -137,6 +136,12 @@ const Messages = () => {
     set(fire)
     openedChat(true); 
     let thisUser = totalChats.filter(chat=>chat.username===username)
+    if(!thisUser.length){
+      let clone = totalChats
+      thisUser = searched.filter(chat=>chat.username===username)
+      clone.unshift(thisUser[0]) // filtered result is array
+      setChats(clone) // this will update the chat list 
+    }
     setDetail(thisUser)
     setUser({username,name})
     setmodal(false)
@@ -147,8 +152,7 @@ const Messages = () => {
   const searchChatUser = e => {
     setLoading(true)
     e.preventDefault();
-  
-    if(searchParam.length > 3){
+ 
       fetch('http://localhost:1901/api/profile/search',{
                 method:'POST',
                 headers:headers(),
@@ -159,7 +163,7 @@ const Messages = () => {
         setResults(data)
         setTimeout(()=>setLoading(false),2000)
       })
-    }
+  
  
   }
 
@@ -181,16 +185,16 @@ const Messages = () => {
           {totalChats && totalChats.map((chatuser,index)=>{
             let active = (onlines && onlines.length) ? onlines.includes(chatuser.username) : false;
             return (
-            <div key={index} className="row mt-3 openchat" style={{cursor:'pointer'}} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onContextMenu={onContext} onClick={openChat}>
-              <div className="col-sm-2" data-name={chatuser.name} data-username={chatuser.username} style={{position:"relative"}} data-s={chatuser.from!==user.username} onClick={openChat}>
+            <div key={index} className="row mt-3 openchat" style={{cursor:'pointer'}} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from && chatuser.from!==user.username} onContextMenu={onContext} onClick={openChat}>
+              <div className="col-sm-2" data-name={chatuser.name} data-username={chatuser.username} style={{position:"relative"}} data-s={chatuser.from && chatuser.from!==user.username} onClick={openChat}>
                   <img data-name={chatuser.name} data-username={chatuser.username}
-                  src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt="" data-s={chatuser.from!==user.username} onClick={openChat}/>
-                  <h2 className={active?'online':'d-none'} data-s={chatuser.from!==user.username} onClick={openChat}>.</h2>
+                  src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt="" data-s={chatuser.from && chatuser.from!==user.username} onClick={openChat}/>
+                  <h2 className={active?'online':'d-none'} data-s={chatuser.from && chatuser.from!==user.username} onClick={openChat}>.</h2>
               </div>
               <div className={`col-sm-10 chatUser`} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>
                 <b data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>{chatuser.username}</b>
-                <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} data-s={chatuser.from!==user.username} data-username={chatuser.username} data-name={chatuser.name} onClick={openChat}>{isTyping.includes(chatuser.username)?'typing...':(chatuser.from===user.username && chatuser.sender? chatuser.sender : dump[chatuser.username])} 
-                {!isTyping.includes(chatuser.username) && <small onClick={openChat}>{(chatuser.from===user.username)? dump[chatuser.username+'_seen'] :'2h'}</small>}</p>
+                <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} data-s={chatuser.from && chatuser.from!==user.username} data-username={chatuser.username} data-name={chatuser.name} onClick={openChat}>{isTyping.includes(chatuser.username)?'typing...':(chatuser.from && chatuser.from===user.username && chatuser.sender? chatuser.sender : dump[chatuser.username]??'')} 
+                {!isTyping.includes(chatuser.username) && <small onClick={openChat}>{(chatuser.from && chatuser.from===user.username)? dump[chatuser.username+'_seen'] :''}</small>}</p>
               </div>
             </div> 
             )
@@ -236,8 +240,8 @@ const Messages = () => {
             (searchParam && searched.length ? searched.map((user,index)=>{
               return (
               <div className='open-searched' data-s={false} data-username={user.username} key={index} data-name={user.name} onClick={openChat}>
-              <img src={user.profile??profile} class="mx-3 pfpicture" data-s={false} data-username={user.username} data-name={user.name} onClick={openChat} alt=""/>
-              <div class="d-block" data-username={user.username} data-s='false' data-name={user.username} onClick={openChat}>
+              <img src={user.profile??profile} className="mx-3 pfpicture" data-s={false} data-username={user.username} data-name={user.name} onClick={openChat} alt=""/>
+              <div className="d-block" data-username={user.username} data-s='false' data-name={user.username} onClick={openChat}>
                 <b data-username={user.username} data-name={user.name} data-s='false' onClick={openChat}>{user.username}</b> <br/>
                 <small data-username={user.username} data-name={user.name} data-s='false' onClick={openChat}>{user.name}</small>
               </div>

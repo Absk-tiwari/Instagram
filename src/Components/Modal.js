@@ -32,6 +32,7 @@ const Modal = ({ isOpen, dimens, onClose, children }) => {
           border: "none",
           borderRadius: "12px",
           boxShadow: "10px solid gray",
+          overflow:"scroll"
         }}
       >
         {children}

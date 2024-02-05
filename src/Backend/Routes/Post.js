@@ -75,6 +75,12 @@ router.post('/getPostsOf', fetchuser, async(req, res) =>{
     }
 });
 
+router.get('/comments/:postid',fetchuser,async(req,res)=>{
+    let postID = req.params.postid
+    let comments =  await Comment.find({for:postID})
+    return res.json(comments)
+})
+
 router.post('/update', fetchuser, async(req, res) =>{
     try { 
         let set={}
@@ -142,5 +148,22 @@ router.post('/addComment', fetchuser, async(req, res) =>{
         return res.status(500).json(error)
     }
 });
+
+router.delete('/comment/delete/:id', fetchuser, async(req, res) =>{
+    try { 
+        
+        let _id = req.params.id        
+        let removed = await Comment.deleteOne({_id})
+        if(removed) return res.json(output)
+        error.message='unable to delete the comment'
+        return res.json(error)
+
+    } catch (e) {
+        error.message = e.message
+        return res.status(500).json(error)
+    }
+});
+
+
 
 module.exports=router  

@@ -8,7 +8,8 @@ const ContextMenu = ({ isVisible, x, y, items, c }) => {
       style={{ 
         top: y,
         left: x,
-        width:c??'200px'
+        width:c??'200px',
+        zIndex:99999
       }}
     >
       {items.map((item, index) => (

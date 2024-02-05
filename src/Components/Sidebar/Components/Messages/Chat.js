@@ -4,6 +4,7 @@ import {socket} from '../../../../socket'
 import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 import ContextMenu from '../../../StateComponents/ContextMenu';
 import headers from '../../../../APIs/Headers';
+import {randomStr} from '../../../../helpers'
 
 function Chat(props) {
   const {me,username,launch,update,till,changeMsg,details} = props    
@@ -21,7 +22,6 @@ function Chat(props) {
   });
   const box = useRef(null)
   const unsend = (from, _id) => {
-    console.log(from,_id)
     fetch('http://localhost:1901/api/messages/unsend',{
       method:'POST',
       headers:headers(),
@@ -115,7 +115,9 @@ function Chat(props) {
       let p = document.createElement('p')
       p.innerText = msg
       p.dataset.id = id
+      p.id = id
       p.className = other ? 'other': 'self'
+      p.addEventListener('contextmenu', onContext)
       div.appendChild(p)
       if(box.current && once){
         box.current.appendChild(div)
@@ -129,6 +131,9 @@ function Chat(props) {
       setContext({
         isVisible : false,  
       })
+    })
+    socket.on('putID',data =>{
+      document.querySelector(`[id="${data.on}"]`).dataset.id = data.exact
     })
     socket.on('receive',data=>{
       let content = data.content
@@ -158,14 +163,23 @@ function Chat(props) {
       }
       setLoading(false)
     })
-    setParent(!parent)
+    setParent(!parent);
+    return () => {
+      document.removeEventListener('click',function(){
+        setContext({
+          isVisible : false,  
+        })
+      })
+      loadChats([])
+    }
   },[username,launch,me])
 
   const sendMessage = event => {
     event.preventDefault()
+    let createdID = randomStr(5)
     if(msg){
       let cstring = me+'&'+username
-      let data = {from:me,to:username,content:msg, cID:cstring}
+      let data = {from:me,to:username,content:msg, cID:cstring,putAt:createdID}
       socket.emit('send', data)
       setMessage('')
       let added = till
@@ -173,7 +187,7 @@ function Chat(props) {
       added[username+'_seen'] = ' sent just now'
       changeMsg(added)
     }
-    showMessage(msg,'sd',false)
+    showMessage(msg,createdID,false)
     setParent(!parent)
     if(update){ 
       update(parent)
@@ -223,7 +237,7 @@ function Chat(props) {
                 </div>
             </section>
             <section className='body' style={{height:'70vh'}} ref={box} >
-              {!hasmsg ? 
+              {!hasmsg && !hasmsg.length? 
                 (<div className='spinner-container'>
                     <div style={{marginTop:'30vh', height:'100px'}}>
                       <p> Send a message to start the conversation</p>

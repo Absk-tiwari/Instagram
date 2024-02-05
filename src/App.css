@@ -363,7 +363,7 @@ i {
 .offcanvas-backdrop.show {
   opacity: 0 !important;
 }
-#input {
+.input {
   border: none !important;
 }
 :focus-visible {

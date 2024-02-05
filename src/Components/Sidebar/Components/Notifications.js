@@ -6,7 +6,7 @@ import logo from '../../../assets/icons/profile.png'
 import ContextMenu from '../../StateComponents/ContextMenu';
 const Notifications = (props) => {
   const [read] = useState(props.read)
-  let [notifications,set] = useState([]) 
+  const [notifications,set] = useState([]) 
   const [count, setCount] = useState(0)
   const [ting , ring] = useState(false)
   const [contextMenu, setContext] = useState({
@@ -57,31 +57,29 @@ const Notifications = (props) => {
     })
   }
 
-  useEffect(() => { 
-  
-    socket.on('notification', data =>{
-      let temp = notifications
-      temp.unshift(data)
-      set(temp)
-      setCount(count+1)
-      document.querySelector('.likenotif').classList.remove('d-none')
-      document.querySelector('.number').innerHTML = count
-      ring(!ting)
-    })
-    socket.on('unnotify', resp=>{
-      let alt = notifications.filter(item=>{ return item.about !== resp.about })
-      set(alt)
-      setCount(count-1)
-      ring(true)
-    })
-    socket.on('init',data=>console.log('connections',data))
-   
-    console.log('M I changing everytime u clicked?');
-    document.addEventListener('click',function(){
-      setContext({
-        isVisible : false,  
+  const rem = () => setContext({
+    isVisible : false,  
+  })
+
+    useEffect(() => { 
+    
+      socket.on('notification', data =>{
+        let temp = notifications
+        temp.unshift(data)
+        set(temp)
+        setCount(count+1)
+        document.querySelector('.likenotif').classList.remove('d-none')
+        document.querySelector('.number').innerHTML = count
+        ring(!ting)
       })
-    })
+      socket.on('unnotify', resp=>{
+        let alt = notifications.filter(item=>{ return item.about !== resp.about })
+        set(alt)
+        setCount(count-1)
+        ring(true)
+      })
+      socket.on('init',data=>console.log('connections',data))
+    document.addEventListener('click',rem)
     if(ting===false){
       fetch('http://localhost:1901/api/notifications',{
         headers:headers()
@@ -113,7 +111,11 @@ const Notifications = (props) => {
     }else{
       document.querySelector('.number').innerHTML = count
     }
+    return ()=> {
+      document.removeEventListener('click',rem)
+    }
   }, [ting,count,read,props.read]);
+
   return (
     <>
     <ContextMenu {...contextMenu}  />
