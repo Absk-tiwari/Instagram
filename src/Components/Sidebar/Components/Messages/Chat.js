@@ -84,22 +84,7 @@ function Chat(props) {
     socket.emit('typing', res)
   }
  
-  const printMessage = msgArr => {
-    let html=''
-    msgArr.forEach(item=> { 
-        html+= `<div style='display:block'><p class='${item.from===me?'self':'other'}'>${item.content}</p></div>`
-    })
-    setTimeout(() => {
-      load(false);
-      if(box.current){
-        box.current.innerHTML = html
-        document.getElementsByClassName('body')[0].scrollTop = document.getElementsByClassName('body')[0].scrollHeight
-        if(launch){
-          updateChat(me,username)
-        }
-      }
-    },2500);
-  }
+ 
   const scrollToBottom = () => {
     setTimeout(() => {
       if (box.current) {
@@ -135,14 +120,15 @@ function Chat(props) {
     socket.on('putID',data =>{
       document.querySelector(`[id="${data.on}"]`).dataset.id = data.exact
     })
-    socket.on('receive',data=>{
+    const receive = data=>{
       let content = data.content
       showMessage(content,data._id)
       let added = till
       added[username] = data.content
       added[username+'_seen'] = ' just now'
       changeMsg(added)
-    }) 
+    }
+    socket.on('receive', receive) 
 
     mark(false); 
     fetch('http://localhost:1901/api/messages/of',{
@@ -171,6 +157,7 @@ function Chat(props) {
         })
       })
       loadChats([])
+      socket.off('receive',receive)
     }
   },[username,launch,me])
 
@@ -202,17 +189,17 @@ function Chat(props) {
       <ContextMenu {...contextMenu} />
       { isLoading===true ?
         <div className="col-12 card-body mx-2">
-                <p className="card-title placeholder-glow mb-5 mt-5 mx-5 d-flex" >
-                <span className="placeholder col-6" style={{height:'40px'}}></span>
-                <span className="placeholder col-1 offset-2"></span>
-                <span className="placeholder offset-1 col-1"></span>
+            <p className="card-title placeholder-glow mb-5 mt-5 mx-5 d-flex" >
+              <span className="placeholder col-6" style={{height:'40px'}}/>
+              <span className="placeholder col-1 offset-2"/>
+              <span className="placeholder offset-1 col-1"/>
             </p>
             <p className="card-text placeholder-glow mt-4 mx-5">
-                <span className="placeholder mt-4 col-7"></span>
-                <span className="placeholder mt-5 col-6"></span>
+              <span className="placeholder mt-4 col-7"/>
+              <span className="placeholder mt-5 col-6"/>
             </p>
             <p className="card-body placeholder-glow mx-5">
-              <span className='placeholder col-5'></span>
+              <span className='placeholder col-5'/>
             </p>
         </div>        
      : (

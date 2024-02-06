@@ -63,7 +63,7 @@ const Notifications = (props) => {
 
     useEffect(() => { 
     
-      socket.on('notification', data =>{
+      const notify = data =>{
         let temp = notifications
         temp.unshift(data)
         set(temp)
@@ -71,13 +71,16 @@ const Notifications = (props) => {
         document.querySelector('.likenotif').classList.remove('d-none')
         document.querySelector('.number').innerHTML = count
         ring(!ting)
-      })
-      socket.on('unnotify', resp=>{
+      }
+
+      socket.on('notification', notify)
+      const remNotification = resp => {
         let alt = notifications.filter(item=>{ return item.about !== resp.about })
         set(alt)
         setCount(count-1)
         ring(true)
-      })
+      }
+      socket.on('unnotify', remNotification)
       socket.on('init',data=>console.log('connections',data))
     document.addEventListener('click',rem)
     if(ting===false){
@@ -113,6 +116,9 @@ const Notifications = (props) => {
     }
     return ()=> {
       document.removeEventListener('click',rem)
+      socket.off('init',data=>console.log('connections',data))
+      socket.off('unnotify', remNotification)
+      socket.off('notification', notify)
     }
   }, [ting,count,read,props.read]);
 
