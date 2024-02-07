@@ -572,6 +572,16 @@ svg{
   clear:both;
   font-family: cursive;
 }
+.otherDiv{
+  display: block;
+  height: 35px; 
+  width: auto; 
+  float: left;
+  padding-top: 3px; 
+  padding-inline: 20px; 
+  clear:both; 
+  margin-top:9px
+}
 .self{
   display: block;
   height: 35px;
@@ -768,4 +778,11 @@ li>span{
   border-bottom-right-radius: 8px;
   border-bottom-left-radius: 8px;
 }
- 
+.inchat{
+  height:20px;
+  width:20px;
+  object-fit: cover;
+  border-radius: 100%;
+  margin-bottom: 12px;
+  margin-right: 5px;
+}

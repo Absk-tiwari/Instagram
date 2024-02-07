@@ -103,9 +103,23 @@ function Chat(props) {
       p.id = id
       p.className = other ? 'other': 'self'
       p.addEventListener('contextmenu', onContext)
-      div.appendChild(p)
+      if(other){
+        let hDiv = document.createElement('div')
+        hDiv.classList.add('hstack')
+        hDiv.classList.add('otherDiv')
+        let imgElem = document.createElement('img')
+        imgElem.src= details[0].profile?? img;
+        imgElem.classList.add('img-rounded')
+        imgElem.classList.add('inchat')
+        hDiv.appendChild(imgElem) 
+        hDiv.appendChild(p)
+        div.appendChild(hDiv)
+      }else{
+        div.appendChild(p)
+      }
       if(box.current && once){
-        box.current.appendChild(div)
+        // console.log(box.current.children)
+        box.current.children[0].appendChild(div)
         document.getElementsByClassName('body')[0].scrollTop = document.getElementsByClassName('body')[0].scrollHeight
       }
   }
@@ -123,6 +137,7 @@ function Chat(props) {
     const receive = data=>{
       let content = data.content
       showMessage(content,data._id)
+      // loadChats([...chats,{content,_id:data._id}])
       let added = till
       added[username] = data.content
       added[username+'_seen'] = ' just now'
@@ -233,7 +248,11 @@ function Chat(props) {
 
               <div className='container' id='container' >
                 {chats && chats.length? chats.map((item, index)=>{ 
-                  return (<div key={index} style={{display:'block'}}><p data-from={item.from===me?me:username} className={item.from===me?'self':'other'} data-id={item._id} onContextMenu={onContext} >{item.content}</p></div>) 
+                  return (item.from===me?
+                      (<div key={index} style={{display:'block'}}>
+                        <p data-from={item.from===me?me:username} className={'self'} data-id={item._id} onContextMenu={onContext} >{item.content}</p>
+                      </div>):
+                      (<div style={{display:'block'}} key={index}><div className={'hstack otherDiv'} ><img className={'img-rounded inchat'} src={details && details[0].profile?details[0].profile:img} alt={''} /><p className={'other'} data-id={item._id} onContextMenu={onContext}>{item.content}</p></div></div>)) 
                 }) :''}
               </div>
 
