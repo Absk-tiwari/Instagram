@@ -10,6 +10,8 @@ import Modal from "./Modal";
 import LoadingBar from "react-top-loading-bar";
 import headers from "../APIs/Headers";
 import Notifications from "./Sidebar/Components/Notifications";
+import { useDispatch } from "react-redux";
+import { setImageURL } from "../actions/setImageURL";
 
 function SidebarComponent() {
   let [hasRead,read] = useState(false)
@@ -21,6 +23,8 @@ function SidebarComponent() {
   const [searched, setResults] = useState([])
   const [isLoading, setLoading] = useState(false)
   const searchbox = useRef(null)
+  const dispatch = useDispatch()
+  const [post, setPost] = useState('')
   let navigator = useNavigate();
   const toggleModal = (e) => {
     if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
@@ -31,7 +35,7 @@ function SidebarComponent() {
     if (searched) {
       setSearch(JSON.parse(searched));
     }
-  }, [formtriggered]);
+  }, [formtriggered,post]);
 
   const lstyle = { listStyleType: "none" };
 
@@ -41,14 +45,14 @@ function SidebarComponent() {
     if (fileInput.files.length > 0) {
       var selectedFile = fileInput.files[0];
       var fileReader = new FileReader();
-
+      
       fileReader.onload = function (e) {
-        localStorage.setItem('posted', e.target.result)
-        setTimeout(() => {
-          navigator('/createPost')
-        }, 3000);
+        const imageURL =  e.target.result
+        dispatch(setImageURL(selectedFile))  
+        setTriggered(!formtriggered);
+        navigator('/createPost')
       };
-
+      
       // Read the file as text, binary, etc. depending on your needs
       fileReader.readAsDataURL(selectedFile); // Change to readAsDataURL f
     } else {

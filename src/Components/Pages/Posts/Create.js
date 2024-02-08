@@ -2,17 +2,23 @@ import React, { useContext, useEffect, useState } from 'react'
 import {toast} from 'react-toastify'
 import { useNavigate } from 'react-router';
 import PostContext from '../../../Contexts/Profiles/PostContext';
+import { useSelector, useDispatch } from 'react-redux'; 
 
 const Create = () => {
+  const post = useSelector(state=> state.image.imageURL) 
   const navigator = useNavigate()
   const {createPost}= useContext(PostContext);
-  const [post, setPost] = useState('');
+  const [orgPost, setPost] = useState('');
   const [fields, setfields] = useState({caption : '', location:''})
 
   useEffect(()=>{
-    let posted = localStorage.getItem('posted');
-    setPost(posted)
-  },[post])
+    var fileReader = new FileReader(); 
+    fileReader.onload = function (e) {
+      setPost(e.target.result) 
+    };
+    fileReader.readAsDataURL(post); // Change to readAsDataURL  
+    //console.log(typeof post, post)
+  },[orgPost])
 
   const onchange = e => setfields({...fields, [e.target.name]:e.target.value})
 
@@ -48,7 +54,7 @@ const Create = () => {
         <div className='col-lg-4 mx-5'>
           <div style={{position:'relative'}}>
             <h4>Preview</h4><br/>
-            <img src={post} style={{height:`60vh`,width:'32vw',objectFit:'cover', border:'3px solid gray',borderRadius:'8px'}} alt='' />
+            <img src={orgPost} style={{height:`60vh`,width:'32vw',objectFit:'cover', border:'3px solid gray',borderRadius:'8px'}} alt='' />
             <button type='submit' className='btn text-white' style={{position:'absolute', borderRadius:'5px', background:'linear-gradient(to right, #84513f, #ea595f)',top:'75vh',left:`335px`,height:'50px',width:'100px'}}>Post</button>
           </div>
         </div>    
