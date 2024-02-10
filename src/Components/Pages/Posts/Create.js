@@ -8,14 +8,14 @@ const Create = () => {
   const post = useSelector(state=> state.image.imageURL) 
   const navigator = useNavigate()
   const {createPost}= useContext(PostContext);
-  const [orgPost, setPost] = useState('');
+  const [orgPost, setPost] = useState('')
   const [fields, setfields] = useState({caption : '', location:''})
 
   useEffect(()=>{
-    var fileReader = new FileReader(); 
+    var fileReader = new FileReader()
     fileReader.onload = function (e) {
       setPost(e.target.result) 
-    };
+    }
     fileReader.readAsDataURL(post); // Change to readAsDataURL  
     //console.log(typeof post, post)
   },[orgPost])
@@ -25,9 +25,9 @@ const Create = () => {
   const handleSubmit = async(event) =>{
     event.preventDefault()
     let body= {
-      postContent: post,
-      caption:     fields.caption,
-      location:    fields.location
+      post,
+      caption: fields.caption,
+      location: fields.location
     }
     let resp = createPost(body) 
     if(resp){

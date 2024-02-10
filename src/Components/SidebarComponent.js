@@ -44,17 +44,9 @@ function SidebarComponent() {
     let fileInput = document.getElementById("create")
     if (fileInput.files.length > 0) {
       var selectedFile = fileInput.files[0];
-      var fileReader = new FileReader();
-      
-      fileReader.onload = function (e) {
-        const imageURL =  e.target.result
-        dispatch(setImageURL(selectedFile))  
-        setTriggered(!formtriggered);
-        navigator('/createPost')
-      };
-      
-      // Read the file as text, binary, etc. depending on your needs
-      fileReader.readAsDataURL(selectedFile); // Change to readAsDataURL f
+      dispatch(setImageURL(selectedFile))  
+      setTriggered(!formtriggered);
+      navigator('/createPost')
     } else {
       console.log('No file selected.');
     }

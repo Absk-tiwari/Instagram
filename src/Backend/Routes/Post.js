@@ -5,7 +5,9 @@ const router = express.Router();
 const fetchuser= require('../Middlewares/LoggedIn');
 const Comment = require("../Models/Comments");
 const Followers = require("../Models/Followers");
-
+const multer = require('multer')
+const upload = multer({dest:'./../tmp/uploads'})
+const uploadOnCloudnary = require('./../utils/cloudinary')
 let error = { status : false, message:'Something went wrong!' }
 let output = { status : true }
 
@@ -23,9 +25,14 @@ router.get('/',   async(req, res) =>{
 
 // has been tested and worked 
 
-router.post('/create', fetchuser, async(req, res) =>{
+router.post('/create', fetchuser,upload.single('post'), async(req, res,next) =>{
     try {
         const user = await User.findById(req.body.id).select('-password')
+        const post = req.files 
+        console.log('caught file is : ', post)
+        if(!post) return error
+        const uploadedPost= await uploadOnCloudnary(post)
+        console.log('received after ipload to cloudinary: ',uploadedPost)
         if(user){
             let obj = {
                 user_id : user._id,
