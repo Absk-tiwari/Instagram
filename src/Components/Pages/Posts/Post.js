@@ -5,16 +5,35 @@ import headers from "../../../APIs/Headers";
 
 const Post = () => {
 const [posts, setPosts] = useState([])
- useEffect(()=>{
-  fetch('http://localhost:1901/api/post',{
-    method:'GET',
-    headers:headers
-  }).then(res=>{
-    return res.json()
-  }).then(data=>{
-    setPosts(data)
-  })
- },[])
+const [skip,setCount] = useState(0)
+ useEffect(()=>{ 
+	 const fetchData = async () => { 
+ 		fetch('http://localhost:1901/api/post',{
+			method:'POST',
+			headers:headers(),
+			body:JSON.stringify({skip})
+		}).then(res=>{
+			return res.json()
+		}).then(data=>{  
+			if(data.length){
+				setPosts(posts=>posts.concat(data)) 
+				setCount(skip=>skip+2)
+			}
+		});  
+	  };
+  
+	  const handleScroll = () => {
+		if(window.innerHeight + document.documentElement.scrollTop ===document.documentElement.offsetHeight){
+		  fetchData();
+		}
+	  }; 
+	  window.addEventListener('scroll', handleScroll);
+	  return () => {
+		window.removeEventListener('scroll', handleScroll);
+	  }; 
+
+ },[skip])
+
   return (
     <>
       { posts && posts.length > 0 ? 

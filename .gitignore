@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+/src/.env
 /src/Backend/.env 
 /src/Backend/node_modules
 /src/Backend/package.json

@@ -8,10 +8,20 @@ import Notifications from "../assets/icons/notifications.png";
 import Create from "../assets/icons/create.png";
 import Profile from "../assets/icons/profile.png";
 const me = JSON.parse(localStorage.getItem('userLogin'))
+const refer = e => { 
+    if (e.target.dataset.refer !== "/search")
+      document.querySelector(".close").click();
+    let elem = e.target;
+    if (elem.children.length ?? false) {
+      if (elem.children[1] ?? false) {
+        elem.children[1].click();
+      }
+    }
+};
 export const SidebarData = [
   {
     title: "Home",
-    icon: <img className="icons" src={Home} alt="not found" />,
+    icon: <img onClick={refer} data-refer={'/'} className="icons" src={Home} alt="not found" />,
     link: "/",
   },
   {
@@ -19,7 +29,7 @@ export const SidebarData = [
     icon: (
       <i
         className="material-icons"
-        style={{ fontSize: "33px", paddingBottom: "5px" }}
+        style={{ fontSize: "33px", paddingBottom: "5px" }} data-bs-toggle="offcanvas" data-bs-target={'#search'}
       >
         {" "}
         search{" "}
@@ -30,33 +40,33 @@ export const SidebarData = [
   },
   {
     title: "Explore",
-    icon: <img className="icons" src={Explore} alt="not found" />,
+    icon: <img onClick={refer} data-refer="/explore" className="icons" src={Explore} alt="not found" />,
     link: "/explore",
   },
   {
     title: "Reels",
-    icon: <img className="icons" src={Reels} alt="not found" />,
+    icon: <img onClick={refer} data-refer="/reels" className="icons" src={Reels} alt="not found" />,
     link: "/reels",
   },
   {
     title: "Messages",
-    icon: <img className="icons" src={Messages} alt="not found" />,
+    icon: <img onClick={refer} data-refer="/messages" className="icons" src={Messages} alt="not found" />,
     link: "/messages",
   },
   {
     title: "Notifications",
-    icon: <img className="icons" src={Notifications} alt="not found" />,
+    icon: <img onClick={refer} className="icons" data-refer="/notifications" src={Notifications} alt="not found" />,
     link: "/notifications",
     modal: "#notifications",
   },
   {
     title: "Create",
-    icon: <img className="icons" src={Create} alt="not found" />,
+    icon: <img onClick={refer} className="icons" src={Create} alt="not found" />,
     link: "#",
   },
   {
     title: "Profile",
-    icon: <img className="pfpicture" src={me && me.profile?me.profile :Profile} style={{height:'30px',width:'30px'}} alt="" />,
+    icon: <img onClick={refer} className="pfpicture" src={me && me.profile?me.profile :Profile} style={{height:'30px',width:'30px'}} alt="" data-refer="/profile" />,
     link: "/profile",
   },
 ];

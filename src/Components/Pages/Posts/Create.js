@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {toast} from 'react-toastify'
 import { useNavigate } from 'react-router';
-import PostContext from '../../../Contexts/Profiles/PostContext';
-import { useSelector, useDispatch } from 'react-redux'; 
+import { useSelector } from 'react-redux'; 
 
 const Create = () => {
   const post = useSelector(state=> state.image.imageURL) 
   const navigator = useNavigate()
-  const {createPost}= useContext(PostContext);
   const [orgPost, setPost] = useState('')
   const [fields, setfields] = useState({caption : '', location:''})
 
@@ -18,24 +16,33 @@ const Create = () => {
     }
     fileReader.readAsDataURL(post); // Change to readAsDataURL  
     //console.log(typeof post, post)
-  },[orgPost])
+  },[post])
 
   const onchange = e => setfields({...fields, [e.target.name]:e.target.value})
 
   const handleSubmit = async(event) =>{
     event.preventDefault()
-    let body= {
-      post,
-      caption: fields.caption,
-      location: fields.location
-    }
-    let resp = createPost(body) 
-    if(resp){
-      setTimeout(() => {
-        navigator('/')
-        toast.success('Posted')
-      }, 2500);
-    }
+  	let body= new FormData()
+	body.append('post',post)
+	body.append('caption',fields.caption)
+	body.append('location',fields.location)
+  
+	fetch(`http://localhost:1901/api/post/create`,{
+		method:'POST',
+		headers:{
+			'auth-token':localStorage.getItem('token')
+		},
+		body:body
+	}).then(res=>res.json()).then(resp=>{
+		if(resp.status){
+			setTimeout(() => {
+				navigator('/')
+				toast.success('Posted')
+			}, 2500);
+		}else{
+			toast.error(resp.message)
+		}
+	})
   }
   return (
     <>

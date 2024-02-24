@@ -11,9 +11,24 @@ body {
   html{
     position: relative;
   }
+  .home{
+	position: absolute;
+	left: 15%;
+  }
+  .page{
+	position: absolute;
+	left: 15%;
+  }
+  .custom-logo>svg{
+	display: none;
+  }
+  .custom-logo>img{
+	display: block!important;
+  }
   .custom-sidebar{
-    display: flex;
-    max-width: 10px!important;
+    display: block;
+    max-width: 100px!important;
+	width: 100px;
     position: absolute;
   }
   #title{
@@ -33,6 +48,10 @@ body {
   .chat-open-screen{
     width:97%;
     margin-left: 20%;
+  }
+  .custom-sidebarList{
+	width: 200px;
+	display: block;
   }
 }
 @media screen and (max-width:1000px) {
@@ -60,7 +79,7 @@ body {
 }
 
 .custom-sidebarList {
-  height: auto;
+  height: -webkit-fill-available;
   width: 16%;
   position: fixed;
   padding-top: 90px;
@@ -645,14 +664,14 @@ section.body{
 
 .rectangle {
   position: absolute;  
-  width: 60px;
+  width: 50px;
   height: 35px;
   background-color: #E94855;
   /* margin-bottom: 100px; */
   left: -40px; 
   bottom: 10px;
-  border-radius: 5px;
-  border: 1px solid #333;
+  border-radius: 6px;
+  /*border: 1px solid #333;*/
   box-shadow: inset 7px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
@@ -709,6 +728,7 @@ section.body{
   height: 20px; 
   right: 10px;
   top: 3px;
+  right: 4px;
   /* filter: blur(0.1em); */
 }
 
@@ -756,6 +776,7 @@ li>span{
   display: grid; 
   place-content: center;
   font-weight: 500;
+  cursor: pointer;
 }
 .cLI:hover{
   background-color: #f3f3f3;
@@ -767,7 +788,8 @@ li>span{
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   height: 70px!important;
-  border-radius: 8px 
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 #contextMenu div:first-child:hover {

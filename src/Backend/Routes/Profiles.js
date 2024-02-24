@@ -5,7 +5,8 @@ const BlockedUser =require('../Models/BlockedUser');
 const Followers =require('../Models/Followers');
 const router = express.Router();
 const fetchuser= require('../Middlewares/LoggedIn');
-
+const upload = require('../Middlewares/multer');
+const uploadOnCloudnary = require('../utils/cloudinary')
 let error = { status : false, message:'Something went wrong!' }
 let output = { status : true }
 
@@ -14,11 +15,13 @@ router.get('/test', async(req,res)=>{
     return   res.json(data)
 })
 
-router.post('/update',fetchuser, async(req,res)=>{
+router.post('/update',[ upload.single('image'), fetchuser], async(req,res)=>{
     try {
+		if(!req.file) res.json(error)
+		const uploaded = await uploadOnCloudnary(req.file.path)
         const update = {
             $set: {
-                profile:req.body.image,
+                profile:uploaded.url,
                 bio : req.body.bio
             },
         };

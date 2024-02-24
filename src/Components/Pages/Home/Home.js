@@ -11,7 +11,7 @@ function Home() {
   },[])
   return (
     <>
-      <div className="col-md-6">
+      <div className="col-md-6 home">
         <Navbar />
         <Post />
       </div>

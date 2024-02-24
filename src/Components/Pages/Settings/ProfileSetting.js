@@ -2,11 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import ProfileContext from '../../../Contexts/Profiles/ProfileContext'
 import Modal from '../../Modal';
 import LoadingBar from "react-top-loading-bar";
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
 
 const ProfileSetting = () => {
-  let user = localStorage.getItem('userLogin')
-  user = JSON.parse(user)
-  const {LoggedIn,updateProfile} = useContext(ProfileContext);
+  let navigator = useNavigate()
+  let user = JSON.parse(localStorage.getItem('userLogin'))
+  const [file,setFile] = useState('')
+  const {LoggedIn} = useContext(ProfileContext);
   const [open, setmodal] = useState(false);
   const [progress,setProgress] = useState(0)
   const [image,setImage] = useState(user.profile??LoggedIn.pfp)
@@ -20,6 +23,7 @@ const ProfileSetting = () => {
 
   const submitFile = event => { 
       var selectedFile = event.target.files[0]
+	  setFile(selectedFile)
       var fileReader = new FileReader();
 
       fileReader.onload = function (e) {
@@ -32,9 +36,26 @@ const ProfileSetting = () => {
   }
   
   const handleClick = event => {
-    event.preventDefault()
-    console.log(fields)
-    updateProfile(fields,image)
+    event.preventDefault() 
+	let formData = new FormData()
+	formData.append('image', file)
+	formData.append('bio', fields.bio)
+	fetch('http://localhost:1901/api/profile/update',{
+		method:'POST',
+		headers:{
+			'auth-token':localStorage.getItem('token')
+		},
+		body:formData
+	}).then(res=>{
+		if(!res.status){
+			throw new Error(res)
+		}else{
+			localStorage.setItem('userLogin',JSON.stringify(res))
+			navigator('/')
+			toast.success('Profile updated!')
+			setTimeout(() => window.location.reload(), 4000);
+		}
+	}).catch(err=>alert(err.message)) 
   }
 
   return (
