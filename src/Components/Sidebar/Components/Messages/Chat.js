@@ -248,7 +248,7 @@ function Chat(props) {
             </section>
             <section className='footer mt-4'>
                 <form className='hstack' onSubmit={sendMessage} style={{position:'relative'}}>
-                    <input type='text' className='chat-input' name='message' value={msg} onChange={OnKeyUp} onBlur={()=>socket.emit('stopped',{is:me,to:username})} />
+                    <input type='text' className='chat-input' name='message' value={msg} onChange={OnKeyUp} autoComplete='off' onBlur={()=>socket.emit('stopped',{is:me,to:username})} />
                     <span style={{left:'3%',position:'absolute'}}>
                       <i className="fa-regular fs-3 fa-face-smile"/>
                     </span>
