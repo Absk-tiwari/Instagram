@@ -27,13 +27,39 @@ import Forgot from "./Components/Pages/Auth/Forgot";
 import Reset from "./Components/Pages/Auth/Reset";
 import { useEffect } from "react";
 import { socket } from "./socket";
+import headers from "./APIs/Headers";
 function App() {
  useEffect(()=>{
-	socket.connect()
-	return ()=>{
-		socket.disconnect()
+	if(localStorage.getItem('token')){
+		let me= JSON.parse(localStorage.getItem('userLogin'))
+		socket.connect()
+		fetch(`http://localhost:1901/api/messages/count/${me.username}`,{
+			method:'GET',
+			headers:headers()
+		}).then(res=>res.json()).then(data=>{
+			if(data.status){
+				console.log(data)
+				let elem = document.getElementById('msg-badge') 
+				elem.innerHTML = data.count
+				if(data.count){
+					let usernames = []
+					for(let item of data.result){
+						let [a,b] = (item._id).split('&')
+						let final = me.username===a?b:a
+						if(final!==me.username){
+							usernames.push(final)
+						}
+					}
+					elem.dataset.garbage = JSON.stringify(usernames)
+					elem.classList.remove('d-none')	
+				}
+			}
+		})
+		return ()=>{
+			socket.disconnect()
+		}
 	}
- },[])
+},[])
   return (
     <>
     <Router>

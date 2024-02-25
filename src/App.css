@@ -49,6 +49,7 @@ body {
   .chat-open-screen{
     width:97%;
     margin-left: 20%;
+	position: fixed;
   }
   .custom-sidebarList{
 	width: 200px;
@@ -611,6 +612,7 @@ svg{
   float: right;
   border-radius: 100px;
   padding-top: 3px;
+  margin-right: 20px!important;
   font-size: large;
   padding-inline: 20px;
   clear:both;
@@ -621,7 +623,8 @@ svg{
   padding-top:12px
 }
 section.body{
-  overflow:auto
+  overflow:scroll!important;
+  position: relative;
 }
 .notify-text{
   padding-top: 13px!important;
@@ -639,7 +642,10 @@ section.body{
 }
 
 .chat-open-screen{
-  overflow-y:hidden
+  overflow-x:hidden!important;
+  position:fixed;
+  width: 54vw !important;
+  margin-left: 28%;
 }
 .online{
   position:absolute;
@@ -651,7 +657,9 @@ section.body{
 }
 .user-row{
   height: 100vh;
-  overflow-y: scroll;
+  width: 28vw!important;
+  overflow-y: scroll!important;
+  position:fixed;
   border-right: 1px solid lightgray
 }
 .likenotif {
@@ -808,4 +816,15 @@ li>span{
   border-radius: 100%;
   margin-bottom: 12px;
   margin-right: 5px;
+}
+#msg-badge{
+    font-size: xx-small;
+    padding-right: 10px;
+    background-color: red !important;
+    border-radius: 50%;
+    position: absolute;
+    left: 25px;
+    margin-bottom: 20px;
+    height: 16px;
+	width: 14px;
 }

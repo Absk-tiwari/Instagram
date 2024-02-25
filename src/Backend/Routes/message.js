@@ -192,5 +192,34 @@ router.post('/delete', fetchuser, async(req, res) =>{
     return res.json(error)
 })
 
+router.get('/count/:username', fetchuser, async(req, res) =>{
+	const {username} = req.params
+	const result = await Message.aggregate([
+		{
+		  $match: {
+			$or:[
+				{from: username},
+				{to: username}
+			] // Add your WHERE condition here 
+			,
+			read:false,
+			to:username
+		  },
+		},
+		{
+		  $group: {
+			_id: '$connectionID',
+			count: { $sum: 1 },
+		  },
+		},
+	]);
+
+    if(result){
+        output.count= Object.keys(result).length 
+        return res.json({...output, result})
+    }
+    return res.json(error)
+})
+
 
 module.exports=router  

@@ -69,7 +69,26 @@ const Messages = () => {
   const changeParent = newState => setchange(newState)
   let tillMessages={};
   socket.on('receive',data=>{
+	console.log(data)
     setchange(!change)
+	let og = document.getElementById('msg-badge')
+	let added
+	if(og.innerHTML){
+		let oggy = og.innerHTML 
+		let oggyHas = og.dataset.garbage
+		if(oggyHas){
+			let users = JSON.parse(oggyHas)
+			let exists = users.indexOf(data.from) 
+			if(exists < 0){
+				added = JSON.parse(oggy) + 1
+			}
+		}
+
+	}else{
+		added = 1
+	} 
+	og.innerHTML=added
+	og.classList.remove('d-none')
   })
    
 

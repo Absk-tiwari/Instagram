@@ -63,7 +63,7 @@ function Chat(props) {
       ]
     }
     event.preventDefault()
-    const x = event.clientX - 100
+    const x = event.clientX - 700
     const y = event.clientY 
     setContext({
       isVisible : true, 

@@ -130,6 +130,7 @@ function SidebarComponent() {
                onClick={refer} data-refer={val.link} >
                 <div id="icon" style={{ height: "20px" }} data-refer={val.link} onClick={refer}>
                   {val.icon}
+				  {val.add??''}
                   {val.link === "/notifications" && <span className="arrived d-none">.</span>}
                 </div>
                 {val.link === "/notifications" || val.link === "/search" ? (

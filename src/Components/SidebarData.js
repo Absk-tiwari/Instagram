@@ -51,6 +51,7 @@ export const SidebarData = [
   {
     title: "Messages",
     icon: <img onClick={refer} data-refer="/messages" className="icons" src={Messages} alt="not found" />,
+    add: <span className="badge text-bg-secondary d-none" id="msg-badge">4</span>,
     link: "/messages",
   },
   {
