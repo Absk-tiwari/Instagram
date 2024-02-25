@@ -38,6 +38,7 @@ body {
     display: none;
   }
   .navbar{
+	z-index:99999 !important;;
     display: flex!important;
     flex-direction: column!important;
     overflow: scroll!important;
@@ -769,7 +770,7 @@ li>span{
   cursor: pointer;
 }
 .navbar{
-  z-index: -1;
+  z-index: 2;
 }
 .cLI{
   align-items: center;

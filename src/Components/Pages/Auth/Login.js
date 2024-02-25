@@ -1,15 +1,40 @@
-import React, {useContext, useState} from "react";
+import React, { useState} from "react";
 import logo from "../../../assets/icons/insta.svg";
-import { Link } from "react-router-dom";
-import AuthContext from "../../../Contexts/Auth/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 import Loader from "../../StateComponents/Loader";
 import {toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import headers from "../../../APIs/Headers";
 
 const Login = () => {
   const [progress, setProgress] = useState(0)
-  const {login } = useContext(AuthContext) 
+  let navigator = useNavigate();
+  const host = 'http://localhost:1901';
+  const login = async({username, password}) =>{
+	try {
+		const resp =await fetch(`${host}/api/auth/login`,{
+			method : 'POST',
+			headers : headers(),
+			body : JSON.stringify({username, password})
+		});
+		const response = await resp.json();
+		console.log(response)
+		if(response.status){
+			// Save the auth token 
+			localStorage.setItem('token', response.authToken);
+			navigator('/')
+			toast.success('Logged in!')
+			setTimeout(() => window.location.reload(), 2500);
+		}else{
+			toast.error(response.message) 
+		}
+
+	} catch (err) {
+		alert(err.message); 
+	}
+}
+
   const [fields, setfields] = useState({username:"", password : ""})
   const [isLoading, setLoading] = useState(false)
 
@@ -17,9 +42,8 @@ const Login = () => {
     setLoading(!isLoading)
     e.preventDefault();
     setTimeout(() => {
-      login(fields)
-      toast.success('logged in')
-    }, 4000);
+      login(fields) 
+    }, 2000);
     setLoading(!isLoading)
   }
   const onchange = e => {
@@ -28,60 +52,40 @@ const Login = () => {
   return (
     <>
       <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
-      <ToastContainer position='top-center' autoClose={5000} hideProgressBar={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='dark' />           
+      <ToastContainer position='top-center' autoClose={2500} hideProgressBar={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='dark' />           
        <div className="container-fluid justify-contents-center">
         <div className="container d-flex mt-5">
           <div className="col-md-5 offset-4 mt-3">
             <div className="card d-flex" style={{ zIndex: 4 }}>
               <div className="formTitle align-items-center text-center mt-3">
-                <img
-                  src={logo}
-                  alt="not?"
-                  style={{
-                    height: "15vh",
-                    width: "25vw",
-                  }}
-                />
+                <img src={logo} alt="not?" style={{ height: "15vh",width: "25vw" }}/>
               </div>
-              <div className="loginBody">
+              <div className="loginBody mb-5">
                 <div className="container">
                   <form onSubmit={process}>
                     <div className="form-floating mb-3">
-                      <input
-                        type="text"
-                        onChange={onchange}
-                        name="username"
-                        value={fields.username}
-                        className="form-control"
-                        id="username"
-                        placeholder="username"
-                      />
+                      <input type="text" onChange={onchange} name="username" value={fields.username} className="form-control" id="username" placeholder="username" />
+
                       <label htmlFor="username">
                         Phone number, username, or email
                       </label>
                     </div>
                     <div className="form-floating mb-3">
-                      <input
-                        type="password"
-                        className="form-control"
-                        id="password"
-                        placeholder="password"
-                        name="password"
-                        value={fields.password}
-                        onChange={onchange}
-                      />
+                      <input type="password" className="form-control" id="password"
+                        placeholder="password" name="password" value={fields.password}
+                        onChange={onchange} />
                       <label htmlFor="password">Password</label>
                     </div>
                     <input
-                      type="submit"
-                      className="btn col-12 btn-primary mb-3 fw-bold"
-                      value={`Log in`}
-                      disabled={fields.username.length > 5 && fields.password.length > 7 ? '' : true}
-                      onClick={() => setProgress(100)}
-                    />
-                    {isLoading && <Loader height='30'/>}
-                    <small className="text-secondary offset-4 px-4 ">
-                      Forgot password?
+                      type="submit" className="btn col-12 btn-primary mb-3 fw-bold"
+                      value={`Log in`} disabled={fields.username.length < 5 || fields.password.length < 7 } onClick={()=>setProgress(100)} />
+	                    {isLoading && <Loader height='30'/>}
+
+                    <small className="text-secondary offset-3 mt-5">
+                      Forgot password? Click 
+					  <Link to={'/forgotPassword'} className='fw-bold text-decoration-none'>
+						&nbsp;Here 
+					  </Link> to reset
                     </small>
                   </form>
                 </div>

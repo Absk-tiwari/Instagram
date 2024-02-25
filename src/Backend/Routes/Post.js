@@ -27,7 +27,6 @@ router.post("/", async (req, res) => {
 
 router.post("/create", [ upload.single('post'),fetchuser] , async (req, res) => {
   try {
-	console.log(req.body.id)
     const user = await User.findById(req.body.id).select("-password")
     const post = req.file
     console.log("user is : ",user.username)

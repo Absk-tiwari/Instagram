@@ -1,3 +1,4 @@
+require('dotenv').config()
 const connection = require("./db");
 const express = require("express");
 const cors = require("cors");
@@ -36,7 +37,7 @@ socket.use((req, next) => {
   }
   return next(new Error("Username missing"));
 });
-socket.on("connection", (conn) => {
+socket.on("connection", conn => {
   if (conn.recovered) {
     // recovery was successful: socket.id, socket.rooms and socket.data were restored
   } else {
@@ -50,7 +51,7 @@ socket.on("connection", (conn) => {
   conn.on("users", () => {
     socket.emit("init", Object.keys(Object.fromEntries(users)));
   });
-  conn.on("send", async (data) => {
+  conn.on("send", async data => {
     let target = data.to;
     target = users.get(target);
     let dataobj = {
@@ -75,43 +76,33 @@ socket.on("connection", (conn) => {
     }
   });
 
-  conn.on("typing", (data) => {
+  conn.on("typing", data => {
     socket.to(users.get(data.to)).emit("isTyping", data.is);
   });
 
-  conn.on("stopped", (data) => {
+  conn.on("stopped", data => {
     socket.to(users.get(data.to)).emit("hasStopped", data.is);
   });
 
-  conn.on("notify", async (data) => {
+  conn.on("notify", async data => {
     let obj = {};
     if (data.type) {
       switch (data.type) {
-        case "follow":
-          {
-            obj.message = `<b>${data.user}</b> started following you`;
-          }
+        case "follow": obj.message = `<b>${data.user}</b> started following you`
           break;
-        case "like":
-          {
-            obj.message = `<b>${data.user}</b> liked your post`;
-          }
+        case "like":obj.message = `<b>${data.user}</b> liked your post`
           break;
-        case "follow-request":
-          {
-            obj.message = `<b>${data.user}</b> has requested to follow you`;
-          }
+        case "follow-request": obj.message = `<b>${data.user}</b> has requested to follow you`          
           break;
+		default: obj.message = 'its nothing'
       }
       obj.read = false;
     }
     let target = users.get(data.for);
 
-    if (data.user) {
+    if (data.user && data.user !== data.for) {
       if (data.type === "follow") {
-        let sender = await User.findOne({ username: data.user }).select(
-          "profile -_id"
-        );
+        let sender = await User.findOne({ username: data.user }).select("profile -_id");
         obj.label = sender.profile;
       } else {
         obj.label = data.label;
@@ -134,7 +125,7 @@ socket.on("connection", (conn) => {
     }
   });
 
-  conn.on("remNotified", async (data) => {
+  conn.on("remNotified", async data => {
     let set = {};
     if (data.type) {
       if (data.type === "follow") {
@@ -149,9 +140,8 @@ socket.on("connection", (conn) => {
       }
       let done = await Notification.deleteOne(set);
       if (!done) {
-        socket
-          .to(users.get(data.user))
-          .emit("error", "couldnt remove the notification");
+        socket.to(users.get(data.user))
+		.emit("error", "couldnt remove the notification");
       } else {
         console.log(done._id, "this should be an id");
         socket.to(users.get(data.for)).emit("unnotify", data);
@@ -162,5 +152,5 @@ socket.on("connection", (conn) => {
   conn.on("disconnect", () => {
     users.delete(socket.username);
   });
-  socket.on("reconnect", (attemptNumber) => {});
+  socket.on("reconnect", attemptNumber => {});
 });

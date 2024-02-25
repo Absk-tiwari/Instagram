@@ -23,8 +23,17 @@ import Signup from "./Components/Pages/Auth/Signup";
 import ProfileSetting from "./Components/Pages/Settings/ProfileSetting";
 import AuthState from "./Contexts/Auth/AuthState"; 
 import Test from "./Components/Test";
+import Forgot from "./Components/Pages/Auth/Forgot";
+import Reset from "./Components/Pages/Auth/Reset";
+import { useEffect } from "react";
+import { socket } from "./socket";
 function App() {
-
+ useEffect(()=>{
+	socket.connect()
+	return ()=>{
+		socket.disconnect()
+	}
+ },[])
   return (
     <>
     <Router>
@@ -44,6 +53,8 @@ function App() {
                   <Route exact path="/explore" element={<Explore />} />
                   <Route exact path="/messages" element={<Messages />} />
                   <Route exact path="/test" element={<Test />} />
+                  <Route exact path="/forgotPassword" element={<Forgot />} />
+                  <Route exact path="/reset/:token" element={<Reset />} />
                   <Route
                     exact
                     path="/notifications"

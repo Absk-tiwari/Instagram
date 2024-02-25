@@ -26,8 +26,8 @@ function SidebarComponent() {
   const searchbox = useRef(null)
   const dispatch = useDispatch() 
   let navigator = useNavigate();
-  const toggleModal = (e) => {
-    if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
+  const toggleModal = e => {
+	if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   };
 
   useEffect(() => {
@@ -108,9 +108,9 @@ function SidebarComponent() {
         setTimeout(()=>setLoading(false),500)
       })
   }
-
+  if(location.pathname.includes('reset')) return null
   return (
-    !["/login", "/signup"].includes(location.pathname) && (
+    !['/login', '/signup', '/forgotPassword'].includes(location.pathname) && (
       <div className="custom-sidebar">
         <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
         <div className="custom-logo">
@@ -213,7 +213,7 @@ function SidebarComponent() {
         <div className="offcanvas-body">
           <div className="row"> 
               <form className="hstack gap-3" onSubmit={searchUser}>
-                <input name="username" value={term} onChange={(e)=>{setTerm(e.target.value);searchUser(term)}} className="form-control searchbox" ref={searchbox} placeholder="Search"/><button type="submit" className="btn d-none"/>
+                <input name="username" value={term} onChange={(e)=>{setTerm(e.target.value);searchUser(term)}} className="form-control searchbox" ref={searchbox} autoComplete="off" placeholder="Search"/><button type="submit" className="btn d-none"/>
               </form> 
           </div>
           <hr/>

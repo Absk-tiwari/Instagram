@@ -45,6 +45,7 @@ const Messages = () => {
       }).then(resp=>{
         if(resp.status){
           setChats(totalChats.filter(c=>c.username!==username))
+		  if(selectedUser.username===username) openedChat(!opened)
         }
       })
     }
@@ -159,7 +160,7 @@ const Messages = () => {
         return res.json()
       }).then(data=>{
         setResults(data)
-        setTimeout(()=>setLoading(false),2000)
+        setTimeout(()=>setLoading(false),200)
       })
   
  
@@ -224,7 +225,7 @@ const Messages = () => {
              <hr />
              <div className="hstack">
               <form onSubmit={searchChatUser} className="col-11">
-                <input type="text" className="search_in_chat" name="search_in_chat" onChange={(e)=>{setSearchParam(e.target.value);searchChatUser(e)}} value={searchParam} placeholder="Search..."/>
+                <input type="text" className="search_in_chat" name="search_in_chat" onChange={(e)=>{setSearchParam(e.target.value);searchChatUser(e)}} autoComplete="off" value={searchParam} placeholder="Search..."/>
               </form>
               {isLoading && <Loader height={46}/>}
             </div>

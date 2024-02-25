@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import Navbar from "./Navbar";
 import Suggestions from "./Suggestions";
 import Post from "../Posts/Post";
+// eslint-disable-next-line
 import Respond from '../../../respond'
 
 function Home() {
  
   useEffect(()=>{
-     Respond();
+	// Respond();
   },[])
   return (
     <>

@@ -6,9 +6,13 @@ const bcrypt= require('bcrypt');
 const jwt= require('jsonwebtoken');
 const fetchuser= require('../Middlewares/LoggedIn');
 const JWT_SECRET = 'whateverItWas';
+const transporter = require("./../utils/nodemailer");
 
 let error = { status : false, message:'Something went wrong!' }
 let output = { status : true }
+const mailOptions = {
+	from: 'absk1901mff@gmail.com',
+};
 
 // Create a user
 router.post('/signup',[
@@ -22,12 +26,17 @@ router.post('/signup',[
         if(!errors.isEmpty()){
             return res.status(400).res.json({errors : errors.array()})
         }
+		//await User.deleteMany({username:{$ne:'absk.tiwari'}})
         // return if the email already exists 
         let user = await User.findOne({email : req.body.email})
         if(user){
-            error.message="A user with that email already exists!"
-            return res.status(400).json(error)
+            return res.status(400).json({...error, key:'email', message:'A user with that email already exists!'})
         }
+
+		let usernameExists = await User.findOne({username : req.body.username})
+		if(usernameExists){
+			return res.status(400).json({...error,key:'username',message:'username is taken!'})
+		}
         // Gnerate hash with salt
         const salt = await bcrypt.genSalt(8);
         const secPass = await bcrypt.hash(req.body.password, salt)
@@ -67,7 +76,7 @@ router.post('/login',[
         }
         const compared = await bcrypt.compare(req.body.password, user.password)
         if(!compared){
-            error.message = "Incorrect Credentials!"
+            error.message = "Incorrect Password!"
             return res.status(400).json(error)
         }
         
@@ -98,4 +107,54 @@ router.get('/getuser', fetchuser, async(req, res) =>{
     }
 );
 
-module.exports=router   
+router.post('/forgotPassword', async(req, res) =>{
+    try { 
+		const found = await User.findOne({email:req.body.email}).select('_id')
+		if(!found){ 
+			return res.status(402).json({...error, key: 'email', message:'Invalid email'})
+		} 
+		const payload = {
+            user_id : found._id
+        } 
+        const authToken = jwt.sign(payload, JWT_SECRET)
+
+		mailOptions.to= req.body.email
+		mailOptions.subject= 'Reset your password'
+		mailOptions.html=`<p>Please click <a href='http://localhost:3306/reset/${authToken}'>here</a> to verify your email.</p>`
+
+		transporter.sendMail(mailOptions, (err, info) => {
+
+			if (err) {
+				return res.status(402).json({...error, message:'Error sending email'});
+			} else {
+				return res.status(200).json({...output, message:'Email has been sent please check inbox.'}); 
+			}
+
+		});
+
+    } catch (e) {
+        error.message = e.message
+        return res.status(500).json(error)     
+    }
+});	
+
+router.post('/changePassword', async(req, res) =>{
+    try {
+        const token = req.body.tokenedID;  
+		const data = jwt.verify(token, JWT_SECRET);
+		const userid = data.user_id
+		const salt = await bcrypt.genSalt(8);
+        const converted = await bcrypt.hash(req.body.password, salt)
+        const user = await User.updateOne({_id: userid}, {password:converted});
+		if(user){
+			return res.status(200).json({...output, message:'Password updated successfully!', user}) 
+		}
+		return res.status(400).json({...error,message:'Couldn\'t update the password!'})
+    } catch (e) {
+        error.message = e.message
+        return res.status(500).json(error)     
+    }
+    }
+);
+
+module.exports=router 

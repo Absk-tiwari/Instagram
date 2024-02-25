@@ -92,6 +92,7 @@ function Chat(props) {
       }
     },2500);
   };
+  // eslint-disable-next-line
   const [isLoading, setLoading] = useState(false)
   const showMessage = (msg,id,other=true) => {
      let once = true
@@ -119,7 +120,10 @@ function Chat(props) {
       }
       if(box.current && once){
         // console.log(box.current.children)
-        box.current.children[0].appendChild(div)
+		const last = box.current.children.length
+		console.log(last)
+		mark(true)
+        box.current.children[last-1].appendChild(div)
         document.getElementsByClassName('body')[0].scrollTop = document.getElementsByClassName('body')[0].scrollHeight
       }
   }
@@ -144,8 +148,7 @@ function Chat(props) {
       changeMsg(added)
     }
     socket.on('receive', receive) 
-
-    mark(false); 
+ 
     fetch('http://localhost:1901/api/messages/of',{
             method:'POST',
             headers:headers(),
@@ -202,22 +205,7 @@ function Chat(props) {
   return (
       <>
       <ContextMenu {...contextMenu} />
-      { isLoading===true ?
-        <div className="col-12 card-body mx-2">
-            <p className="card-title placeholder-glow mb-5 mt-5 mx-5 d-flex" >
-              <span className="placeholder col-6" style={{height:'40px'}}/>
-              <span className="placeholder col-1 offset-2"/>
-              <span className="placeholder offset-1 col-1"/>
-            </p>
-            <p className="card-text placeholder-glow mt-4 mx-5">
-              <span className="placeholder mt-4 col-7"/>
-              <span className="placeholder mt-5 col-6"/>
-            </p>
-            <p className="card-body placeholder-glow mx-5">
-              <span className='placeholder col-5'/>
-            </p>
-        </div>        
-     : (
+       {(
         <>
         <div className='container-fluid' style={{margin:0,padding:0,position:''}}>
             <section className='header' style={{backgroundColor:'#e9ecef'}}>
@@ -239,12 +227,13 @@ function Chat(props) {
                 </div>
             </section>
             <section className='body' style={{height:'70vh'}} ref={box} >
-              {!hasmsg && !hasmsg.length? 
+              {!hasmsg && 
                 (<div className='spinner-container'>
                     <div style={{marginTop:'30vh', height:'100px'}}>
                       <p> Send a message to start the conversation</p>
                     </div>
-                </div>):loader && (<div className='spinner-container' style={{marginLeft:'45%',marginTop:'30%',display:'block'}}><div className='spinner' style={{height:'60px', width:'60px'}}/></div>)}
+                </div>)}
+				{loader && (<div className='spinner-container' style={{marginLeft:'45%',marginTop:'30%',display:'block'}}><div className='spinner' style={{height:'60px', width:'60px'}}/></div>)}
 
               <div className='container' id='container' >
                 {chats && chats.length? chats.map((item, index)=>{ 
