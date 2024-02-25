@@ -125,5 +125,17 @@ router.post('/search',fetchuser,async(req,res)=>{
     }
 })
 
+router.get('/getProfiles',fetchuser,async(req,res)=>{
+    try{ 
+        let fetchedUsers = await User.find({
+			_id:{$ne:req.body.id}
+		}).select('-password')
+        return res.json({...output, profiles:fetchedUsers});
+
+    }catch(e){
+        return res.json({message:e.message})
+    }
+})
+
 
 module.exports = router   
