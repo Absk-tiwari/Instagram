@@ -1,6 +1,6 @@
 import React from 'react'
 import ProfileContext from './ProfileContext';
-import pfp from '../../assets/icons/pfp.png';
+import pfp from '../../assets/icons/profile.png';
 import headers from '../../APIs/Headers';
 import { useNavigate } from 'react-router';
 

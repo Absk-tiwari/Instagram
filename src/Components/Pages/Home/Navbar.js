@@ -38,7 +38,6 @@ const Navbar = () => {
             <span className="placeholder col-1" style={placeholderStyle}></span>&nbsp;
             <span className="placeholder col-1" style={placeholderStyle}></span>&nbsp;
             <span className="placeholder col-1" style={placeholderStyle}></span>&nbsp;
-            <span className="placeholder col-1" style={placeholderStyle}></span>&nbsp;
           </p>
       }
 
