@@ -6,9 +6,7 @@
 .pnp.js
 /src/.env
 /src/Backend/.env 
-/src/Backend/node_modules
-/src/Backend/package.json
-/src/Backend/package-lock.json
+/src/Backend/node_modules 
 # testing
 /coverage
 
