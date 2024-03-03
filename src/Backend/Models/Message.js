@@ -18,7 +18,7 @@ const messageSchema = new mongoose.Schema({
     },
     at : {
         type : Date,
-        default : Date.now()
+        default : Date.now
     },
     read : {
         type : Boolean,
@@ -27,7 +27,11 @@ const messageSchema = new mongoose.Schema({
     deleted_by : {
         type : String,
         default:null
-    }
+    },
+	cleared_by:{
+		type: String,
+		default:null
+	}
 });
 const Message= mongoose.model('Message', messageSchema);
 

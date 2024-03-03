@@ -558,6 +558,7 @@ svg{
   height:55px;
   margin-left:10px;
   border-radius:25px; 
+  border: 1px solid gray;
 }
 .arrived{
   position: absolute;
@@ -822,8 +823,23 @@ li>span{
     background-color: red !important;
     border-radius: 50%;
     position: absolute;
-    left: 25px;
+    left: 25px; 
     margin-bottom: 20px;
     height: 16px;
 	width: 14px;
+}
+.iconStyle{
+    font-size:25px;
+    margin-left:40px;
+    cursor:pointer
+}
+.style{
+    height: 15%;
+    width: 17%;
+    border: 2px solid black;
+    border-style: rounded;
+}
+.openchat{
+	height: 300px;
+	overflow: auto;
 }

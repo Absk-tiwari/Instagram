@@ -4,27 +4,36 @@ import headers from '../../../APIs/Headers';
 import Button from '../../StateComponents/Button';
 import logo from '../../../assets/icons/profile.png'
 import ContextMenu from '../../StateComponents/ContextMenu';
+import {howLong} from '../../../helpers';
+import { useNavigate } from 'react-router-dom';
 const Notifications = (props) => {
+  const navigator =	useNavigate()
   const [read] = useState(props.read)
   const [notifications,set] = useState([]) 
   const [count, setCount] = useState(0)
   const [ting , ring] = useState(false)
-  const [contextMenu, setContext] = useState({
-    isVisible: false,
-    x: 0,
-    y: 0,
-    items: [],
-    c:''
-  });
-
+  const [contextMenu, setContext] = useState({isVisible: false,x: 0,y: 0,items: [],c:''})
+  const redirect = event => {
+	if(event.target?.dataset?.id){
+		document.getElementById('notifications')?.classList?.remove('show')
+		let item = document.getElementById(event.target.dataset.id);
+		if(item){
+			let username = item.dataset?.from
+			let should = item.dataset?.s
+			if(should) navigator(`/profile/${username}`)
+		}
+	}else{
+		event.preventDefault()
+	}
+  }
   const remove = _id => {
     fetch('http://localhost:1901/api/notifications/delete',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({_id})
-    }).then(res=>{
-      return res.json()
-    }).then(resp=>{
+    })
+	.then(r=>r.json())
+	.then(resp=>{
       if(resp.status){
         let temp = notifications
         temp = temp.filter(item=>item._id!==_id)
@@ -57,14 +66,13 @@ const Notifications = (props) => {
     })
   }
 
-  const rem = () => setContext({
-    isVisible : false,  
-  })
+  const rem = () => setContext({isVisible : false})
 
     useEffect(() => { 
     
       const notify = data =>{
         let temp = notifications
+		console.log(data)
         temp.unshift(data)
         set(temp)
         setCount(count+1)
@@ -81,13 +89,14 @@ const Notifications = (props) => {
         ring(true)
       }
       socket.on('unnotify', remNotification)
-      socket.on('init',data=>console.log('connections',data))
     document.addEventListener('click',rem)
     if(ting===false){
       fetch('http://localhost:1901/api/notifications',{
         headers:headers()
-      }).then(res=> {return res.json()}).then(data=>{
-        set(data);
+      })
+	  .then(r=> r.json())
+	  .then(data=>{
+        set(data);console.log(data)
         let count=0;
         if(data && data.length){
           for(let i of data){
@@ -127,13 +136,13 @@ const Notifications = (props) => {
     <ContextMenu {...contextMenu}  />
     {notifications.map((item,index)=>{   
       return (
-      <div className={`notification ${item.read===true && 'read'}`}  data-id={item._id} key={index} onContextMenu={onContext} >
-              <div className="hstack list-item gap-3" data-id={item._id}>
-                <img src={item.label??logo} alt="?" className="rounded-circle pfpicture mx-2" data-id={item._id} />
-                <p className="text-dark text-wrap notify-text" dangerouslySetInnerHTML={{ __html: item.message}} data-id={item._id} />
-                <small data-id={item._id} className="text-secondary">2h</small>
-                {(item.message).includes('following') && <Button data-id={item._id} text={'follow'} alt={'following'}/>}
-              </div>
+      <div className={`notification ${item.read===true && 'read'}`}  data-id={item._id} key={index} onContextMenu={onContext} id={item._id} data-from={item.from} data-s={(item.message).includes('following')} onClick={redirect}>
+			<div className="hstack list-item gap-3" data-id={item._id}>
+			<img src={item.label??logo} alt="?" className="rounded-circle pfpicture mx-2" data-id={item._id} />
+			<p className="text-dark text-wrap notify-text" dangerouslySetInnerHTML={{ __html: item.message}} data-id={item._id} />
+			<small data-id={item._id} className="text-secondary"> {howLong(item.at)} </small>
+			{(item.message).includes('following') && <Button data-id={item._id} text={`${item.custom?.follow?'follow':'following'}`} alt={`${item.custom?.follow?'following':'follow'}`}/>}
+			</div>
       </div>
       )})}
     </>

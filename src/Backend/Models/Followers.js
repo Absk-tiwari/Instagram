@@ -10,7 +10,7 @@ const FollowersSchema= new mongoose.Schema({
     },
     at:{
         type : Date,
-        default: Date.now()
+        default: Date.now
     }  
 });
 const Followers=mongoose.model('Followers', FollowersSchema);

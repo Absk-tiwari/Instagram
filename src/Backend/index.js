@@ -6,6 +6,7 @@ const io = require("socket.io");
 const Message = require("./Models/Message");
 const User = require("./Models/User");
 const Notification = require("./Models/Notification");
+const Followers = require('./Models/Followers');
 connection();
 const app = express();
 app.use(cors());
@@ -45,7 +46,7 @@ socket.on("connection", conn => {
     users.set(socket.username, conn.id);
     const myObject = Object.keys(Object.fromEntries(users));
     socket.emit("init", myObject);
-    console.log("connected users -", myObject);
+    // console.log("connected users -", myObject);
   }
 
   conn.on("users", () => {
@@ -57,8 +58,9 @@ socket.on("connection", conn => {
     let dataobj = {
       from: data.from,
       content: data.content,
-      at: Date.now(),
+      at: Date.now,
       read: false,
+	  replaceMsg:data.replaceMsg
     };
 
     if (data.to) {
@@ -88,14 +90,20 @@ socket.on("connection", conn => {
     let obj = {};
     if (data.type) {
       switch (data.type) {
-        case "follow": obj.message = `<b>${data.user}</b> started following you`
+        case "follow": obj.message = `<span data-refer='${data.user}' style='cursor:pointer'><b>${data.user}</b> started following you</span>`
           break;
         case "like":obj.message = `<b>${data.user}</b> liked your post`
           break;
-        case "follow-request": obj.message = `<b>${data.user}</b> has requested to follow you`          
+        case "follow-request": obj.message = `<span data-refer='${data.user}' style='cursor:pointer'<b>${data.user}</b> has requested to follow you</span>`          
           break;
 		default: obj.message = 'its nothing'
       }
+	  let detail = await Followers.findOne({of:data.user,username:data.for}).select('_id') 
+	  if(detail?._id){
+		obj.custom = {follow:false}
+	  }else{
+		obj.custom = {follow:true}
+	  }
       obj.read = false;
     }
     let target = users.get(data.for);
@@ -115,8 +123,9 @@ socket.on("connection", conn => {
         from: data.user,
         message: obj.message,
         about: data.about,
+		custom:obj.custom
       });
-
+	  await Notification.updateOne({for:data.user,type:'follow',from:data.for},{$set:{custom:{follow:false}}})
       obj._id = created._id;
       obj.about = data.about;
       if (target) {

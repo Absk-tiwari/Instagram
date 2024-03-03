@@ -37,7 +37,6 @@ router.post('/update',[ upload.single('image'), fetchuser], async(req,res)=>{
     }
 })
 
-// yet to be tested : Get profile details - login required 
 router.post('/getuser', fetchuser, async(req, res) =>{
     try {
         let userid  = req.body.id;  
@@ -58,7 +57,6 @@ router.post('/getuser', fetchuser, async(req, res) =>{
         return res.status(500).send(error)
     }
 });
-
 
 // block someone for a user 
 router.post('/block', fetchuser, async (req,res) => {
@@ -100,11 +98,9 @@ router.post('/users',fetchuser,async(req,res)=>{
     try{
         let users = req.body.users
         let fetchedUsers = await User.find({username:{ $in: users } })
-
         return res.json(fetchedUsers);
-
     }catch(e){
-        return res.json({message:e.message})
+        return res.json({...error,message:e.message})
     }
 })
 

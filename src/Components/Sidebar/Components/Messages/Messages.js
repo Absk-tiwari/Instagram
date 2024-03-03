@@ -8,6 +8,8 @@ import Chat from '../Messages/Chat'
 import profile from '../../../../assets/icons/profile.png'
 import headers from "../../../../APIs/Headers";
 import ContextMenu from "../../../StateComponents/ContextMenu";
+import { howLong } from "../../../../helpers";
+
 const Messages = () => {
   const [isTyping ,setTyping] = useState([])
   const [totalChats, setChats] = useState([])
@@ -26,24 +28,19 @@ const Messages = () => {
   const [onlines , setOnline] = useState([]);
   const [open, setmodal] = useState(false);
   const [dump, putMessage] = useState([])
-  const [contextMenu, setContext] = useState({
-    isVisible: false,
-    x: 0,
-    y: 0,
-    items: [],
-  });
+  const [contextMenu, setContext] = useState({ isVisible: false, x: 0, y: 0, items: [] })
 
-  const deleteChat = (username) => {
-    if((username)){
+  const deleteChat = username => {  // handle delete chat
+    if(username){
       let me = user.username
       fetch(`http://localhost:1901/api/messages/clear`,{
-        method:'POST',
-        headers:headers(),
-        body:JSON.stringify({me,username})
-      }).then(res=>{
-        return res.json()
-      }).then(resp=>{
-        if(resp.status){
+		method:'POST',
+		headers:headers(),
+		body:JSON.stringify({me,username})
+	  })
+	  .then(r=> r.json())
+	  .then(res=>{
+        if(res.status){
           setChats(totalChats.filter(c=>c.username!==username))
 		  if(selectedUser.username===username) openedChat(!opened)
         }
@@ -53,43 +50,23 @@ const Messages = () => {
   const block = () => {}
 
   const onContext = event => {
-    console.log(event.target)
     event.preventDefault()
+	let elem = document.getElementById(event.target.dataset.pick).dataset.detail
+	elem = JSON.parse(elem)
     const x = event.clientX - 100
     const y = event.clientY  
     setContext({
       isVisible : true, 
       x, y ,
       items : [
-        {label:'Delete', onClick:()=>deleteChat(event.target.dataset.username)},
-        {label:'Block', class:'text-danger', onClick:()=>block(event.target.dataset.username)}
+        {label:'Delete', onClick:()=>deleteChat(elem.username)},
+        {label:'Block', class:'text-danger', onClick:()=>block(elem.username)}
       ]
     })
   }
   const changeParent = newState => setchange(newState)
   let tillMessages={};
-  socket.on('receive',data=>{
-	console.log(data)
-    setchange(!change)
-	let og = document.getElementById('msg-badge')
-	let added
-	if(og.innerHTML){
-		let oggy = og.innerHTML 
-		let oggyHas = og.dataset.garbage
-		if(oggyHas){
-			let users = JSON.parse(oggyHas)
-			let exists = users.indexOf(data.from) 
-			if(exists < 0){
-				added = JSON.parse(oggy) + 1
-			}
-		}
 
-	}else{
-		added = 1
-	} 
-	og.innerHTML=added
-	og.classList.remove('d-none')
-  })
    
 
   socket.on('flag',()=>setchange(!change))
@@ -103,9 +80,35 @@ const Messages = () => {
     setTyping(now)
   })
   useEffect(()=>{
+
     socket.on('init',data=>{
       setOnline(data)
     })
+
+	socket.on('receive',data=>{
+		let cloned = dump
+		cloned[data.from] = data.replaceMsg
+		console.log(data)
+		putMessage(cloned)
+		setchange(!change)
+		let og = document.getElementById('msg-badge')
+		let added
+		if(og.innerHTML){
+			let oggy = og.innerHTML 
+			let oggyHas = og.dataset.garbage
+			if(oggyHas){
+				let users = JSON.parse(oggyHas)
+				let exists = users.indexOf(data.from) 
+				if(exists < 0){
+					added = JSON.parse(oggy) + 1
+				}
+			}
+		}else{
+			added = 1
+		} 
+		og.innerHTML=added
+		og.classList.remove('d-none')
+	  })
     document.addEventListener('click',function(){
         setContext({
           isVisible : false,  
@@ -113,24 +116,27 @@ const Messages = () => {
     })
     socket.emit('users')
     const init = async() => {
-      let data = await getChats(user.username)
-      return data  
+      let texts = await getChats(user.username)
+      return texts  
     }
     let resp = init()
     resp.then(res=>{  
-      if(!res){
-        console.log('do you mean no chats?')
-      }else{ 
+      if(res){
         setChats(res)
         for(let i of res){
           let key = i.username
           let key2 = i.username+'_seen'
+          let key3 = i.username+'_last'
           tillMessages[key] = i.last          
-          tillMessages[key2] = i.read?' seen':' sent'          
+          tillMessages[key2] = i.read?' seen '+howLong(i.at):' sent '+howLong(i.at)          
+          tillMessages[key3] = i.sender // its the message by sender(anyone)          
         }
         putMessage(tillMessages)     
       } 
-    })  
+    })
+	return ()=>{
+		socket.off('receive')  
+	}
   } ,
 [ getChats, user.username])
 
@@ -139,31 +145,30 @@ const Messages = () => {
     if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   } 
 
-  const style = {
-    height: "15%",
-    width: "17%",
-    border: "2px solid black ",
-    borderStyle: "rounded",
-  }; 
-
   const openChat = event => {
     let ele = event.target
-    let username = ele.dataset.username
-    let name = ele.dataset.name
-    let fire =  JSON.parse(ele.dataset.s)
-    set(fire)
-    openedChat(true); 
-    let thisUser = totalChats.filter(chat=>chat.username===username)
-    if(!thisUser.length){
-      let clone = totalChats
-      thisUser = searched.filter(chat=>chat.username===username)
-      clone.unshift(thisUser[0]) // filtered result is array
-      setChats(clone) // this will update the chat list 
-    }
-    setDetail(thisUser)
-    setUser({username,name})
-    setmodal(false)
-    setSearchParam('')
+	if(ele && ele.dataset.pick){
+		let element = document.getElementById(ele.dataset.pick) 
+		let data = JSON.parse(element.dataset.detail)
+	    let username = data.username
+		let name = data.name
+		let fire = JSON.parse(element.dataset.s)
+		set(fire)
+		openedChat(true); 
+		let thisUser = totalChats.filter(chat=>chat.username===username)
+		if(!thisUser.length){
+			let clone = totalChats
+			thisUser = searched.filter(chat=>chat.username===username)
+			clone.unshift(thisUser[0]) // filtered result is array
+			setChats(clone) // this will update the chat list 
+		}
+		setDetail(thisUser)
+		setUser({username,name})
+		setmodal(false)
+		setSearchParam('')
+	}else{
+		event.preventDefault() // dont want to see cannot read #~@! of "undefined"
+	}
   }
 
   
@@ -203,16 +208,22 @@ const Messages = () => {
           {totalChats && totalChats.map((chatuser,index)=>{
             let active = (onlines && onlines.length) ? onlines.includes(chatuser.username) : false;
             return (
-            <div key={index} className="row mt-3 openchat" style={{cursor:'pointer'}} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from && chatuser.from!==user.username} onContextMenu={onContext} onClick={openChat}>
-              <div className="col-sm-2" data-name={chatuser.name} data-username={chatuser.username} style={{position:"relative"}} data-s={chatuser.from && chatuser.from!==user.username} onClick={openChat}>
-                  <img data-name={chatuser.name} data-username={chatuser.username}
-                  src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt="" data-s={chatuser.from && chatuser.from!==user.username} onClick={openChat}/>
-                  <h2 className={active?'online':'d-none'} data-s={chatuser.from && chatuser.from!==user.username} onClick={openChat}>.</h2>
+            <div key={index} className={`row mt-3 openchat`} id={chatuser._id} style={{cursor:'pointer'}} data-detail={JSON.stringify(chatuser)} data-s={chatuser.from && chatuser.from!==user.username} onContextMenu={onContext} onClick={openChat} data-pick={chatuser._id}>
+              <div className="col-sm-2" style={{position:"relative"}} onClick={openChat}>
+                  <img
+                  src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt="" onClick={openChat} data-pick={chatuser._id}/>
+                  <h2 className={active?'online':'d-none'} onClick={openChat} data-pick={chatuser._id}>.</h2>
               </div>
-              <div className={`col-sm-10 chatUser`} data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>
-                <b data-username={chatuser.username} data-name={chatuser.name} data-s={chatuser.from!==user.username} onClick={openChat}>{chatuser.username}</b>
-                <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} data-s={chatuser.from && chatuser.from!==user.username} data-username={chatuser.username} data-name={chatuser.name} onClick={openChat}>{isTyping.includes(chatuser.username)?'typing...':(chatuser.from && chatuser.from===user.username && chatuser.sender? chatuser.sender : dump[chatuser.username]??'')} 
-                {!isTyping.includes(chatuser.username) && <small onClick={openChat}>{(chatuser.from && chatuser.from===user.username)? dump[chatuser.username+'_seen'] :''}</small>}</p>
+              <div className={`col-sm-10 chatUser`} onClick={openChat} data-pick={chatuser._id}>
+                <b onClick={openChat} data-pick={chatuser._id}>{chatuser.username}</b>
+                <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} onClick={openChat} data-pick={chatuser._id}>
+					{isTyping.includes(chatuser.username)?'typing...':
+					(chatuser.from && chatuser.from===user.username && chatuser.sender? dump[chatuser.username+'_last'] : dump[chatuser.username]??'')} 
+					{!isTyping.includes(chatuser.username) && 
+					<small onClick={openChat} data-pick={chatuser._id}>
+						{(chatuser.from && chatuser.from===user.username)? dump[chatuser.username+'_seen'] :''}
+					</small>}
+				</p>
               </div>
             </div> 
             )
@@ -223,7 +234,7 @@ const Messages = () => {
         <div className="col-md-8 chat-open-screen">
          { !opened ? <div className="text-center d-flex justify-content-center align-items-center min-vh-100">
             <div className="container text-center d-block">
-              <img src={msg} alt="?" style={style} className="rounded-circle" />
+              <img src={msg} alt="?" className="rounded-circle style" />
               <br />
               <p className="fs-5 pt-4">Your Messages</p>
               <p className="pt-1 text-secondary">
@@ -239,7 +250,7 @@ const Messages = () => {
       </div>
       <Modal isOpen={open} dimens={{ height: 410, width: 550 }} onClose={toggleModal} >
         <>
-          <div className="searchChat " id="searchChat" >
+          <div className="searchChat" id="searchChat" >
             <p className="text-center fw-bolder">New message</p>
              <hr />
              <div className="hstack">
@@ -251,17 +262,17 @@ const Messages = () => {
             <hr />
            {isLoading===true ?
             (<p className="placeholder-glow mb-3 mt-3 mx-2">
-              <span className="placeholder col-1" style={{height:'40px',width:'40px',borderRadius:'50%'}}></span>&nbsp;
-              <span className="placeholder col-3"></span> <br/>
-              <span className="placeholder col-6"></span>
+              <span className="placeholder col-1" style={{height:'40px',width:'40px',borderRadius:'50%'}}/>&nbsp;
+              <span className="placeholder col-3" /><br/>
+              <span className="placeholder col-6" />
             </p>):             
             (searchParam && searched.length ? searched.map((user,index)=>{
               return (
-              <div className='open-searched' data-s={false} data-username={user.username} key={index} data-name={user.name} onClick={openChat}>
-              <img src={user.profile??profile} className="mx-3 pfpicture" data-s={false} data-username={user.username} data-name={user.name} onClick={openChat} alt=""/>
-              <div className="d-block" data-username={user.username} data-s='false' data-name={user.username} onClick={openChat}>
-                <b data-username={user.username} data-name={user.name} data-s='false' onClick={openChat}>{user.username}</b> <br/>
-                <small data-username={user.username} data-name={user.name} data-s='false' onClick={openChat}>{user.name}</small>
+              <div className='open-searched' data-s={false} data-pick={user._id} key={index} id={user._id} onClick={openChat} data-detail={JSON.stringify(user)}>
+              <img src={user.profile??profile} className="mx-3 pfpicture" data-s={false} data-pick={user._id} onClick={openChat} alt=""/>
+              <div className="d-block" data-s='false' data-pick={user._id}onClick={openChat}>
+                <b data-pick={user._id} data-s='false' onClick={openChat}>{user.username}</b> <br/>
+                <small data-pick={user._id} data-s='false' onClick={openChat}>{user.name}</small>
               </div>
             </div>)
             }):(

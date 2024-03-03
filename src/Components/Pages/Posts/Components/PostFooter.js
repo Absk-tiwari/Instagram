@@ -9,6 +9,7 @@ const PostFooter = (props) => {
   let me = JSON.parse(localStorage.getItem('userLogin'))
   const { post } = props;
   const { alt } = props;
+  const c = props.c;  // whether to show the comment icon or not
   const [likes, setLikes ]= useState(post.likes.length)
   const [like, reactPost] = useState(post.likes.includes(me.username));
   const [save, savePost] = useState(false);
@@ -16,13 +17,7 @@ const PostFooter = (props) => {
   const [comments,put] = useState([]); // allover comments 
   const [open, setmodal] = useState(false);
   const [replies, contain] = useState([])
-  const [contextMenu, setContext] = useState({
-    isVisible: false,
-    x: 0,
-    y: 0,
-    items: [],
-    c:''
-  });
+  const [contextMenu, setContext] = useState({isVisible: false,x: 0,y: 0,items: [],c:''})
 
   const toggle = e => {
     if(e.target.id==='modal' || e.target.classList.contains('postImg')) setmodal(!open)
@@ -30,7 +25,7 @@ const PostFooter = (props) => {
 
   const replied = event => {
     event.preventDefault()
-    addComment()
+    addComment(true)
     let mine = me.username
     let obj ={}
     obj[mine]= [{profile:me.profile,content:comment, username:me.username}]
@@ -45,16 +40,17 @@ const PostFooter = (props) => {
     event.preventDefault()
     addComment()
   }
-  const addComment = () => {
+  const addComment = (reply=false) => {
     fetch('http://localhost:1901/api/post/addComment',{
       method:'POST',
       headers:headers(),
-      body:JSON.stringify({username:post.username,comment, postID:post._id})
-    }).then(res=>{
-      return res.json()
-    }).then(resp=>{
-      if(resp.status) console.log('comment added!')
+      body:JSON.stringify({username:post.username,comment, postID:post._id,reply})
+    })
+	.then(r=>r.json())
+	.then(resp=>{
+      if(resp.status)
       setComment('')
+	  getComments(false)
     })
   }
   const updatePost = type => {
@@ -83,7 +79,7 @@ const PostFooter = (props) => {
     })
   }
 
-  const getComments = () => {
+  const getComments = (outside=true) => {
     fetch(`http://localhost:1901/api/post/comments/${post._id}`,{
       method:'GET',
       headers:headers()
@@ -91,7 +87,7 @@ const PostFooter = (props) => {
       if(data.length){
         put(data)
       }
-      setmodal(!open)
+      if(outside) setmodal(!open)
     }) 
   }
 
@@ -120,17 +116,10 @@ const PostFooter = (props) => {
     event.preventDefault()
     const x = event.clientX
     const y = event.clientY + 25
-    setContext({
-      isVisible : true, 
-      x, y ,
-      items,
-      c:'70px'
-    })
+    setContext({isVisible : true, x, y ,items,c:'70px'})
   }
 
-  const rem = () => setContext({
-    isVisible : false,  
-  })
+  const rem = () => setContext({isVisible : false})
 
   useEffect(()=>{
     document.addEventListener('click', rem )
@@ -146,7 +135,7 @@ const PostFooter = (props) => {
           <i className={`fa${!like ? '-regular': ''} fa-heart${like ? ' animate': ''} mt-1`} style={{transition: "0.2s",fontSize: "25px",
           color: like ? 'red':''}} onClick={() =>updatePost(like)} title={like?'Unlike':'Like'}/>
         </div>
-        <div className="col-sm-1">
+		{c && <div className="col-sm-1">
            <svg aria-label="Comment" className="_8-yf5 " color="#262626" fill="#262626" 
            height="22" role="img" viewBox="0 0 48 48" width="24" onClick={getComments}> 
             <path clipRule="evenodd" d="M47.5 46.1l-2.8-11c1.8-3.3 2.8-7.1  
@@ -155,7 +144,7 @@ const PostFooter = (props) => {
                 1-5.2 2.6-10 2.6-11.4 0-20.6-9.2-20.6-20.5S12.7 3.5 24 3.5 44.5 12.7 44.5 24z" 
              fillRule="evenodd"/>  
            </svg>
-        </div>
+        </div>}
         <div className="col-sm-1">
           <svg aria-label="Share Post" className="_8-yf5 " color="#262626" fill="#262626" 
           height="22" role="img" viewBox="0 0 48 48" width="24"> 
@@ -178,7 +167,7 @@ const PostFooter = (props) => {
             >{post.username}</Link></b>
           &nbsp;<p>{post.caption??' It is what it is.'} &#128516;</p>
         </div>
-        { alt.details && <div className="col-md-12">
+        { c && <div className="col-md-12">
           <span className="text-secondary" style={{cursor:'pointer'}} onClick={getComments}>
             View all comments
           </span>
@@ -222,36 +211,42 @@ const PostFooter = (props) => {
                 </p>
               </div>
              ):comments.map((user,index)=>{
-              return (
-                <div key={index} className={`row mt-3 openchat`} data-index={comments.indexOf(user)} style={{cursor:'pointer'}} onContextMenu={onContext}>
-                  <div className="col-sm-2" data-index={comments.indexOf(user)} style={{position:"relative"}}>
-                      <img data-index={`${comments.indexOf(user)}`}
-                      src={profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
-                  </div>
-                  <div className={`col-sm-10 user`} style={{lineHeight:'1.3'}} data-index={comments.indexOf(user)} >
-                    <b>{user.from}</b>
-                    <p className={`username text-dark`} style={{fontWeight:'500'}} data-index={comments.indexOf(user)}> 
-                    <small data-index={comments.indexOf(user)}>{user.content}</small><br/> <span className="text-secondary" onClick={()=>ToReply(comments.indexOf(user)+'_id')}>Reply</span>
-                  {replies[user.from] && replies[user.from].map((cmt,index)=>{
-                    return (<div key={index} className="row mt-3 openchat" style={{cursor:'pointer'}} >
-                            <div className="col-sm-2" style={{position:"relative"}}>
-                              <img data-index={`${comments.indexOf(cmt)}`} src={cmt.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
-                            </div>
-                            <div className={`col-sm-10 user`} style={{lineHeight:'1.3'}} >
-                              <b>{cmt.username}</b>
-                              <p className={`username text-dark`} style={{fontWeight:'500'}} id={comments.indexOf(user)+'_id'} > {cmt.content}
-                              </p>
-                            </div>
-                        </div> )
-                  })}
-                  </p>
-                  <form className="d-none" id={`${comments.indexOf(user)+'_id'}`} onSubmit={replied}>
-                    <input type="text" className="form-control" style={{border:0,borderRadius:0,borderBottom:'0.5px solid black'}} onChange={e=>setComment(e.target.value)} /> 
-                    <button type="submit" className="btn text-primary">send</button>
-                  </form>
-                </div>
-              </div> 
-            )})}
+				return (
+				  <div key={index} className={`row mt-3 openchat`} data-index={index} style={{cursor:'pointer'}} onContextMenu={onContext}>
+					<div className="col-sm-2" data-index={index} style={{position:"relative"}}>
+						<img data-index={`${index}`}
+						src={profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
+					</div>
+					<div className={`col-sm-10 user`} style={{lineHeight:'1.3'}} data-index={index} >
+					  <b>{user.from}</b>
+					  <p className={`username text-dark`} style={{fontWeight:'500'}} data-index={index}> 
+					  <small data-index={index}>{user.content}</small><br/> <span className="text-secondary" onClick={()=>ToReply(index+'_id')}>Reply</span>
+					</p>
+					<form className="d-none" id={`${comments.indexOf(user)+'_id'}`} onSubmit={replied}>
+					  <input type="text" className="form-control" style={{border:0,borderRadius:0,borderBottom:'0.5px solid black'}} onChange={e=>setComment(e.target.value)} /> 
+					  <button type="submit" className="btn text-primary">send</button>
+					</form>
+					{user.replies && (user.replies).map((cmt,index)=>{
+						  return (<div key={index} className="row mt-3 openchat" style={{cursor:'pointer'}} >
+							  <div className="col-sm-2" style={{position:"relative"}}>
+								<img data-index={`${index}`} src={cmt.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
+							  </div>
+							  <div className={`col-sm-10 user`} style={{lineHeight:'1.3'}} >
+								<b>{cmt.from}</b>
+								<p className={`username text-dark`} style={{fontWeight:'500'}} > 
+								<small> {cmt.content} </small> <br/>
+								<span className="text-secondary" onClick={()=>ToReply(index+'rep_id')}>Reply</span> 
+								</p>
+								<form className="d-none" id={index+'rep_id'} onSubmit={replied}>
+								  <input type="text" className="form-control" style={{border:0,borderRadius:0,borderBottom:'0.5px solid black'}} onChange={e=>setComment(e.target.value)} /> 
+								  <button type="submit" className="btn text-primary">send</button>
+								</form>
+							  </div>
+						  </div> )
+						})}
+				  </div>
+				</div> 
+			  )})}
 
           </div>
         </div>

@@ -12,8 +12,9 @@ const CommentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    replies:[{type:Object}],  
     likes:[{type:String}],  
-    at : {type : Date,default : Date.now()}
+    at : {type : Date,default : Date.now}
 });
 const Comment= mongoose.model('Comment', CommentSchema);
 

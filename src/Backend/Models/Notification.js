@@ -26,8 +26,9 @@ const NotificationSchema= new mongoose.Schema({
     },
     at : {
         type: Date,
-        default : Date.now()
-    }
+        default : Date.now
+    },
+	custom:{type:Object}
 });
 const Notification=mongoose.model('Notification', NotificationSchema);
 Notification.createIndexes();

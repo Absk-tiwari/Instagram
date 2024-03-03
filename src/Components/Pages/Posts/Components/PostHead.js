@@ -1,14 +1,15 @@
-import React  from 'react';
+import React, { useEffect }  from 'react';
 import { Link } from "react-router-dom";
 import pfp from '../../../../assets/icons/profile.png'
 import Button from "../../../StateComponents/Button";
-
+import {howLong} from  '../../../../helpers'
 const PostHead = (props) => { 
   let post = props.post
   const refer = e => {
     let elem = e.target;
     elem.closest('.head').querySelector('.linkToProfile').click();
   }
+  useEffect(()=>{},[])
 
   return (
     <div className='row d-flex'>
@@ -17,10 +18,10 @@ const PostHead = (props) => {
         <img className="pfpicture" src={post.profile??pfp} alt="?"/>
       </div>
       <div className="col-4 pt-2" >
-        <Link className="text-decoration-none text-dark fw-bold linkToProfile" id="link" to={`/profile?username=${post.username}`}>
+        <Link className="text-decoration-none text-dark fw-bold linkToProfile" id="link" to={`/profile/${post.username}`}>
            {post.username}
         </Link>
-        <small className="text-secondary mx-2">{(new Date(post.created_at)).getHours()??'2h'}</small> <br/>
+        <small className="text-secondary mx-2">{howLong(new Date(post.created_at))}</small> <br/>
         <small className="mb-2">{post.location}</small>
       </div>
       <div className="col-5">

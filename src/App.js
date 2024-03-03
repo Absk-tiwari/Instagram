@@ -38,7 +38,6 @@ function App() {
 			headers:headers()
 		}).then(res=>res.json()).then(data=>{
 			if(data.status){
-				console.log(data)
 				let elem = document.getElementById('msg-badge') 
 				elem.innerHTML = data.count
 				if(data.count){
@@ -88,7 +87,7 @@ function App() {
                   />
                   <Route exact path="/reels" element={<Reels />} />
                   <Route exact path="/createPost" element={<Create/>} />
-                  <Route exact path="/profile" element={<Profile />} />
+                  <Route path="/profile/:username?" element={<Profile />} />
                   <Route exact path="/edit-profile" element={<ProfileSetting />} />
                   <Route path="/stories/:username/view" element={<Story />} />
                 </Routes>

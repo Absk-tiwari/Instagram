@@ -20,6 +20,7 @@ router.post('/', fetchuser, async(req, res) =>{
                     {from: username},
                     {to: username}
                 ] // Add your WHERE condition here
+				,cleared_by:{$ne:username}
               },
             },
             {
@@ -54,33 +55,25 @@ router.post('/', fetchuser, async(req, res) =>{
                 }
                 conv.push(item)
         }
-        // let conv = 
-        // result.filter(item=>{
-        //      return item._id!==username
-        // }) 
         return res.json(conv);
     } catch (e) {
         error.message = e.message
         return res.status(500).send(error)
     }
 });
-
-
-// has been tested and worked 
-
  
-router.post('/of', fetchuser, async(req, res) =>{
+router.post('/of', fetchuser, async(req, res) =>{     // get the chats of
     try {
         // await Message.deleteMany()
         let cID = req.body.cID
-        let [fore,back] = cID.split('&')
-        let one = fore+'&'+back
-        let two = back+'&'+fore
+        let [me,them] = cID.split('&')
+        let one = me+'&'+them
+        let two = them+'&'+me
         const result = await Message.find({
             $or : [
                { connectionID:one},
                { connectionID:two}
-            ]
+            ],deleted_by:{$ne:me}
         }).select('from content');
           
         return res.json(result);
@@ -90,8 +83,6 @@ router.post('/of', fetchuser, async(req, res) =>{
         return res.status(500).send(error)
     }
 });
-
-
 // has been tested and worked 
 
 router.post('/create', fetchuser, async(req, res) =>{
@@ -121,7 +112,7 @@ router.post('/create', fetchuser, async(req, res) =>{
     }
 });
 
-router.post('/update', fetchuser, async(req, res) =>{
+router.post('/update', fetchuser, async(req, res) =>{   // mark texts as read 
     try {
         const me = req.body.me
         const username = req.body.username
@@ -155,7 +146,7 @@ router.post('/update', fetchuser, async(req, res) =>{
     }
 });
 
-router.post('/clear',fetchuser, async(req,res)=>{
+router.post('/clear',fetchuser, async(req,res)=>{  // if both cleared it will be deleted
     const me = req.body.me
     const username = req.body.username
     let one = me+'&'+username
@@ -167,14 +158,19 @@ router.post('/clear',fetchuser, async(req,res)=>{
             { connectionID: two },
         ],
     };
-
-    let cleared = await Message.deleteMany(filter);
-    if(cleared){
-        output.message = 'cleared'
-        return res.json(output)
+	let prevCleared = await Message.findOne(filter).select('cleared_by')
+	let cleared
+	if(prevCleared?.cleared_by){
+		cleared = await Message.deleteMany(filter)
+	}else{
+		cleared = await Message.updateMany(filter,{cleared_by:me});
+	}
+    if(cleared){ 
+        return res.json({...output,message:'cleared'})
     }
     return res.json(error)
 })
+
 router.post('/unsend', fetchuser, async(req, res) =>{
     const resp = await Message.deleteOne({_id:req.body._id})
     if(resp){
@@ -192,7 +188,7 @@ router.post('/delete', fetchuser, async(req, res) =>{
     return res.json(error)
 })
 
-router.get('/count/:username', fetchuser, async(req, res) =>{
+router.get('/count/:username', fetchuser, async(req, res) =>{  // route just for showing message-badge
 	const {username} = req.params
 	const result = await Message.aggregate([
 		{
@@ -220,6 +216,5 @@ router.get('/count/:username', fetchuser, async(req, res) =>{
     }
     return res.json(error)
 })
-
 
 module.exports=router  

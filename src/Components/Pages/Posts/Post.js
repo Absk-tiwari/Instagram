@@ -4,26 +4,31 @@ import PostFooter from "./Components/PostFooter";
 import headers from "../../../APIs/Headers";
 
 const Post = () => {
-const [posts, setPosts] = useState([])
-const [skip,setCount] = useState(0)
- useEffect(()=>{ 
-	 const fetchData = async () => { 
- 		fetch('http://localhost:1901/api/post',{
-			method:'POST',
-			headers:headers(),
-			body:JSON.stringify({skip})
-		}).then(res=>{
-			return res.json()
-		}).then(data=>{  
-			if(data.length){
-				setPosts(posts=>posts.concat(data)) 
-				setCount(skip=>skip+2)
-			}
-		});  
+	const  [posts, setPosts] = useState([])
+	useEffect(()=>{ 
+		let skip = 0
+		let stopRequest =false
+		const fetchData = async () => { 
+		if(!stopRequest){   // continue only if last request had a response 
+			fetch('http://localhost:1901/api/post',{
+			   method:'POST',
+			   headers:headers(),
+			   body:JSON.stringify({skip})
+		   }).then(res=>{
+			   return res.json()
+		   }).then(data=>{  
+			   if(data.length){
+				   setPosts(posts=>posts.concat(data)) 
+				   skip = skip + 2
+			   }else{ 
+				stopRequest= true
+			   }
+		   });  
+		}
 	  };
-  
-	  const handleScroll = () => {
-		if(window.innerHeight + document.documentElement.scrollTop ===document.documentElement.offsetHeight){
+	  fetchData() // call it once without a scroll
+	  const handleScroll = () => {  // trigger only when at the bottom of the page
+		if(document.documentElement.clientHeight + window.scrollY === document.documentElement.scrollHeight){
 		  fetchData();
 		}
 	  }; 
@@ -32,7 +37,7 @@ const [skip,setCount] = useState(0)
 		window.removeEventListener('scroll', handleScroll);
 	  }; 
 
- },[skip])
+ },[])
 
   return (
     <>

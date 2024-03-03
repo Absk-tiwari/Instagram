@@ -54,8 +54,10 @@ function SidebarComponent() {
   const submit = () => document.getElementById("create").click();
   const markRead = () => fetch('http://localhost:1901/api/notifications/read',{
     headers:headers()
-  }).then(res=>res.json()).then(resp=>{
-    if(resp.status){
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.status){
       read(!hasRead)
       document.querySelector('.likenotif').classList.add('d-none')
     }
@@ -75,14 +77,30 @@ function SidebarComponent() {
   }
   const refer = e => {
     setProgress(100) 
-    if (e.target.dataset.refer !== "/search")
-      document.querySelector(".close").click();
+    // if (e.target.dataset.refer !== "/search"){
+	// 	document.querySelector(".close").click()	
+	// } 
+
     let elem = e.target;
-    if (elem.children.length ?? false) {
-      if (elem.children[1] ?? false) {
-        elem.children[1].click();
-      }
-    }
+    if (elem.dataset.refer) {
+		if(!['/notifications','/search'].includes(elem.dataset.refer)){
+			document.querySelector(`a[href="${elem.dataset.refer}"]`).click()
+		}else{
+			// switch (elem.dataset.refer) {
+			// 	case '/notifications': document.getElementById(`notifications`)?.classList?.add('show');
+			// 	console.log('wanna see?')
+			// 		break;
+			
+			// 	case '/search': document.getElementById(`search`)?.classList?.add('show')
+			// 		break;
+			
+			// 	default:
+			// 		break;
+			// }
+		}
+    }else{
+   	  e.preventDefault()
+	}
   };
 
   const removeItem = index => {
@@ -90,7 +108,7 @@ function SidebarComponent() {
       search.splice(index, 1);
       localStorage.setItem("searched", JSON.stringify(search));
     } else {
-      localStorage.setItem("searched", JSON.stringify(""));
+      localStorage.setItem("searched", '');
     }
     setTriggered(!formtriggered);
   };
@@ -98,12 +116,12 @@ function SidebarComponent() {
   const searchUser = term => {
     setLoading(true)
       fetch('http://localhost:1901/api/profile/search',{
-                method:'POST',
-                headers:headers(),
-                body:JSON.stringify({param:term})
-      }).then(res=>{
-        return res.json()
-      }).then(data=>{
+			method:'POST',
+			headers:headers(),
+			body:JSON.stringify({param:term})
+      })
+	  .then(res=> res.json())
+	  .then(data=>{
         setResults(data)
         setTimeout(()=>setLoading(false),500)
       })
@@ -230,9 +248,9 @@ function SidebarComponent() {
               <div style={{height:"60px",backgroundColor:"#f8f8f8",borderRadius:'10px',width:'93%',display:'flex',marginLeft:'14px',marginTop:'5px',paddingTop:'4px'}} className='open-searched' data-username={user.username} key={index} onClick={()=>gotoProfile(user.username)}>
               <img src={user.profile??profile} className="mx-2 pfpicture" data-s={false} data-username={user.username}  onClick={()=>gotoProfile(user.username)} alt=""/>
               <div className="d-block" data-username={user.username} onClick={()=>gotoProfile(user.username)}>
-                <b data-username={user.username}  onClick={()=>gotoProfile(user.username)}>{user.username}</b> <br/>
+                <b data-username={user.username}  onClick={()=>gotoProfile(user.username)}>{user.username}</b><br/>
                 <small data-username={user.username}  onClick={()=>gotoProfile(user.username)}>{user.name}</small>
-                <Link to={`/profile?username=${user.username}`} className={` d-none`} id={`${user.username}`} /> 
+                <Link to={`/profile/${user.username}`} className={` d-none`} id={`${user.username}`} /> 
               </div>
             </div>)
             }): term.length ?  <b className="mx-3">No results found..</b> :(

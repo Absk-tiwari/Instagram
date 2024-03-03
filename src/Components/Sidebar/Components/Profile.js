@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import obito from "../../../assets/icons/profile.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
@@ -10,13 +10,15 @@ import Chat from '../Components/Messages/Chat'
 import { socket } from "../../../socket";
 
 const Profile = () => {
+  const location = useLocation()
   const [active, setStat] = useState(1);
   const [chatopened, setupChat] = useState(false)
-  let me = JSON.parse(localStorage.getItem('userLogin')) 
   const [user, setUser] = useState([])
   const [posts, setPost] = useState([])
   const [react, setReact] = useState(false)
   
+  let me = JSON.parse(localStorage.getItem('userLogin')) 
+
   const preview =  e => {
     let div = document.createElement("div"); 
     div.classList.add('randomDiv') ;
@@ -27,7 +29,7 @@ const Profile = () => {
     div.appendChild(cloned); 
     setTimeout(()=>{
       document.body.appendChild(div);
-    },2000)
+    },500)
     
   };
   document.body.addEventListener('click',function(event) {
@@ -38,15 +40,15 @@ const Profile = () => {
     }
   })
 
-  const reaction =  (act,targetUsername)  => {
+  const reaction =  (act,targetUsername)  => {  // update profile based on follow btn change
     let type = act ? 'follow':'unfollow'
     fetch('http://localhost:1901/api/post/update',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({type,targetUsername})
-    }).then(res=>{
-      return res.json()
-    }).then(resp=>{
+    })
+	.then(r=> r.json())
+	.then(resp=>{
       if(resp.status){
         let data={
           type: 'follow',
@@ -72,11 +74,10 @@ const Profile = () => {
  
  const [loaded, setLoad] = useState(false)
   useEffect(()=>{
-    let query = window.location.search
+    let params = location.pathname.split('/')
     let term
-    if(query){ 
-      term = query.split('?')
-      term = term[1].split('=')[1]
+    if(params.length===3){  
+      term = params[2] 
     }else{
       term = JSON.parse(localStorage.getItem('userLogin'))
       term = term.username
@@ -85,24 +86,21 @@ const Profile = () => {
         method:'POST',
         headers:headers(),
         body:JSON.stringify({username:term})
-      }).then(res=>{
-        return res.json();
-      }).then(data=>{
+      })
+	  .then(res=> res.json())
+	  .then(data=>{
         setLoad(true)
-        if(data && data.hasOwnProperty('user')){
+        if(data?.user){
           setUser(data.user)
-          if(data.isFollowing){
-            setReact(true)
-          }
+          if(data.isFollowing) setReact(true)
+          
           fetch('http://localhost:1901/api/post/getPostsOf',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({username:data.user.username})
-          }).then(res=>{
-            return res.json()
-          }).then(data=>{
-            setPost(data)
           })
+		  .then(res=> res.json())
+		  .then(data=>setPost(data))
         }
       })
      

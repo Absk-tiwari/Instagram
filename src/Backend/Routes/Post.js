@@ -9,6 +9,7 @@ const Followers = require("../Models/Followers");
 // const multer = require('multer')
 // const upload = multer({dest:'./../tmp/uploads'})
 const uploadOnCloudnary = require("./../utils/cloudinary");
+const Notification = require("../Models/Notification");
 let error = { status: false, message: "Something went wrong!" };
 let output = { status: true };
 
@@ -85,7 +86,7 @@ router.get("/comments/:postid", fetchuser, async (req, res) => {
   return res.json(comments);
 });
 
-router.post("/update", fetchuser, async (req, res) => {
+router.post("/update", fetchuser, async (req, res) => {  // when someone followed | un-followed
   try {
     let set = {};
     let thisUser = await User.findById(req.body.id).select(
@@ -147,16 +148,25 @@ router.post("/update", fetchuser, async (req, res) => {
 router.post("/addComment", fetchuser, async (req, res) => {
   try {
     let thisUser = await User.findById(req.body.id).select("username -_id");
-    let added = await Comment.create({
-      from: thisUser.username,
-      for: req.body.postID,
-      content: req.body.comment,
-    });
+	let upsert
+	if(req.body.reply){
+		let obj ={
+			from: thisUser.username,
+			for: req.body.postID,
+			content: req.body.comment
+		}
+		upsert = await Comment.updateOne({for:req.body.postID},{$push:{replies:obj}})
+	}else{
+		upsert = await Comment.create({
+		  from: thisUser.username,
+		  for: req.body.postID,
+		  content: req.body.comment,
+		});
+	}
 
-    if (added) return res.json(output);
+    if (upsert) return res.json(output);
+    return res.json({...error,message:'unable to add the comment'});
 
-    error.message = "unable to add the comment";
-    return res.json(error);
   } catch (e) {
     error.message = e.message;
     return res.status(500).json(error);

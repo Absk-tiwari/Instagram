@@ -11,48 +11,35 @@ function Chat(props) {
   const [parent,setParent] = useState(false) // reflection to parent
   const {updateChat} = useContext(ProfileContext) // for target user api
   const [chats, loadChats] = useState([]) // old chats
-  const [msg, setMessage] = useState('') // typing message
+  const [msg, setMessage] = useState('') // typing indicator
   const [hasmsg, mark] = useState(false) // decide to initiate the convo
   const [loader, load] = useState(true) // loader false will show fetched msgs 
-  const [contextMenu, setContext] = useState({
-    isVisible: false,
-    x: 0,
-    y: 0,
-    items: [],
-  });
-  const box = useRef(null)
-  const unsend = (from, _id) => {
+  const [contextMenu, setContext] = useState({ isVisible: false, x: 0,y: 0,items: []})
+  const box = useRef(null) // its child has all you need
+
+  const unsend = (from, _id) => {   // handle un-sending message
     fetch('http://localhost:1901/api/messages/unsend',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({_id,of:from})
-    }).then(res=>{
-      return res.json()
-    }).then(resp=>{
-      if(resp.status){
-        document.querySelector('[data-id="'+_id+'"]').remove()
-      }
+    }).then(r=>r.json()).then(res=>{
+      	if(res.status) document.querySelector('[data-id="'+_id+'"]').remove() 
     });
   }
 
-  const remove = (me, _id) => {
-
+  const remove = (me, _id) => {   // handle delete message
     fetch('http://localhost:1901/api/messages/delete',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({me,_id,username})
-    }).then(res=>{
-      return res.json()
-    }).then(resp=>{
-      if(resp.status){
-        document.querySelector('[data-id="'+_id+'"]').remove()
-      }
+    }).then(r=> r.json()).then(res=>{
+      	if(res.status) document.querySelector('[data-id="'+_id+'"]').remove()
     })
   }
-  const onContext = event => { 
+  const onContext = event => {  // add items to context-menu
     let items
     if(event.target.className==='other'){
-      items = [
+      items=[
         {label:'Copy', onClick:()=>console.log('tried to copy')},
         {label:'Delete', onClick:()=>remove(event.target.dataset.from, event.target.dataset.id)}
       ]
@@ -63,39 +50,28 @@ function Chat(props) {
       ]
     }
     event.preventDefault()
-    const x = event.clientX - 700
+    const x = event.clientX-700
     const y = event.clientY 
-    setContext({
-      isVisible : true, 
-      x, y ,
-      items
-    })
-  }
+    setContext({isVisible : true, x, y , items})
+  }      // items are added to context menu
 
-  const iconStyle ={
-    fontSize:'25px',
-    marginLeft:'40px',
-    cursor:'pointer'
-  }
    
-  const OnKeyUp = event => {
+  const OnKeyUp = event => {  // signal typing... 
     setMessage(event.target.value)
-    let res = {is:me,to:username}
+    let res= {is:me,to:username}
     socket.emit('typing', res)
   }
  
  
   const scrollToBottom = () => {
     setTimeout(() => {
-      if (box.current) {
-        box.current.scrollTop = box.current.scrollHeight;
-      }
-    },2500);
+      if (box.current) box.current.scrollTop = box.current.scrollHeight;
+    },2000);
   };
   // eslint-disable-next-line
   const [isLoading, setLoading] = useState(false)
-  const showMessage = (msg,id,other=true) => {
-     let once = true
+
+  const showMessage = (msg,id,other=true) => {    // let the message be printed
       let div = document.createElement('div')
       div.style.display='block'
       let p = document.createElement('p')
@@ -115,65 +91,48 @@ function Chat(props) {
         hDiv.appendChild(imgElem) 
         hDiv.appendChild(p)
         div.appendChild(hDiv)
-      }else{
-        div.appendChild(p)
-      }
-      if(box.current && once){
-        // console.log(box.current.children)
+      }else div.appendChild(p) 
+
+      if(box.current){
 		const last = box.current.children.length
-		console.log(last)
-		mark(true)
+		mark(true) // it had messages
         box.current.children[last-1].appendChild(div)
         document.getElementsByClassName('body')[0].scrollTop = document.getElementsByClassName('body')[0].scrollHeight
       }
-  }
+  }    // messages has been printed
   
   useEffect(()=>{
     setLoading(true);
-    document.addEventListener('click',function(){
-      setContext({
-        isVisible : false,  
-      })
-    })
-    socket.on('putID',data =>{
-      document.querySelector(`[id="${data.on}"]`).dataset.id = data.exact
-    })
+    document.addEventListener('click',()=>{ setContext({isVisible : false}) })
+    socket.on('putID', data => document.querySelector(`[id="${data.on}"]`).dataset.id = data.exact )
     const receive = data=>{
       let content = data.content
       showMessage(content,data._id)
-      // loadChats([...chats,{content,_id:data._id}])
       let added = till
       added[username] = data.content
       added[username+'_seen'] = ' just now'
+	  console.log(added)
       changeMsg(added)
     }
-    socket.on('receive', receive) 
+    socket.on('receive', receive)  // handle 
  
     fetch('http://localhost:1901/api/messages/of',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({cID:me+'&'+username})
-    }).then(res=>{
-      return res.json()
-    }).then(oldchats=>{
+    }).then(res=> res.json()).then(oldchats=>{
       if(oldchats && oldchats.length){
         loadChats(oldchats)
         mark(true)
       }
       load(false) 
       scrollToBottom()
-      if(launch){
-        updateChat(me,username)
-      }
+      if(launch) updateChat(me,username) // was a text for u ? update it
       setLoading(false)
     })
     setParent(!parent);
     return () => {
-      document.removeEventListener('click',function(){
-        setContext({
-          isVisible : false,  
-        })
-      })
+      document.removeEventListener('click', ()=> setContext({isVisible : false}))
       loadChats([])
       socket.off('receive',receive)
     }
@@ -181,25 +140,33 @@ function Chat(props) {
 
   const sendMessage = event => {
     event.preventDefault()
-    let createdID = randomStr(5)
+    let createdID = randomStr(5) // helper function
     if(msg){
       let cstring = me+'&'+username
-      let data = {from:me,to:username,content:msg, cID:cstring,putAt:createdID}
-      socket.emit('send', data)
+      let data = {from:me,to:username,content:msg, cID:cstring,putAt:createdID,changeMsg:me,replaceMsg:msg}
       setMessage('')
-      let added = till
-      added[username] = msg
+      let added = till 
+      added[username+'_last'] = msg
       added[username+'_seen'] = ' sent just now'
+	  let newMsg
+	  if(added[username]){
+		let prev = added[username]
+		if(prev.includes('message')){
+			let prev = added[username].split(' ')
+			prev=prev[0]
+			newMsg = `${parseInt(prev)+1} new messages`
+		}else{
+			newMsg = `2 new messages`
+		}  
+		data.replaceMsg =added[username]= newMsg 		
+      }  
       changeMsg(added)
+	  socket.emit('send', data)
     }
     showMessage(msg,createdID,false)
     setParent(!parent)
-    if(update){ 
-      update(parent)
-    }
-    if(launch){
-      updateChat(me,username)
-    }
+    if(update) update(parent)
+	if(launch) updateChat(me,username) // seen text for you ? must be updated
   }
 
   return (
@@ -212,7 +179,7 @@ function Chat(props) {
                 <div className='hstack'>
                     <div className='col-9 hstack'>
                         <div className='img-container mx-5 col-1'>
-                            <img src={details && details[0].profile?details[0].profile:img} style={{height:'63px',width:'63px'}} className='rounded-circle' alt={username} />
+                            <img src={details && (details[0].profile??img)} style={{height:'63px',width:'63px'}} className='rounded-circle' alt={username} />
                         </div>
                         <div className='col-10' style={{paddingTop:'15px'}}>
                             <h3>{username}</h3>
@@ -220,9 +187,9 @@ function Chat(props) {
                         </div>
                     </div>
                     <div className='col-3'>
-                        <span className='fa fa-phone' style={iconStyle} title='call' />
-                        <span className='fa fa-video-camera' title='video call' style={iconStyle}/> 
-                        <span className='fa fa-ellipsis-v' title='options' style={iconStyle}/> 
+                        <span className='fa fa-phone iconStyle' title='call' />
+                        <span className='fa fa-video-camera iconStyle' title='video call'/> 
+                        <span className='fa fa-ellipsis-v iconStyle' title='options'/> 
                     </div>
                 </div>
             </section>
@@ -236,13 +203,13 @@ function Chat(props) {
 				{loader && (<div className='spinner-container' style={{marginLeft:'45%',marginTop:'30%',display:'block'}}><div className='spinner' style={{height:'60px', width:'60px'}}/></div>)}
 
               <div className='container' id='container' >
-                {chats && chats.length? chats.map((item, index)=>{ 
+                {chats && chats.map((item, index)=>{ 
                   return (item.from===me?
-                      (<div key={index} style={{display:'block'}}>
-                        <p data-from={item.from===me?me:username} className={'self'} data-id={item._id} onContextMenu={onContext} >{item.content}</p>
+                      (<div key={index} className='d-block'>
+                        <p data-from={item.from===me?me:username} className='self' data-id={item._id} onContextMenu={onContext} >{item.content}</p>
                       </div>):
-                      (<div style={{display:'block'}} key={index}><div className={'hstack otherDiv'} ><img className={'img-rounded inchat'} src={details && details[0].profile?details[0].profile:img} alt={''} /><p className={'other'} data-id={item._id} onContextMenu={onContext}>{item.content}</p></div></div>)) 
-                }) :''}
+                      (<div className='d-block' key={index}><div className='hstack otherDiv'><img className='img-rounded inchat' src={details && (details[0].profile??img)} alt={''} /><p className='other' data-id={item._id} onContextMenu={onContext}>{item.content}</p></div></div>)) 
+                })}
               </div>
 
             </section>
