@@ -212,7 +212,7 @@ const PostFooter = (props) => {
               </div>
              ):comments.map((user,index)=>{
 				return (
-				  <div key={index} className={`row mt-3 openchat`} data-index={index} style={{cursor:'pointer'}} onContextMenu={onContext}>
+				  <div key={index} className={`row mt-3`} data-index={index} style={{cursor:'pointer'}} onContextMenu={onContext}>
 					<div className="col-sm-2" data-index={index} style={{position:"relative"}}>
 						<img data-index={`${index}`}
 						src={profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
@@ -227,7 +227,7 @@ const PostFooter = (props) => {
 					  <button type="submit" className="btn text-primary">send</button>
 					</form>
 					{user.replies && (user.replies).map((cmt,index)=>{
-						  return (<div key={index} className="row mt-3 openchat" style={{cursor:'pointer'}} >
+						  return (<div key={index} className="row mt-3" style={{cursor:'pointer'}} >
 							  <div className="col-sm-2" style={{position:"relative"}}>
 								<img data-index={`${index}`} src={cmt.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
 							  </div>

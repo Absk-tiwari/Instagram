@@ -52,7 +52,7 @@ const Post = () => {
               <img className="postContent" src={post.content} alt="." />
             </div>
             <div className="card-footer">
-              <PostFooter post={post} alt={{details:true}}/>
+              <PostFooter post={post} alt={{details:true}} c={true}/>
             </div>
           </div>
         );
