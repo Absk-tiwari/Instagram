@@ -2,21 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import headers from "../../../../APIs/Headers";
 import {socket} from '../../../../socket';
-import Modal from "../../../Modal";
+import Modal from "../../../StateComponents/Modal";
 import profile from '../../../../assets/icons/profile.png'
 import ContextMenu from "../../../StateComponents/ContextMenu";
+import Placeholder from "../../../StateComponents/Placeholder";
+import { howLong } from "../../../../helpers";
 const PostFooter = (props) => {
   let me = JSON.parse(localStorage.getItem('userLogin'))
-  const { post } = props;
-  const { alt } = props;
-  const c = props.c;  // whether to show the comment icon or not
+  const { post,alt, c } = props;
+  const [isLoading, setLoading] = useState(true)
+   // c is for whether to show the comment icon or not
   const [likes, setLikes ]= useState(post.likes.length)
   const [like, reactPost] = useState(post.likes.includes(me.username));
   const [save, savePost] = useState(false);
   const [comment,setComment] = useState(''); // this holds the input text
+  const [addAnthorComment,addAnother] = useState(''); // this holds the input text
   const [comments,put] = useState([]); // allover comments 
   const [open, setmodal] = useState(false);
-  const [replies, contain] = useState([])
+  const [repliedTo, setreply] = useState([])
   const [contextMenu, setContext] = useState({isVisible: false,x: 0,y: 0,items: [],c:''})
 
   const toggle = e => {
@@ -25,11 +28,7 @@ const PostFooter = (props) => {
 
   const replied = event => {
     event.preventDefault()
-    addComment(true)
-    let mine = me.username
-    let obj ={}
-    obj[mine]= [{profile:me.profile,content:comment, username:me.username}]
-    contain(obj) 
+    addComment(true) 
     setComment('')
     document.getElementById(event.target.id).classList.add('d-none') 
   }
@@ -40,22 +39,37 @@ const PostFooter = (props) => {
     event.preventDefault()
     addComment()
   }
-  const addComment = (reply=false) => {
+
+  const submitAnthrComment = event => {
+	event.preventDefault()
+	addComment(false,true)
+	addAnother('')
+  }
+  const addComment = (reply=false,another=false) => {
+	let cmt = another? addAnthorComment : reply ? repliedTo : comment
     fetch('http://localhost:1901/api/post/addComment',{
       method:'POST',
       headers:headers(),
-      body:JSON.stringify({username:post.username,comment, postID:post._id,reply})
+      body:JSON.stringify({username:post.username,comment:cmt, postID:post._id,reply})
     })
 	.then(r=>r.json())
 	.then(resp=>{
       if(resp.status)
       setComment('')
+	  let data={ 
+		type:'comment',
+		for: post.username,
+		label: post.content??'',
+		user : me.username ,
+		about:post._id+me.username,
+		comment:comment??addAnthorComment
+	  }
+	  socket.emit('notify', data )
 	  getComments(false)
     })
   }
   const updatePost = type => {
     type = type?'unlike':'like'
-    console.log(type, post._id)
     reactPost(!like)    
     fetch('http://localhost:1901/api/post/update',{
       method : 'POST',
@@ -87,6 +101,9 @@ const PostFooter = (props) => {
       if(data.length){
         put(data)
       }
+	  setTimeout(() => {
+		setLoading(false)
+	  }, 500);
       if(outside) setmodal(!open)
     }) 
   }
@@ -106,6 +123,12 @@ const PostFooter = (props) => {
     });
   }
 
+  const showReplies=className=>{
+	let set = document.getElementsByClassName(className)
+	for(let i in set){
+		set[i]?.classList?.remove('d-none')
+	}
+  }
   const onContext = event => { 
     let user = event.target.dataset.index
     user = comments[user]
@@ -188,48 +211,43 @@ const PostFooter = (props) => {
               <div className="col-md-12 mt-1 d-flex">
                 <b><Link className={'text-dark text-decoration-none'} to={`/profile?user=${post.username}`}
                   >{post.username}</Link></b>
-                &nbsp;<p>{post.caption??' It is what it is.'} &#128516;</p>
+                &nbsp;<p>{post.caption??' It is what it is.'} &#128516;</p> <br/>
               </div>
-
-              {!comments.length?(
-                <div className="col-12 card-body mx-2">
-                <p className="card-title placeholder-glow mb-3">
-                  <span className="placeholder col-6"/> 
-                </p>
-                <p className="card-text placeholder-glow">
-                  <span className="placeholder col-7"/>
-                  <span className="placeholder col-6"/>
-                  <span className="placeholder col-7"/>
-                  <span className="placeholder col-6"/>
-                  <span className="placeholder col-8"/>
-                </p>
-                <p className="card-body placeholder-glow">
-                  <span className='placeholder col-2'/>
-                  <span className='placeholder col-11'/>
-                  <span className='placeholder col-10'/>
-                  <span className='placeholder col-5'/>
-                </p>
-              </div>
-             ):comments.map((user,index)=>{
+				<div className={`card-head`}>
+					<form id={`commentForm`} onSubmit={submitAnthrComment}>
+						<input placeholder="Add a comment..." className="input" value={addAnthorComment} onChange={e=>addAnother(e.target.value)} />
+						<button type="submit" className="btn text-primary">
+							Add
+						</button>
+					</form>
+				</div>
+              {isLoading ?(
+                <Placeholder/>
+              ):''}
+			 {comments?.length? comments.map((user,ind)=>{
 				return (
-				  <div key={index} className={`row mt-3`} data-index={index} style={{cursor:'pointer'}} onContextMenu={onContext}>
-					<div className="col-sm-2" data-index={index} style={{position:"relative"}}>
-						<img data-index={`${index}`}
+				  <div key={ind} className={`row mt-3 cpo`} data-index={ind} onContextMenu={onContext}>
+					<div className="col-sm-2 rel" data-index={ind} >
+						<img data-index={ind}
 						src={profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
 					</div>
-					<div className={`col-sm-10 user`} style={{lineHeight:'1.3'}} data-index={index} >
+					<div className={`col-sm-10 user`} style={{lineHeight:'1.3'}} data-index={ind} >
 					  <b>{user.from}</b>
-					  <p className={`username text-dark`} style={{fontWeight:'500'}} data-index={index}> 
-					  <small data-index={index}>{user.content}</small><br/> <span className="text-secondary" onClick={()=>ToReply(index+'_id')}>Reply</span>
+					  <p className={`username text-dark`} style={{fontWeight:'500'}} data-index={ind}> 
+					  <small data-index={ind}>{user.content}</small><br/> <span className="text-secondary" onClick={()=>ToReply(ind+'_id')}>Reply</span>
+					  {user.replies.length?(
+  					  	<small className={`mx-2 text-secondary cpo`}
+					   	onClick={()=>showReplies(ind+'_replies')}>View replies</small>):''}
+					  <small className={`text-secondary mx-5`}>{howLong(user.at)}</small>
 					</p>
-					<form className="d-none" id={`${comments.indexOf(user)+'_id'}`} onSubmit={replied}>
-					  <input type="text" className="form-control" style={{border:0,borderRadius:0,borderBottom:'0.5px solid black'}} onChange={e=>setComment(e.target.value)} /> 
+					<form className="d-none" id={ind+'_id'} onSubmit={replied}>
+					  <input type="text" className="form-control" style={{border:0,borderRadius:0,borderBottom:'0.5px solid black'}} onChange={e=>setreply(e.target.value)} /> 
 					  <button type="submit" className="btn text-primary">send</button>
 					</form>
 					{user.replies && (user.replies).map((cmt,index)=>{
-						  return (<div key={index} className="row mt-3" style={{cursor:'pointer'}} >
-							  <div className="col-sm-2" style={{position:"relative"}}>
-								<img data-index={`${index}`} src={cmt.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
+					return (<div key={index} className={`row mt-3 d-none ${ind+'_replies'} cpo`}>
+							  <div className={`col-sm-2 rel`} >
+								<img data-index={index} src={cmt.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
 							  </div>
 							  <div className={`col-sm-10 user`} style={{lineHeight:'1.3'}} >
 								<b>{cmt.from}</b>
@@ -238,7 +256,7 @@ const PostFooter = (props) => {
 								<span className="text-secondary" onClick={()=>ToReply(index+'rep_id')}>Reply</span> 
 								</p>
 								<form className="d-none" id={index+'rep_id'} onSubmit={replied}>
-								  <input type="text" className="form-control" style={{border:0,borderRadius:0,borderBottom:'0.5px solid black'}} onChange={e=>setComment(e.target.value)} /> 
+								  <input type="text" className="form-control" style={{border:0,borderRadius:0,borderBottom:'0.5px solid black'}} onChange={e=>setreply(e.target.value)} /> 
 								  <button type="submit" className="btn text-primary">send</button>
 								</form>
 							  </div>
@@ -246,7 +264,11 @@ const PostFooter = (props) => {
 						})}
 				  </div>
 				</div> 
-			  )})}
+			  )}):(
+				 <div className={`col-auto mx-auto aligns-items-center justify-content-center mt-5`}>
+					<h3 className={`text-center mt-5`}>No comments yet</h3>
+				 </div>
+				)}
 
           </div>
         </div>

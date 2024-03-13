@@ -5,6 +5,7 @@ import headers from "../../../APIs/Headers";
 
 const Post = () => {
 	const  [posts, setPosts] = useState([])
+	const reflection = updatedPosts => setPosts(updatedPosts)
 	useEffect(()=>{ 
 		let skip = 0
 		let stopRequest =false
@@ -14,10 +15,10 @@ const Post = () => {
 			   method:'POST',
 			   headers:headers(),
 			   body:JSON.stringify({skip})
-		   }).then(res=>{
-			   return res.json()
-		   }).then(data=>{  
-			   if(data.length){
+		   })
+		   .then(r=>r.json())
+		   .then(data=>{  
+			   if(data?.length){
 				   setPosts(posts=>posts.concat(data)) 
 				   skip = skip + 2
 			   }else{ 
@@ -41,15 +42,15 @@ const Post = () => {
 
   return (
     <>
-      { posts && posts.length > 0 ? 
+      { posts?.length ? 
         posts.map( (post,index) => {
         return (
           <div className="col-md-8 post card mt-5" key={index}>
             <div className="card-header profileHead">
-              <PostHead post={post} />
+              <PostHead post={post} totalPosts={posts} updatePosts={reflection} />
             </div>
             <div className="card-body">
-              <img className="postContent" src={post.content} alt="." />
+              <img className="postContent" src={post.content} alt={``} />
             </div>
             <div className="card-footer">
               <PostFooter post={post} alt={{details:true}} c={true}/>
@@ -62,12 +63,12 @@ const Post = () => {
           <div className="card-body">
             <h5 className="card-title placeholder-glow">
               <span className="placeholder col-6" style={{height:'50px',width:'50px',borderRadius:'50%'}}/>&nbsp;
-              <span className="placeholder col-6" style={{height:'20px'}}></span>
+              <span className="placeholder col-6" style={{height:'20px'}}/> 
             </h5>
             <p className="card-text placeholder-glow">
-              <span className="placeholder col-12" style={{height:'300px'}}></span>
+              <span className="placeholder col-12" style={{height:'300px'}}/> 
             </p>
-            <span className="placeholder placeholder-glow col-10"></span>
+            <span className="placeholder placeholder-glow col-10"/> 
           </div>
         </div> 
         </>

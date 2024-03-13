@@ -196,12 +196,17 @@ img {
 .profileHead {
   line-height: 1;
 }
-.followbtn {
+.followingbtn {
   background-color:#e4e9ed!important;
+  color:black
+}
+.followbtn{
+	background-color: #0d6efd!important;
+	color:white!important
 }
 
 .postContent {
-  height: 55vh;
+  height: auto;
   width: 100%;
 }
 
@@ -795,8 +800,7 @@ li>span{
   position: absolute;
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  height: 70px!important;
+  z-index: 1000; 
   border-radius: 8px;
   cursor: pointer;
 }
@@ -840,6 +844,51 @@ li>span{
     border-style: rounded;
 }
 .openchat{
-	height: 300px;
+	/* height: 300px; */
 	overflow: auto;
+}
+.rel{
+	position: relative!important;
+}
+.cpo{
+	cursor: pointer!important;
+}
+.absoluteAtPoint{
+	position:absolute;
+	top:0px;
+	left:0px
+}
+.abs{
+	position: absolute!important;
+}
+.selfImage{
+	float: right;
+	clear: both;
+    width: 40%;
+    height: auto;
+    border-radius: 20px;
+    border: 2px solid blueviolet;
+    display: block;
+	margin: 5px;
+	margin-right: 20px
+}
+.otherImage{
+	float: left;
+	clear: both;
+    width: 40%;
+    height: auto;
+    border-radius: 20px; 
+    display: block;
+	margin: auto; 
+	margin-left: 0px;
+}
+.readStat{
+	clear: both;
+	float: right;
+	margin-right: 30px;
+    margin-top: -20px;
+	color: #797979;
+}
+.blue{
+	background-color: blue;
 }

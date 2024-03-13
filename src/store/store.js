@@ -1,7 +1,10 @@
-import { createStore , combineReducers } from "redux";
 import imageReducer  from "../reducers/reducer";
+import {getUserDetails}  from "../actions/auth";
+import { configureStore } from "@reduxjs/toolkit";
 
-const rootReducer = combineReducers({
-    image:imageReducer
+export const store = configureStore({
+	reducer:{
+		auth:getUserDetails,
+		image:imageReducer
+	}
 })
-export const store = createStore(rootReducer)

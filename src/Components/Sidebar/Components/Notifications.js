@@ -53,7 +53,7 @@ const Notifications = (props) => {
     }
     let _id = elem.dataset.id
     let items = [ 
-        {label:(<i className='fa fa-trash'/>), class:'text-danger', onClick:()=>remove(_id)}
+        {label:(<div className={`d-flex`}><i className={`fa fa-trash mt-1 mx-1`}/><span className={'text-danger'}>Remove</span></div>), class:'text-danger', onClick:()=>remove(_id)}
       ]
     event.preventDefault()
     const x = event.clientX - 250
@@ -62,7 +62,8 @@ const Notifications = (props) => {
       isVisible : true, 
       x, y ,
       items,
-      c:'70px'
+      c:'100px',
+	  h:`50px`
     })
   }
 
@@ -72,7 +73,6 @@ const Notifications = (props) => {
     
       const notify = data =>{
         let temp = notifications
-		console.log(data)
         temp.unshift(data)
         set(temp)
         setCount(count+1)
@@ -96,7 +96,7 @@ const Notifications = (props) => {
       })
 	  .then(r=> r.json())
 	  .then(data=>{
-        set(data);console.log(data)
+        set(data);//console.log(data)
         let count=0;
         if(data && data.length){
           for(let i of data){

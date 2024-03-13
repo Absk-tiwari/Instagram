@@ -25,6 +25,7 @@ router.post('/update',[ upload.single('image'), fetchuser], async(req,res)=>{
                 bio : req.body.bio
             },
         };
+		console.log(update)
         let updated = await User.updateOne({_id:req.body.id},update)
         if(updated){ 
             let user = await User.findById(req.body.id)
@@ -123,8 +124,14 @@ router.post('/search',fetchuser,async(req,res)=>{
 
 router.get('/getProfiles',fetchuser,async(req,res)=>{
     try{ 
+		let thisUser = await User.findOne({_id:req.body.id}) 
+		let following = await Followers.find({username:thisUser.username}).select('of -_id')
+		let usernames=[]
+		for(let i in following){
+			usernames.push(following[i].of)
+		} 
         let fetchedUsers = await User.find({
-			_id:{$ne:req.body.id}
+			_id:{$ne:req.body.id}, username:{$nin:usernames}
 		}).select('-password')
         return res.json({...output, profiles:fetchedUsers});
 

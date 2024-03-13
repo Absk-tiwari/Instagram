@@ -19,8 +19,8 @@ const ProfileRow = (props) =>{
             </div> 
             <div className='col-sm-4'>
                 {  profile.self ?              
-                  <Button text={'Log out'}/>
-                    : <Button text={'Follow'} alt={'Following'}/>
+                  <Button text={'Log out'} Class={'followingbtn'} />
+                    : <Button text={'Follow'} Class={'followbtn'}  alt={'Following'}/>
                 }             
             </div>
        </div>

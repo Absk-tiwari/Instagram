@@ -12,10 +12,11 @@ function Chat(props) {
   const {updateChat} = useContext(ProfileContext) // for target user api
   const [chats, loadChats] = useState([]) // old chats
   const [msg, setMessage] = useState('') // typing indicator
-  const [hasmsg, mark] = useState(false) // decide to initiate the convo
+  const [hasmsg, AvailMessage] = useState(false) // decide to initiate the convo
   const [loader, load] = useState(true) // loader false will show fetched msgs 
   const [contextMenu, setContext] = useState({ isVisible: false, x: 0,y: 0,items: []})
   const box = useRef(null) // its child has all you need
+  const file = useRef(null) // its child has all you need
 
   const unsend = (from, _id) => {   // handle un-sending message
     fetch('http://localhost:1901/api/messages/unsend',{
@@ -25,6 +26,10 @@ function Chat(props) {
     }).then(r=>r.json()).then(res=>{
       	if(res.status) document.querySelector('[data-id="'+_id+'"]').remove() 
     });
+  }
+
+  const uploadFile = event => {
+	file.current?.click()
   }
 
   const remove = (me, _id) => {   // handle delete message
@@ -63,10 +68,10 @@ function Chat(props) {
   }
  
  
-  const scrollToBottom = () => {
+  const scrollToBottom = time => {
     setTimeout(() => {
       if (box.current) box.current.scrollTop = box.current.scrollHeight;
-    },2000);
+    },time);
   };
   // eslint-disable-next-line
   const [isLoading, setLoading] = useState(false)
@@ -95,48 +100,45 @@ function Chat(props) {
 
       if(box.current){
 		const last = box.current.children.length
-		mark(true) // it had messages
+		AvailMessage(true) // it had messages
         box.current.children[last-1].appendChild(div)
-        document.getElementsByClassName('body')[0].scrollTop = document.getElementsByClassName('body')[0].scrollHeight
+        scrollToBottom(0)
       }
   }    // messages has been printed
   
-  useEffect(()=>{
-    setLoading(true);
-    document.addEventListener('click',()=>{ setContext({isVisible : false}) })
-    socket.on('putID', data => document.querySelector(`[id="${data.on}"]`).dataset.id = data.exact )
-    const receive = data=>{
-      let content = data.content
-      showMessage(content,data._id)
-      let added = till
-      added[username] = data.content
-      added[username+'_seen'] = ' just now'
-	  console.log(added)
-      changeMsg(added)
-    }
-    socket.on('receive', receive)  // handle 
- 
-    fetch('http://localhost:1901/api/messages/of',{
-            method:'POST',
-            headers:headers(),
-            body:JSON.stringify({cID:me+'&'+username})
-    }).then(res=> res.json()).then(oldchats=>{
-      if(oldchats && oldchats.length){
-        loadChats(oldchats)
-        mark(true)
+  const sendImage = src =>{
+	 let img = document.createElement('img')
+	 img.src= src
+	 img.className=`selfImage`
+	 let createdID = randomStr(5) 
+	 img.dataset.id = createdID
+	 img.id = createdID
+	 let cstring = me+'&'+username
+	 let data = {from:me,to:username,content:src, cID:cstring,putAt:createdID,changeMsg:me,replaceMsg:msg}
+	 console.log(data);
+	 let added = till 
+	 added[username+'_last'] = 'Photo'
+	 added[username+'_seen'] = ' sent just now'
+	 let newMsg
+	 if(added[username]){
+	   let prev = added[username]
+	   if(prev.includes('message')){
+		   let prev = added[username].split(' ')
+		   prev=prev[0]
+		   newMsg = `${parseInt(prev)+1} new messages`
+	   }else{
+		   newMsg = `2 new messages`
+	   }  
+	   data.replaceMsg =added[username]= newMsg 		
+	 }  
+	 changeMsg(added)
+	 socket.emit('send', data)
+	  if(box.current){
+		const last = box.current.children.length
+        box.current.children[last-1].appendChild(img)
+        scrollToBottom(0)
       }
-      load(false) 
-      scrollToBottom()
-      if(launch) updateChat(me,username) // was a text for u ? update it
-      setLoading(false)
-    })
-    setParent(!parent);
-    return () => {
-      document.removeEventListener('click', ()=> setContext({isVisible : false}))
-      loadChats([])
-      socket.off('receive',receive)
-    }
-  },[username,launch,me])
+  }
 
   const sendMessage = event => {
     event.preventDefault()
@@ -168,6 +170,61 @@ function Chat(props) {
     if(update) update(parent)
 	if(launch) updateChat(me,username) // seen text for you ? must be updated
   }
+  useEffect(()=>{
+    setLoading(true);
+    document.addEventListener('click',()=>{ setContext({isVisible : false}) })
+    socket.on('putID', data => document.querySelector(`[id="${data.on}"]`).dataset.id = data.exact )
+    const receive = data=>{
+      let content = data.content
+      showMessage(content,data._id)
+      let added = till
+      added[username] = data.content
+      added[username+'_seen'] = ' just now'
+	  console.log(added)
+      changeMsg(added)
+    }
+    socket.on('receive', receive)  // handle 
+ 
+    fetch('http://localhost:1901/api/messages/of',{
+            method:'POST',
+            headers:headers(),
+            body:JSON.stringify({cID:me+'&'+username})
+    }).then(res=> res.json()).then(oldchats=>{
+      if(oldchats && oldchats.length){
+        loadChats(oldchats)
+        AvailMessage(true)
+      }
+      load(false) 
+      scrollToBottom(1500)
+      if(launch) updateChat(me,username) // was a text for u ? update it
+      setLoading(false)
+    })
+	let ImgElem = file.current
+	ImgElem.addEventListener('change', e =>{
+		let blob = e.target.files[0]
+		var fileReader = new FileReader()
+		fileReader.onload = function (e) {
+		  sendImage(e.target.result)
+		}
+		fileReader.readAsDataURL(blob)
+	})
+    setParent(!parent);
+    return () => {
+	  ImgElem.removeEventListener('change',e=>{
+		let blob = e.target.files[0]
+		var fileReader = new FileReader()
+		 
+		fileReader.onload = function (e) {
+		  sendImage(e.target.result)
+		}
+		fileReader.readAsDataURL(blob); 
+	})
+      document.removeEventListener('click', ()=> setContext({isVisible : false}))
+      loadChats([])
+      socket.off('receive',receive)
+    }
+  },[username,launch,me])
+
 
   return (
       <>
@@ -200,32 +257,41 @@ function Chat(props) {
                       <p> Send a message to start the conversation</p>
                     </div>
                 </div>)}
-				{loader && (<div className='spinner-container' style={{marginLeft:'45%',marginTop:'30%',display:'block'}}><div className='spinner' style={{height:'60px', width:'60px'}}/></div>)}
+				{loader && (<div className='spinner-container d-block' style={{marginLeft:'45%',marginTop:'30%'}}><div className='spinner' style={{height:'60px', width:'60px'}}/></div>)}
 
-              <div className='container' id='container' >
+              <div className='container' id='container'>
                 {chats && chats.map((item, index)=>{ 
                   return (item.from===me?
-                      (<div key={index} className='d-block'>
-                        <p data-from={item.from===me?me:username} className='self' data-id={item._id} onContextMenu={onContext} >{item.content}</p>
+                      (<div key={index} className={`d-block`}>
+						{item.content.length>10000?
+						<img src={item.content} className={`selfImage`} alt={``} data-id={item._id} onContextMenu={onContext} />:
+						<p data-from={item.from===me?me:username} className='self' data-id={item._id} onContextMenu={onContext} >{item.content}</p>}
+                        
+						{index===chats.length-1 && item.read ? <small className={'readStat'}>seen</small> :''}
                       </div>):
-                      (<div className='d-block' key={index}><div className='hstack otherDiv'><img className='img-rounded inchat' src={details && (details[0].profile??img)} alt={''} /><p className='other' data-id={item._id} onContextMenu={onContext}>{item.content}</p></div></div>)) 
+                       (<div className='d-block' key={index}>
+							<div className='hstack otherDiv'>
+								<img className={`img-rounded inchat`} src={details && (details[0].profile??img)} alt={''} />
+								{item.content?.length>10000?
+								<img src={item.content} className={`otherImage`} data-id={item._id} alt={``} onContextMenu={onContext}/>
+								:<p className='other' data-id={item._id} onContextMenu={onContext}>{item.content}</p>}
+							</div>
+						</div>)) 
                 })}
               </div>
 
             </section>
             <section className='footer mt-4'>
-                <form className='hstack' onSubmit={sendMessage} style={{position:'relative'}}>
+                <form className='hstack rel' onSubmit={sendMessage} >
                     <input type='text' className='chat-input' name='message' value={msg} onChange={OnKeyUp} autoComplete='off' onBlur={()=>socket.emit('stopped',{is:me,to:username})} />
                     <span style={{left:'3%',position:'absolute'}}>
                       <i className="fa-regular fs-3 fa-face-smile"/>
                     </span>
-                    <span style={{left:'84%',position:'absolute'}}>
+                    <span style={{left:'88%',position:'absolute'}} onClick={uploadFile}>
                       <i className={`fa-regular ${msg.length?'d-none':''} fs-3 fa-image`}/>
                     </span>
-                    <span style={{width:'88%', position:'absolute', fontSize:'large', left:'90%'}}>
-                      <i className={`fa-solid fs-3 ${msg.length?'d-none':''} fa-paperclip`}/>
-                    </span>
-                    <span type='submit' className={`text-primary ${msg.length?'':'d-none'} fs-5 fw-bold`} style={{width:'90%', marginLeft:'15px',position:'absolute', left:'85%',fontFamily:'monospace'}} > Send </span>
+					<input className='d-none' type='file' name='sendImage' ref={file}/>
+                    <span type='submit' className={`text-primary abs ${msg.length?'':'d-none'} fs-5 fw-bold`} style={{width:'90%', marginLeft:'15px', left:'85%',fontFamily:'monospace'}} > Send </span>
                 </form>
             </section>
         </div>

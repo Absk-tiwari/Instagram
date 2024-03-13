@@ -13,7 +13,7 @@ import Profile from "./Components/Sidebar/Components/Profile";
 import Reels from "./Components/Sidebar/Components/Reels";
 import Create from "./Components/Pages/Posts/Create";
 import Notifications from "./Components/Sidebar/Components/Notifications";
-import SidebarComponent from "./Components/SidebarComponent";
+import SidebarComponent from "./Components/Sidebar/SidebarComponent";
 import ProfileState from "./Contexts/Profiles/ProfileState";
 import PostState from "./Contexts/Profiles/PostState";
 import StoryState from "./Contexts/Stories/StoryState";
@@ -28,7 +28,11 @@ import Reset from "./Components/Pages/Auth/Reset";
 import { useEffect } from "react";
 import { socket } from "./socket";
 import headers from "./APIs/Headers";
+import { useDispatch, useSelector } from "react-redux";
 function App() {
+ const dispatch = useDispatch()
+ const {userInfo} = useSelector(state=>state.auth)
+// console.log(userInfo)
  useEffect(()=>{
 	if(localStorage.getItem('token')){
 		let me= JSON.parse(localStorage.getItem('userLogin'))
@@ -39,16 +43,16 @@ function App() {
 		}).then(res=>res.json()).then(data=>{
 			if(data.status){
 				let elem = document.getElementById('msg-badge') 
-				elem.innerHTML = data.count
+				console.log(data.count)
 				if(data.count){
+					elem.innerHTML = data.count
 					let usernames = []
 					for(let item of data.result){
 						let [a,b] = (item._id).split('&')
 						let final = me.username===a?b:a
-						if(final!==me.username){
-							usernames.push(final)
-						}
+						usernames.push(final)
 					}
+					console.log(usernames)
 					elem.dataset.garbage = JSON.stringify(usernames)
 					elem.classList.remove('d-none')	
 				}

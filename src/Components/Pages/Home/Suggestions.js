@@ -10,7 +10,6 @@ const Suggestions = () => {
 	fetch(`http://localhost:1901/api/profile/getProfiles`,{
 		headers:headers()
 	}).then(res=>res.json()).then(resp=>{
-		console.log(resp)
 		setProfiles(resp.profiles)
 	}) 
 

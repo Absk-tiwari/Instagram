@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ProfileContext from "../../../../Contexts/Profiles/ProfileContext";
 import msg from "../../../../assets/icons/messenger.jpg";
-import Modal from "../../../Modal";
+import Modal from "../../../StateComponents/Modal";
 import Loader from "../../../StateComponents/Loader";
 import { socket } from '././../../../../socket';
 import Chat from '../Messages/Chat'
@@ -40,7 +40,7 @@ const Messages = () => {
 	  })
 	  .then(r=> r.json())
 	  .then(res=>{
-        if(res.status){
+        if(res?.status){
           setChats(totalChats.filter(c=>c.username!==username))
 		  if(selectedUser.username===username) openedChat(!opened)
         }
@@ -100,7 +100,9 @@ const Messages = () => {
 				let users = JSON.parse(oggyHas)
 				let exists = users.indexOf(data.from) 
 				if(exists < 0){
-					added = JSON.parse(oggy) + 1
+					added= JSON.parse(oggy) + 1
+				}else{
+					added=oggy
 				}
 			}
 		}else{
@@ -218,7 +220,8 @@ const Messages = () => {
                 <b onClick={openChat} data-pick={chatuser._id}>{chatuser.username}</b>
                 <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} onClick={openChat} data-pick={chatuser._id}>
 					{isTyping.includes(chatuser.username)?'typing...':
-					(chatuser.from && chatuser.from===user.username && chatuser.sender? dump[chatuser.username+'_last'] : dump[chatuser.username]??'')} 
+					(chatuser.from && chatuser.from===user.username? dump[chatuser.username+'_last']?.length>10000?'Photo':dump[chatuser.username+'_last'] 
+					: dump[chatuser.username]?.length>10000?'Photo':dump[chatuser.username] ??'' )} 
 					{!isTyping.includes(chatuser.username) && 
 					<small onClick={openChat} data-pick={chatuser._id}>
 						{(chatuser.from && chatuser.from===user.username)? dump[chatuser.username+'_seen'] :''}
@@ -240,7 +243,7 @@ const Messages = () => {
               <p className="pt-1 text-secondary">
                 Send private photos and messages to a friend or group
               </p>
-              <button className="btn btn-primary openModal" onClick={toggleModal}>
+              <button className={`btn btn-primary openModal`} onClick={toggleModal}>
                 Send message
               </button>
             </div>
@@ -255,7 +258,7 @@ const Messages = () => {
              <hr />
              <div className="hstack">
               <form onSubmit={searchChatUser} className="col-11">
-                <input type="text" className="search_in_chat" name="search_in_chat" onChange={(e)=>{setSearchParam(e.target.value);searchChatUser(e)}} autoComplete="off" value={searchParam} placeholder="Search..."/>
+                <input type="text" className="search_in_chat" name="search_in_chat" onChange={e=>{setSearchParam(e.target.value);searchChatUser(e)}} autoComplete="off" value={searchParam} placeholder="Search..."/>
               </form>
               {isLoading && <Loader height={46}/>}
             </div>
@@ -270,9 +273,9 @@ const Messages = () => {
               return (
               <div className='open-searched' data-s={false} data-pick={user._id} key={index} id={user._id} onClick={openChat} data-detail={JSON.stringify(user)}>
               <img src={user.profile??profile} className="mx-3 pfpicture" data-s={false} data-pick={user._id} onClick={openChat} alt=""/>
-              <div className="d-block" data-s='false' data-pick={user._id}onClick={openChat}>
-                <b data-pick={user._id} data-s='false' onClick={openChat}>{user.username}</b> <br/>
-                <small data-pick={user._id} data-s='false' onClick={openChat}>{user.name}</small>
+              <div className="d-block" data-s={false} data-pick={user._id}onClick={openChat}>
+                <b data-pick={user._id} data-s={false} onClick={openChat}>{user.username}</b> <br/>
+                <small data-pick={user._id} data-s={false} onClick={openChat}>{user.name}</small>
               </div>
             </div>)
             }):(

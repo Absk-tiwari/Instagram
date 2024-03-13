@@ -90,11 +90,13 @@ socket.on("connection", conn => {
     let obj = {};
     if (data.type) {
       switch (data.type) {
-        case "follow": obj.message = `<span data-refer='${data.user}' style='cursor:pointer'><b>${data.user}</b> started following you</span>`
+        case "follow": obj.message = `<span data-refer='${data.user}' class='cpo'><b>${data.user}</b> started following you</span>`
           break;
-        case "like":obj.message = `<b>${data.user}</b> liked your post`
+        case "like":obj.message = `<b data-refer='${data.user}'>${data.user}</b> liked your post`
           break;
-        case "follow-request": obj.message = `<span data-refer='${data.user}' style='cursor:pointer'<b>${data.user}</b> has requested to follow you</span>`          
+        case "follow-request": obj.message = `<span data-refer='${data.user}' class='cpo'><b>${data.user}</b> has requested to follow you</span>`          
+          break;
+        case "comment": obj.message = `<span data-refer='${data.user}' class='cpo'><b>${data.user}</b> commented on your post : <b>${data.comment}</b></span>`          
           break;
 		default: obj.message = 'its nothing'
       }
@@ -112,6 +114,7 @@ socket.on("connection", conn => {
       if (data.type === "follow") {
         let sender = await User.findOne({ username: data.user }).select("profile -_id");
         obj.label = sender.profile;
+		await Notification.updateOne({for:data.user,type:'follow',from:data.for},{$set:{custom:obj.custom}})
       } else {
         obj.label = data.label;
       }
@@ -125,7 +128,7 @@ socket.on("connection", conn => {
         about: data.about,
 		custom:obj.custom
       });
-	  await Notification.updateOne({for:data.user,type:'follow',from:data.for},{$set:{custom:{follow:false}}})
+ 
       obj._id = created._id;
       obj.about = data.about;
       if (target) {
@@ -152,7 +155,7 @@ socket.on("connection", conn => {
         socket.to(users.get(data.user))
 		.emit("error", "couldnt remove the notification");
       } else {
-        console.log(done._id, "this should be an id");
+        console.log(done._id, "this should be an id i.e. removin notifications");
         socket.to(users.get(data.for)).emit("unnotify", data);
       }
     }

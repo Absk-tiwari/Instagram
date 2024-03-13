@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import ProfileContext from '../../../Contexts/Profiles/ProfileContext'
-import Modal from '../../Modal';
+import Modal from '../../StateComponents/Modal';
 import LoadingBar from "react-top-loading-bar";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
@@ -74,7 +74,7 @@ const ProfileSetting = () => {
                 </div>
                 <div className='col-md-7' style={{lineHeight:'0.5'}}>
                     <p className='text-dark fw-bold px-3 pt-3'>{user.username}</p>
-                    <label htmlFor='pfpUpdate' className='fw-bold px-3 text-primary'>Change Profile Photo</label>
+                    <label htmlFor='pfpUpdate' className='fw-bold px-3 text-primary cpo'>Change Profile Photo</label>
                     <input type='file' id='pfpUpdate' className='d-none' onChange={submitFile}/>
                 </div>
      

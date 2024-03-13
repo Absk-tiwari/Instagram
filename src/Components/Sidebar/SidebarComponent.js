@@ -1,31 +1,34 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ToastContainer } from 'react-toastify'
-import "../App.css";
+import "../../App.css";
 import { SidebarData } from "./SidebarData";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router";
-import More from "../assets/icons/more.png";
-import profile from "../assets/icons/profile.png";
-import Modal from "./Modal";
+import More from "../../assets/icons/more.png";
+import profile from "../../assets/icons/profile.png";
+import Modal from "../StateComponents/Modal";
 import LoadingBar from "react-top-loading-bar";
-import headers from "../APIs/Headers";
-import Notifications from "./Sidebar/Components/Notifications";
+import headers from "../../APIs/Headers";
+import Notifications from "../Sidebar/Components/Notifications";
 import { useDispatch } from "react-redux";
-import { setImageURL } from "../actions/setImageURL";
-import logo from '../assets/log.svg'
+import { setImageURL } from "../../actions/setImageURL";
+import logo from '../../assets/log.svg'
 
 function SidebarComponent() {
-  let [hasRead,read] = useState(false)
   const location = useLocation();
+  const searchbox = useRef(null)
+  const lstyle = { listStyleType: "none" };
+  const dispatch = useDispatch() 
+  let navigator = useNavigate();
+  let [hasRead,read] = useState(false)
   const [term, setTerm] = useState("");
   const [open, setmodal] = useState(false);
   const [search, setSearch] = useState([]);
   const [formtriggered, setTriggered] = useState(true);
   const [searched, setResults] = useState([])
   const [isLoading, setLoading] = useState(false)
-  const searchbox = useRef(null)
-  const dispatch = useDispatch() 
-  let navigator = useNavigate();
+  const [progress,setProgress] = useState(0)
+
   const toggleModal = e => {
 	if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   };
@@ -37,7 +40,6 @@ function SidebarComponent() {
     }
   }, [formtriggered]);
 
-  const lstyle = { listStyleType: "none" };
 
   const createPost = () => {
 
@@ -63,7 +65,6 @@ function SidebarComponent() {
     }
   })
 
-  const [progress,setProgress] = useState(0)
 
   const gotoProfile = username => {
     let tgetElem = document.getElementById(username)
@@ -77,31 +78,21 @@ function SidebarComponent() {
   }
   const refer = e => {
     setProgress(100) 
-    // if (e.target.dataset.refer !== "/search"){
-	// 	document.querySelector(".close").click()	
-	// } 
-
     let elem = e.target;
-    if (elem.dataset.refer) {
-		if(!['/notifications','/search'].includes(elem.dataset.refer)){
-			document.querySelector(`a[href="${elem.dataset.refer}"]`).click()
+	let target=elem.dataset.refer
+	console.log(target)
+    if (target) {
+		if(!['/notifications','/search','#create'].includes(target)){
+			document.querySelector(`a[href="${target}"]`).click()
 		}else{
-			// switch (elem.dataset.refer) {
-			// 	case '/notifications': document.getElementById(`notifications`)?.classList?.add('show');
-			// 	console.log('wanna see?')
-			// 		break;
-			
-			// 	case '/search': document.getElementById(`search`)?.classList?.add('show')
-			// 		break;
-			
-			// 	default:
-			// 		break;
-			// }
+			if(target==='#create'){
+				document.getElementById(`create`).click()	
+			}
 		}
     }else{
    	  e.preventDefault()
 	}
-  };
+  }
 
   const removeItem = index => {
     if (index !== "all") {
@@ -209,7 +200,7 @@ function SidebarComponent() {
         </div>
       </div>
       <form id="createPost" method="post" className="d-none">
-        <input type="file" onChange={createPost} id="create" className="d-none" name="file" />
+        <input type="file" onChange={createPost} id="create" data- className="d-none" name="file" />
       </form>
       <div className="offcanvas offcanvas-start" data-bs-scroll="true"  tabIndex="-1"
         id="notifications" aria-labelledby="offcanvasWithBothOptionsLabel">
@@ -245,7 +236,7 @@ function SidebarComponent() {
             </p>):             
             (term && searched.length ? searched.map((user,index)=>{
               return (
-              <div style={{height:"60px",backgroundColor:"#f8f8f8",borderRadius:'10px',width:'93%',display:'flex',marginLeft:'14px',marginTop:'5px',paddingTop:'4px'}} className='open-searched' data-username={user.username} key={index} onClick={()=>gotoProfile(user.username)}>
+              <div style={{height:"60px",backgroundColor:"#f8f8f8",borderRadius:'10px',width:'93%',marginLeft:'14px',marginTop:'5px',paddingTop:'4px'}} className='open-searched d-flex' data-username={user.username} key={index} onClick={()=>gotoProfile(user.username)}>
               <img src={user.profile??profile} className="mx-2 pfpicture" data-s={false} data-username={user.username}  onClick={()=>gotoProfile(user.username)} alt=""/>
               <div className="d-block" data-username={user.username} onClick={()=>gotoProfile(user.username)}>
                 <b data-username={user.username}  onClick={()=>gotoProfile(user.username)}>{user.username}</b><br/>
@@ -256,13 +247,13 @@ function SidebarComponent() {
             }): term.length ?  <b className="mx-3">No results found..</b> :(
               <>
             <div className="mt-2 d-flex list-item"> 
-              <b>Recent</b>  {search.length  ? <p className="text-primary offset-md-8" style={{cursor:'pointer'}}onClick={()=>removeItem('all')}>Clear all</p>:'' }
+              <b>Recent</b>  {search.length  ? <p className="text-primary offset-md-8 cpo" onClick={()=>removeItem('all')}>Clear all</p>:'' }
             </div>
             <div className="mt-2">
               {search && search.map((item,key) => {
                
-                return <li key={key} className="nav-link mx-3 mt-3 d-flex lh-1" >
-                  <p className="col-md-11" onClick={()=>{ setTerm(item);searchUser(item)}} style={{cursor:'pointer'}}>{item}</p>
+                return <li key={key} className="nav-link mx-3 mt-3 d-flex lh-1 cpo" >
+                  <p className="col-md-11 " onClick={()=>{ setTerm(item);searchUser(item)}} >{item}</p>
                   <i className="btn btn-close" onClick={() => removeItem(search.indexOf(item)) }></i>
                 </li>
 

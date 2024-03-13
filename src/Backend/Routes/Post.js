@@ -14,10 +14,24 @@ let error = { status: false, message: "Something went wrong!" };
 let output = { status: true };
 
 // yet to be tested
-router.post("/", async (req, res) => {
+router.post("/", fetchuser, async (req, res) => {
   try {
-    const posts = await Post.find().sort({created_at:-1}).skip(req.body.skip).limit(2);
-    return res.json(posts);
+	let thisUser = await User.findOne({_id:req.body.id})
+    let posts = await Post.find().sort({created_at:-1}).skip(req.body.skip).limit(2);
+	let final=[] 
+	for(let post of posts){ // customizing the follow btn state on post heads
+		
+		let pfp = await User.findById(post.user_id).select('profile -_id')
+		post._doc.profile = pfp.profile
+
+		let found = await Followers.find({of:post.username,username:thisUser.username})
+		if(found.length){ 
+			final.push({...post._doc, shouldFollow:false }) 
+		}else{
+			final.push({...post._doc, shouldFollow:true }) 
+		}
+	}
+    return res.json(final);
   } catch (e) {
     error.message = e.message;
     return res.status(500).send(error);
@@ -56,6 +70,22 @@ router.post("/create", [ upload.single('post'),fetchuser] , async (req, res) => 
   } catch (e) {
     error.message = e.message;
     return res.json(error);
+  }
+});
+
+router.delete("/delete/:id", async (req, res) => {
+  try {
+	const deleted = await Post.deleteOne({_id:req.params.id})
+	if (deleted) {
+		let comments = await Comment.deleteMany({for:req.params.id})
+		let notifns = await Notification.deleteMany({about:{$regex: req.params.id }})
+		if(comments && notifns){
+			return res.json({...output,message:'deleted',post:deleted})
+		}
+	}
+    return res.json(error)
+  } catch (e) { 
+    return res.json({...error, message:e.message})
   }
 });
 
