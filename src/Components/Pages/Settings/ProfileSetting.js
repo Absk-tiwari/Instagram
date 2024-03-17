@@ -4,10 +4,12 @@ import Modal from '../../StateComponents/Modal';
 import LoadingBar from "react-top-loading-bar";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
+import Loader from '../../StateComponents/Loader';
 
 const ProfileSetting = () => {
-  let navigator = useNavigate()
-  let user = JSON.parse(localStorage.getItem('userLogin'))
+	let navigator = useNavigate()
+	let user = JSON.parse(localStorage.getItem('userLogin'))
+  const [isLoading, setLoading] = useState(false)
   const [file,setFile] = useState('')
   const {LoggedIn} = useContext(ProfileContext);
   const [open, setmodal] = useState(false);
@@ -36,6 +38,7 @@ const ProfileSetting = () => {
   }
   
   const handleClick = event => {
+	setLoading(true)
     event.preventDefault() 
 	let formData = new FormData()
 	formData.append('image', file)
@@ -51,9 +54,13 @@ const ProfileSetting = () => {
 			throw new Error(res)
 		}else{
 			localStorage.setItem('userLogin',JSON.stringify(res))
-			navigator('/')
-			toast.success('Profile updated!')
-			setTimeout(() => window.location.reload(), 4000);
+			setTimeout(() => {
+				setLoading(false)
+				navigator('/')
+				toast.success('Profile updated!')
+			}, 2000)
+
+			setTimeout(() => window.location.reload(), 2000)
 		}
 	}).catch(err=>alert(err.message)) 
   }
@@ -97,29 +104,25 @@ const ProfileSetting = () => {
                 </div>
                 <div className='col-md-9 mx-3'>
                     <textarea  autoComplete='false' name='bio' placeholder='Bio' value={fields.bio} onChange={(e)=>setFields({...fields,[e.target.name] : e.target.value})} className='form-control searchbox' id='website' />
-                    <small >{LoggedIn.bio.length} / 150 characters</small>
+                    <small >{fields.bio.length} / 150 characters</small>
                 </div>
             </div>
         </div>
         <div className='row offset-1 mt-4 '>
             <div className='col-md-12 d-flex' >
-                <div className='col-md-1'>
-                    <p className='fw-bold pt-2'>Gender</p>
-                </div>
-                <div className='col-md-9 mx-3'>
-                    <select type='text' placeholder='Prefer not to say' className='form-control searchbox' onClick={()=>toggleModal} >
-                        <option value={''}>choose</option>
-                        <option value={'male'}>Male</option>
-                    </select>
-                </div>
+				<p className='fw-bold pt-3'>Active Status</p>
+				<input type='checkbox' checked className='mx-2'/>
             </div>
         </div>
         
         <div className='row offset-1 mt-4 '>
             <div className='col-md-12 d-flex' >
                 <div className='col-md-3'>
-                    <button className='btn btn-primary' text={'Submit'} onClick={handleClick} >Save Changes</button>
+                    <button className={`btn btn-primary ${isLoading?'disabled':''}`} onClick={handleClick} >
+					Save Changes
+					</button>
                 </div>
+				{isLoading? <Loader />:''}
             </div>
         </div>
         </form>

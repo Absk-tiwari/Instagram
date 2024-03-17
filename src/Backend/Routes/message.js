@@ -41,7 +41,7 @@ router.post('/', fetchuser, async(req, res) =>{
                     { connectionID:one},
                     { connectionID:two}
                   ]
-                }).select('content read from at -_id');
+                }).select('-_id');
                 let lastInd = data.length -1
                 let lastMessage = data[lastInd].content
                 let lastMessageFrom = data[lastInd].from

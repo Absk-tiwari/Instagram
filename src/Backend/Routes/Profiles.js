@@ -6,7 +6,8 @@ const Followers =require('../Models/Followers');
 const router = express.Router();
 const fetchuser= require('../Middlewares/LoggedIn');
 const upload = require('../Middlewares/multer');
-const uploadOnCloudnary = require('../utils/cloudinary')
+const uploadOnCloudnary = require('../utils/cloudinary');
+const Saved = require("../Models/Saved");
 let error = { status : false, message:'Something went wrong!' }
 let output = { status : true }
 
@@ -17,19 +18,24 @@ router.get('/test', async(req,res)=>{
 
 router.post('/update',[ upload.single('image'), fetchuser], async(req,res)=>{
     try {
-		if(!req.file) res.json(error)
-		const uploaded = await uploadOnCloudnary(req.file.path)
-        const update = {
-            $set: {
+		let updateSet
+		if(req.file) {
+			const uploaded = await uploadOnCloudnary(req.file.path)
+			updateSet = {
                 profile:uploaded.url,
                 bio : req.body.bio
-            },
+            }
+		}else{
+			updateSet = {
+                bio : req.body.bio
+            }
+		}
+        const update = {
+            $set: updateSet
         };
-		console.log(update)
         let updated = await User.updateOne({_id:req.body.id},update)
-        if(updated){ 
-            let user = await User.findById(req.body.id)
-            return res.json(user)
+        if(updated){  
+            return res.json(updated)
         }
         return res.json(error)
     } catch (err) {
@@ -98,7 +104,7 @@ router.post('/block', fetchuser, async (req,res) => {
 router.post('/users',fetchuser,async(req,res)=>{
     try{
         let users = req.body.users
-        let fetchedUsers = await User.find({username:{ $in: users } })
+        let fetchedUsers = await User.find({username:{ $in: users } }).select('profile username name active')
         return res.json(fetchedUsers);
     }catch(e){
         return res.json({...error,message:e.message})
@@ -122,6 +128,10 @@ router.post('/search',fetchuser,async(req,res)=>{
     }
 })
 
+router.get('/test', fetchuser, async(req,res)=>{
+	let fetched = await Saved.findOne({username:'deepak.tiwari'}).populate('posts')``
+	return res.json(fetched)
+})
 router.get('/getProfiles',fetchuser,async(req,res)=>{
     try{ 
 		let thisUser = await User.findOne({_id:req.body.id}) 

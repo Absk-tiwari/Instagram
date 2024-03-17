@@ -44,13 +44,13 @@ function SidebarComponent() {
   const createPost = () => {
 
     let fileInput = document.getElementById("create")
-    if (fileInput.files.length > 0) {
-      var selectedFile = fileInput.files[0];
+    if (fileInput?.files?.length) {
+      var selectedFile = fileInput.files[0]
       dispatch(setImageURL(selectedFile))  
-      setTriggered(!formtriggered);
+      setTriggered(!formtriggered)
       navigator('/createPost')
     } else {
-      console.log('No file selected.');
+      console.log('No file selected.')
     }
   }
   const submit = () => document.getElementById("create").click();
@@ -70,9 +70,11 @@ function SidebarComponent() {
     let tgetElem = document.getElementById(username)
     tgetElem.click()
     setTerm('')
+	let a = search 
     if(!search.includes(username)){
-      localStorage.setItem("searched", JSON.stringify([...search, username]));
-      setSearch([...search, username])
+      a.unshift(username)
+      localStorage.setItem("searched", JSON.stringify(a));
+      setSearch(a)
     }
     document.querySelector(".close").click();
   }
@@ -80,7 +82,7 @@ function SidebarComponent() {
     setProgress(100) 
     let elem = e.target;
 	let target=elem.dataset.refer
-	console.log(target)
+ 
     if (target) {
 		if(!['/notifications','/search','#create'].includes(target)){
 			document.querySelector(`a[href="${target}"]`).click()
@@ -100,6 +102,7 @@ function SidebarComponent() {
       localStorage.setItem("searched", JSON.stringify(search));
     } else {
       localStorage.setItem("searched", '');
+	  setSearch([])
     }
     setTriggered(!formtriggered);
   };

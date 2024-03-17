@@ -47,7 +47,7 @@ const userSchema= new mongoose.Schema({
         default : Date.now
     },
     active : {
-        type : String,
+        type : Date,
         default : null
     },
     deleted:{

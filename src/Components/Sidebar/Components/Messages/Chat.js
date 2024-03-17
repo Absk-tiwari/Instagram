@@ -4,7 +4,8 @@ import {socket} from '../../../../socket'
 import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 import ContextMenu from '../../../StateComponents/ContextMenu';
 import headers from '../../../../APIs/Headers';
-import {randomStr} from '../../../../helpers'
+import {howLong, randomStr} from '../../../../helpers'
+import { Link } from 'react-router-dom';
 
 function Chat(props) {
   const {me,username,launch,update,till,changeMsg,details} = props    
@@ -17,7 +18,8 @@ function Chat(props) {
   const [contextMenu, setContext] = useState({ isVisible: false, x: 0,y: 0,items: []})
   const box = useRef(null) // its child has all you need
   const file = useRef(null) // its child has all you need
-
+  const [theme,setTheme] = useState('')
+  const [chosen, choose] = useState('')
   const unsend = (from, _id) => {   // handle un-sending message
     fetch('http://localhost:1901/api/messages/unsend',{
       method:'POST',
@@ -115,7 +117,7 @@ function Chat(props) {
 	 img.id = createdID
 	 let cstring = me+'&'+username
 	 let data = {from:me,to:username,content:src, cID:cstring,putAt:createdID,changeMsg:me,replaceMsg:msg}
-	 console.log(data);
+	 
 	 let added = till 
 	 added[username+'_last'] = 'Photo'
 	 added[username+'_seen'] = ' sent just now'
@@ -180,7 +182,6 @@ function Chat(props) {
       let added = till
       added[username] = data.content
       added[username+'_seen'] = ' just now'
-	  console.log(added)
       changeMsg(added)
     }
     socket.on('receive', receive)  // handle 
@@ -225,32 +226,65 @@ function Chat(props) {
     }
   },[username,launch,me])
 
+  const checkTheme = () => {
+	setTheme(chosen)
+  }
 
   return (
       <>
       <ContextMenu {...contextMenu} />
        {(
         <>
-        <div className='container-fluid' style={{margin:0,padding:0,position:''}}>
+        <div className={`container-fluid ${theme}`} style={{margin:0,padding:0,position:'',height:`100vh`}}>
             <section className='header' style={{backgroundColor:'#e9ecef'}}>
                 <div className='hstack'>
                     <div className='col-9 hstack'>
                         <div className='img-container mx-5 col-1'>
-                            <img src={details && (details[0].profile??img)} style={{height:'63px',width:'63px'}} className='rounded-circle' alt={username} />
+                            <img src={details && (details[0].profile??img)} style={{height:'63px',width:'63px'}} className='pfpicture' alt={username} />
                         </div>
                         <div className='col-10' style={{paddingTop:'15px'}}>
                             <h3>{username}</h3>
-                            <p>{props.name}</p>
+							{details[0].active?
+							<p> Active {details.onlines.includes(username)? 'now' 
+							:`${howLong(details[0].active)} ago`}</p>
+							: <p>{username}</p>
+							}
                         </div>
                     </div>
-                    <div className='col-3'>
+                    <div className='col-3 rel dropdown'>
                         <span className='fa fa-phone iconStyle' title='call' />
                         <span className='fa fa-video-camera iconStyle' title='video call'/> 
-                        <span className='fa fa-ellipsis-v iconStyle' title='options'/> 
+                        <span className='fa fa-ellipsis-v iconStyle dropdown' data-bs-toggle={`dropdown`} title='options'/> 
+						<ul className={`dropdown-menu`}>
+							<h5 className={'mx-4'} > Wallpaper </h5>
+							<li>
+								<span className={`dropdown-item px-4`}
+								 onMouseEnter={()=>setTheme('morning')} 
+								 onMouseLeave={checkTheme}
+								 onClick={()=>choose('morning')} >
+									Morning 
+								</span>
+							</li>
+							<li>
+								<span className={`dropdown-item px-4`}
+									onMouseEnter={()=>setTheme('evening')} 
+									onMouseLeave={checkTheme}
+									onClick={()=>choose('evening')} >
+									Evening
+								</span>
+							</li>
+							<li>
+								<span className={`dropdown-item px-4`} onMouseEnter={()=>setTheme('')} 
+									onMouseLeave={checkTheme}
+									onClick={()=>choose('')} >
+									None 
+								</span>
+							</li>
+ 						</ul>
                     </div>
                 </div>
             </section>
-            <section className='body' style={{height:'70vh'}} ref={box} >
+            <section className={`body`} style={{height:'70vh'}} ref={box} >
               {!hasmsg && 
                 (<div className='spinner-container'>
                     <div style={{marginTop:'30vh', height:'100px'}}>

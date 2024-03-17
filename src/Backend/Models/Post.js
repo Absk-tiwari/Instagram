@@ -36,7 +36,12 @@ const PostSchema = new mongoose.Schema({
     deleted : {
         type : Boolean,
         default:false
-    }
+    },
+	saves:[{
+		type :mongoose.Schema.Types.ObjectId, 
+		ref:'save',
+		default:[]
+	}]
 });
 const Post= mongoose.model('Post', PostSchema);
 

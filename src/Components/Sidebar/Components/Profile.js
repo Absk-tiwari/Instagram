@@ -104,6 +104,11 @@ const Profile = () => {
         }
       })
      
+	  fetch('http://localhost:1901/api/profile/test',{
+		headers:headers()
+	  }).then(r=>r.json())
+	  .then(da=>console.log(da))
+	  
   },[react])
   return (
     <>

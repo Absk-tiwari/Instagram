@@ -98,12 +98,15 @@ const Messages = () => {
 			let oggyHas = og.dataset.garbage
 			if(oggyHas){
 				let users = JSON.parse(oggyHas)
+				console.log(og.innerHTML,users)
 				let exists = users.indexOf(data.from) 
 				if(exists < 0){
-					added= JSON.parse(oggy) + 1
+					added= parseInt(oggy) + 1
 				}else{
 					added=oggy
 				}
+			}else{
+				added=1
 			}
 		}else{
 			added = 1
@@ -121,9 +124,8 @@ const Messages = () => {
       let texts = await getChats(user.username)
       return texts  
     }
-    let resp = init()
-    resp.then(res=>{  
-      if(res){
+    init().then(res=>{  
+      if(res){ console.log(res)
         setChats(res)
         for(let i of res){
           let key = i.username
@@ -208,10 +210,10 @@ const Messages = () => {
           </div>
           <div id="user-row-container"> 
           {totalChats && totalChats.map((chatuser,index)=>{
-            let active = (onlines && onlines.length) ? onlines.includes(chatuser.username) : false;
+            let active = onlines?.length ? onlines.includes(chatuser.username) : false;
             return (
-            <div key={index} className={`row mt-3 openchat`} id={chatuser._id} style={{cursor:'pointer'}} data-detail={JSON.stringify(chatuser)} data-s={chatuser.from && chatuser.from!==user.username} onContextMenu={onContext} onClick={openChat} data-pick={chatuser._id}>
-              <div className="col-sm-2" style={{position:"relative"}} onClick={openChat}>
+            <div key={index} className={`row mt-3 openchat cpo`} id={chatuser._id} data-detail={JSON.stringify(chatuser)} data-s={chatuser.from && chatuser.from!==user.username} onContextMenu={onContext} onClick={openChat} data-pick={chatuser._id}>
+              <div className="col-sm-2 rel" onClick={openChat}>
                   <img
                   src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt="" onClick={openChat} data-pick={chatuser._id}/>
                   <h2 className={active?'online':'d-none'} onClick={openChat} data-pick={chatuser._id}>.</h2>
@@ -247,7 +249,7 @@ const Messages = () => {
                 Send message
               </button>
             </div>
-          </div> :  <Chat me={user.username} userImage={selectedUser.image} username={selectedUser.username} name={selectedUser.name} details={userDetail} launch={launch} till={dump} changeMsg={putMessage} update={changeParent} />
+          </div> :  <Chat me={user.username} userImage={selectedUser.image} username={selectedUser.username} name={selectedUser.name} details={{...userDetail,onlines}} launch={launch} till={dump} changeMsg={putMessage} update={changeParent} />
          }
         </div>
       </div>

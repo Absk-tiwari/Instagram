@@ -112,13 +112,11 @@ const PostFooter = (props) => {
     fetch(`http://localhost:1901/api/post/comment/delete/${_id}`,{
       method:'DELETE',
       headers:headers()
-    }).then(res=>{
-      return res.json()
-    }).then(resp=>{
+    }).then(res=>res.json())
+	.then(resp=>{
       if(resp.status){
-        let temp = comments
-        temp = temp.filter(item=>item._id!==_id)
-        put(temp) 
+        let temp = comments 
+        put(temp.filter(item=>item._id!==_id)) 
       }
     });
   }
@@ -175,11 +173,11 @@ const PostFooter = (props) => {
               22.6c.1.6.6 1 1.2 1.1h.2c.5 0 1-.3 1.3-.7l23.2-39c.4-.4.4-1 .1-1.5zM5.2 6.1h35.5L18 18.7 5.2 6.1zm18.7 33.6l-4.4-18.4L42.4 8.6 23.9 39.7z" /> 
           </svg> 
         </div>
-        <div className="col-sm-8"></div>
-        { alt.details && <div className="col-sm-1">
-          <i className={`fa fa-bookmark${save ? '' : '-o'}`} title={save ? "Unsave" : "Save"}
+        <div className="col-sm-7"></div>
+        <div className="col-sm-2">
+          <i className={`fa${save ? '' : 'r'} fa-bookmark`} title={save ? "Unsave" : "Save"}
             onClick={() => savePost(!save)} style={{ fontSize: "24px" }}/>
-        </div>}
+        </div>
       </div>
 
       {likes ? (<p className="d-flex mt-2">{likes===1? likes+' like': likes+' likes'}</p>) :''}
@@ -191,7 +189,7 @@ const PostFooter = (props) => {
           &nbsp;<p>{post.caption??' It is what it is.'} &#128516;</p>
         </div>
         { c && <div className="col-md-12">
-          <span className="text-secondary" style={{cursor:'pointer'}} onClick={getComments}>
+          <span className="text-secondary cpo" onClick={getComments}>
             View all comments
           </span>
         </div>}

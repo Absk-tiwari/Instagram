@@ -7,6 +7,9 @@ body {
   padding: 0;
   position: relative;
 }
+h3{
+	font-family: sans-serif;
+}
 @media screen and (max-width:1000px) {
   html{
     position: relative;
@@ -198,11 +201,13 @@ img {
 }
 .followingbtn {
   background-color:#e4e9ed!important;
-  color:black
+  color:black;
+  font-weight: 500!important;
 }
 .followbtn{
 	background-color: #0d6efd!important;
-	color:white!important
+	color:white!important;
+	font-weight: 500!important;
 }
 
 .postContent {
@@ -341,8 +346,7 @@ html {
 i {
   cursor: pointer;
 }
-.dropdown-menu {
-  inset: auto auto 0px 0px !important;
+.dropdown-menu { 
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   width: 200px !important;
 }
@@ -525,8 +529,8 @@ i {
 }
 
 .spinner {
-  border : 10px solid #f3f3f3;
-  border-top: 10px solid #bcbbbb;
+  border : 5px solid #f3f3f3;
+  border-top: 5px solid #bcbbbb;
   border-radius: 50%;
   animation: spinner 1.5s linear infinite; 
 }
@@ -601,7 +605,7 @@ svg{
 }
 .otherDiv{
   display: block;
-  height: 35px; 
+  height: auto; 
   width: auto; 
   float: left;
   padding-top: 3px; 
@@ -818,7 +822,7 @@ li>span{
   width:20px;
   object-fit: cover;
   border-radius: 100%;
-  margin-bottom: 12px;
+  margin-bottom: auto;
   margin-right: 5px;
 }
 #msg-badge{
@@ -891,4 +895,10 @@ li>span{
 }
 .blue{
 	background-color: blue;
+}
+.evening{
+	background-image: linear-gradient(0deg, lightpink, darkcyan);
+}
+.morning{
+	background-image: linear-gradient(0deg, transparent, lightblue);
 }

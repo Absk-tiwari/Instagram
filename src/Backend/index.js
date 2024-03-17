@@ -7,6 +7,7 @@ const Message = require("./Models/Message");
 const User = require("./Models/User");
 const Notification = require("./Models/Notification");
 const Followers = require('./Models/Followers');
+const { updateLastActive } = require('./helper');
 connection();
 const app = express();
 app.use(cors());
@@ -29,6 +30,7 @@ const server = app.listen(port);
 const socket = io(server, { cors: "http://localhost:3306" });
 
 let users = new Map();
+let disconnecting = []
 socket.use((req, next) => {
   const handshakeData = req.request;
   const username = handshakeData._query.username;
@@ -161,8 +163,13 @@ socket.on("connection", conn => {
     }
   });
 
-  conn.on("disconnect", () => {
-    users.delete(socket.username);
+  conn.on("disconnect", async() => {
+	 
+	disconnecting.push(socket.username)
+	await updateLastActive(socket.username)
+ 
+    users.delete(socket.username)
+	console.log(disconnecting)
   });
-  socket.on("reconnect", attemptNumber => {});
+  socket.on("reconnect", () => {})
 });

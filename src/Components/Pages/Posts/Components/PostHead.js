@@ -30,7 +30,12 @@ const PostHead = (props) => {
 	console.log('block user',post)
   }
   const save =()=> {
-	console.log('save post',post)
+	fetch('http://localhost:1901/api/post/save',{
+		method:'POST',
+		headers:headers(),
+		body:JSON.stringify({post_id:post._id})
+	}).then(r=>r.json)
+	.then(data=>console.log(data))
   }
   const rep =()=> {
 	console.log('report post',post)

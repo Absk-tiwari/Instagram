@@ -10,6 +10,7 @@ const Followers = require("../Models/Followers");
 // const upload = multer({dest:'./../tmp/uploads'})
 const uploadOnCloudnary = require("./../utils/cloudinary");
 const Notification = require("../Models/Notification");
+const Saved = require("../Models/Saved");
 let error = { status: false, message: "Something went wrong!" };
 let output = { status: true };
 
@@ -73,6 +74,19 @@ router.post("/create", [ upload.single('post'),fetchuser] , async (req, res) => 
   }
 });
 
+router.post('/save',fetchuser, async(req,res)=>{
+	try{
+	let user = await User.findOne({_id:req.body.id})
+	let saved = await Saved.create({username:user.username, post_id:req.body.post_id})
+	if(saved){
+		let updated= await Post.updateOne({_id:req.body.post_id},{$set:{saves:saved._id}})
+		if(updated) return res.json(output) 
+	}
+	return res.json(error)
+	}catch(error){
+		return res.json({...error,message:error.message})
+	}
+})
 router.delete("/delete/:id", async (req, res) => {
   try {
 	const deleted = await Post.deleteOne({_id:req.params.id})
