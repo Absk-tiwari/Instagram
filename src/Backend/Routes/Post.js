@@ -27,9 +27,9 @@ router.post("/", fetchuser, async (req, res) => {
 
 		let found = await Followers.find({of:post.username,username:thisUser.username})
 		if(found.length){ 
-			final.push({...post._doc, shouldFollow:false }) 
+			final.push({...post._doc, shouldFollow:false , verified:pfp.verified }) 
 		}else{
-			final.push({...post._doc, shouldFollow:true }) 
+			final.push({...post._doc, shouldFollow:true , verified:pfp.verified }) 
 		}
 	}
     return res.json(final);
