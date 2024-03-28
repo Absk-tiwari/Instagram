@@ -255,32 +255,48 @@ function Chat(props) {
                         <span className='fa fa-phone iconStyle' title='call' />
                         <span className='fa fa-video-camera iconStyle' title='video call'/> 
                         <span className='fa fa-ellipsis-v iconStyle dropdown' data-bs-toggle={`dropdown`} title='options'/> 
-						<ul className={`dropdown-menu`}>
-							<h5 className={'mx-4'} > Wallpaper </h5>
-							<li>
-								<span className={`dropdown-item px-4`}
-								 onMouseEnter={()=>setTheme('morning')} 
-								 onMouseLeave={checkTheme}
-								 onClick={()=>choose('morning')} >
-									Morning 
-								</span>
-							</li>
-							<li>
-								<span className={`dropdown-item px-4`}
-									onMouseEnter={()=>setTheme('evening')} 
-									onMouseLeave={checkTheme}
-									onClick={()=>choose('evening')} >
-									Evening
-								</span>
-							</li>
-							<li>
-								<span className={`dropdown-item px-4`} onMouseEnter={()=>setTheme('')} 
-									onMouseLeave={checkTheme}
-									onClick={()=>choose('')} >
-									None 
-								</span>
-							</li>
- 						</ul>
+                        <ul className={`dropdown-menu`}>
+                          <h5 className={'mx-4'} > Wallpaper </h5>
+                          <li>
+                            <span className={`dropdown-item px-4`}
+                            onMouseEnter={()=>setTheme('morning')} 
+                            onMouseLeave={checkTheme}
+                            onClick={()=>choose('morning')} >
+                              Morning 
+                            </span>
+                          </li>
+                          <li>
+                            <span className={`dropdown-item px-4`}
+                              onMouseEnter={()=>setTheme('evening')} 
+                              onMouseLeave={checkTheme}
+                              onClick={()=>choose('evening')} >
+                              Evening
+                            </span>
+                          </li>
+                          <li>
+                            <span className={`dropdown-item px-4`}
+                              onMouseEnter={()=>setTheme('dust')} 
+                              onMouseLeave={checkTheme}
+                              onClick={()=>choose('dust')} >
+                              Dust
+                            </span>
+                          </li>
+                          <li>
+                            <span className={`dropdown-item px-4`}
+                              onMouseEnter={()=>setTheme('dark')} 
+                              onMouseLeave={checkTheme}
+                              onClick={()=>choose('dark')} >
+                              Dark
+                            </span>
+                          </li>
+                          <li>
+                            <span className={`dropdown-item px-4`} onMouseEnter={()=>setTheme('')} 
+                              onMouseLeave={checkTheme}
+                              onClick={()=>choose('')} >
+                              None 
+                            </span>
+                          </li>
+                        </ul>
                     </div>
                 </div>
             </section>

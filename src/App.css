@@ -890,7 +890,7 @@ li>span{
 	clear: both;
 	float: right;
 	margin-right: 30px;
-    margin-top: -20px;
+  margin-top: 0px;
 	color: #797979;
 }
 .blue{
@@ -901,4 +901,10 @@ li>span{
 }
 .morning{
 	background-image: linear-gradient(0deg, transparent, lightblue);
+}
+.dust{
+  background-image: linear-gradient(0deg, #efeeee, black);
+}
+.dark{
+  background-color: #3a3838;
 }

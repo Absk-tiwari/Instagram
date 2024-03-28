@@ -4,6 +4,7 @@ import pfp from '../../../../assets/icons/profile.png'
 import Button from "../../../StateComponents/Button";
 import {howLong} from  '../../../../helpers'
 import headers from '../../../../APIs/Headers';
+import verified from '../../../../assets/icons/verified.png'  
 const PostHead = (props) => { 
   let {post,updatePosts,totalPosts} = props
   let me = JSON.parse(localStorage.getItem('userLogin'))
@@ -51,7 +52,11 @@ const PostHead = (props) => {
         <Link className={`text-decoration-none text-dark fw-bold linkToProfile`} id="link" to={`/profile/${post.username}`}>
            {post.username}
         </Link>
-        <small className="text-secondary mx-2">{howLong(new Date(post.created_at))}</small> <br/>
+        {post.username==='absk.tiwari' || post.verified ?
+           <img height={20} width={20} src={verified} className={`mx-1`} alt={''}/> 
+          :'' 
+        }
+        <small className="text-secondary mx-2">{ howLong(new Date(post.created_at)) }</small> <br/>
         <small className="mb-2">{post.location}</small>
       </div>
 	  <div className="col-5">
