@@ -166,18 +166,19 @@ const PostFooter = (props) => {
              fillRule="evenodd"/>  
            </svg>
         </div>}
-        <div className="col-sm-1">
+        {c && (<><div className="col-sm-1">
           <svg aria-label="Share Post" className="_8-yf5 " color="#262626" fill="#262626" 
           height="22" role="img" viewBox="0 0 48 48" width="24"> 
             <path d="M47.8 3.8c-.3-.5-.8-.8-1.3-.8h-45C.9 3.1.3 3.5.1 4S0 5.2.4 5.7l15.9 15.6 5.5  
               22.6c.1.6.6 1 1.2 1.1h.2c.5 0 1-.3 1.3-.7l23.2-39c.4-.4.4-1 .1-1.5zM5.2 6.1h35.5L18 18.7 5.2 6.1zm18.7 33.6l-4.4-18.4L42.4 8.6 23.9 39.7z" /> 
           </svg> 
-        </div>
-        <div className="col-sm-7"></div>
+        </div> 
+        <div className="col-sm-7"/>
         <div className="col-sm-2">
           <i className={`fa${save ? '' : 'r'} fa-bookmark`} title={save ? "Unsave" : "Save"}
             onClick={() => savePost(!save)} style={{ fontSize: "24px" }}/>
-        </div>
+        </div></>)
+		}
       </div>
 
       {likes ? (<p className="d-flex mt-2">{likes===1? likes+' like': likes+' likes'}</p>) :''}

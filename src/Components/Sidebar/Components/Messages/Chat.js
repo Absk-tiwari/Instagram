@@ -251,7 +251,7 @@ function Chat(props) {
 							}
                         </div>
                     </div>
-                    <div className='col-3 rel dropdown'>
+                    <div className='col-3 rel dropdown d-flex'>
                         <span className='fa fa-phone iconStyle' title='call' />
                         <span className='fa fa-video-camera iconStyle' title='video call'/> 
                         <span className='fa fa-ellipsis-v iconStyle dropdown' data-bs-toggle={`dropdown`} title='options'/> 

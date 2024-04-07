@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from "react";
 import obito from "../../../assets/icons/profile.png";
+import verified from '../../../assets/icons/verified.png'
 import { Link, useLocation } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
@@ -126,8 +127,10 @@ const Profile = () => {
         <div className="col-md-8">
 
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-6 d-flex">
               <h4>{user.username??'Instagram User'}</h4>
+			  {user.username==='absk.tiwari' || user.verified ? 
+			  	<img height={20} width={20} src={verified} className={`mx-1`} alt={''}/> :''}
             </div>
             {user && me.username===user.username?
             (<div className="col-md-6">

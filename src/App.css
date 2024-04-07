@@ -556,7 +556,7 @@ i {
 .account{
   position: absolute;
   top:82vh;
-  left:5vw
+  left:3vw
 }
 svg{
   cursor: pointer;
@@ -837,9 +837,10 @@ li>span{
 	width: 14px;
 }
 .iconStyle{
-    font-size:25px;
-    margin-left:40px;
-    cursor:pointer
+    font-size:22px;
+    /* margin-left:15px; */
+    cursor:pointer;
+	margin-inline: auto;
 }
 .style{
     height: 15%;
@@ -907,4 +908,20 @@ li>span{
 }
 .dark{
   background-color: #3a3838;
+}
+.fa-ellipsis-h{
+	position:relative;
+	right:12%;
+	top:10px
+}
+.fa-bookmark{
+	position: absolute;
+	left: 57%;
+}
+video{
+	width: inherit;
+}
+.uname{  
+	margin-top:10px; 
+	margin-left:6px;
 }

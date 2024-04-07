@@ -22,9 +22,9 @@ const Suggestions = () => {
         </div>
         <span id='sug'> Suggested for you </span>
         {
-          profiles.length && profiles.map((profile, index )=>{
+          profiles.length ? profiles.map((profile, index )=>{
             return <ProfileRow  key={index} profile={profile}/>
-          })
+          }) :''
          }
       </div> 
    </>
