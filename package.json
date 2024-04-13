@@ -26,7 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-	"install": "cd ./Backend && npm i && cd ../src && npm i",
+	"install": "cd src/Backend && npm i",
 	"render-build": "npm install && npm run build"
   },
   "eslintConfig": {
