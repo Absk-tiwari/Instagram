@@ -25,7 +25,9 @@
     "start": "set PORT=3306 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+	"install": "cd ./Backend && npm i && cd ../src && npm i",
+	"render-build": "npm install && npm run build"
   },
   "eslintConfig": {
     "extends": [
