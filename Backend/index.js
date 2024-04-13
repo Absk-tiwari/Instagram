@@ -11,13 +11,11 @@ const { updateLastActive } = require('./helper');
 connection();
 const app = express();
 app.use(cors({
-	origin:["https://instagram-dun-eta.vercel.app/"],
+	origin:["https://instagram-dun-eta.vercel.app"],
 	methods:["GET","POST"],
 	credentials:true
 }));
 const port = 1901;
-
-//io.on('connection' , socket=>console.log(socket.id))
 
 app.use(express.json());
 app.use("/api/auth", require("./Routes/Auth"));

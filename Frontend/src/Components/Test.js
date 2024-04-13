@@ -4,7 +4,7 @@ function Test() {
    const [photos, set] =  useState([])
 
    useEffect(()=>{
-    fetch('http://https://instagram-api-one.vercel.app//api/profile/test').then(res=>{
+    fetch('https://instagram-api-one.vercel.app//api/profile/test').then(res=>{
         return res.json()
     }).then(data=>{
         set(data)

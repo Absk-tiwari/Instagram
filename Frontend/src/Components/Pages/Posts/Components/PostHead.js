@@ -15,7 +15,7 @@ const PostHead = (props) => {
   useEffect(()=>{},[])
 
   const del =()=> {
-	fetch(`http://https://instagram-api-one.vercel.app//api/post/delete/${post._id}`,{
+	fetch(`https://instagram-api-one.vercel.app/api/post/delete/${post._id}`,{
 		headers:headers(),
 		method:'DELETE'
 	})
@@ -31,7 +31,7 @@ const PostHead = (props) => {
 	console.log('block user',post)
   }
   const save =()=> {
-	fetch('http://https://instagram-api-one.vercel.app//api/post/save',{
+	fetch('https://instagram-api-one.vercel.app//api/post/save',{
 		method:'POST',
 		headers:headers(),
 		body:JSON.stringify({post_id:post._id})

@@ -6,7 +6,7 @@ import headers from "../../APIs/Headers";
 const PostState = (props) => {
     
     const createPost = async(obj) => {
-      let resp = await fetch(`http://https://instagram-api-one.vercel.app//api/post/create`,{
+      let resp = await fetch(`https://instagram-api-one.vercel.app/api/post/create`,{
         method:'POST',
         headers:headers(),
         body:JSON.stringify(obj)

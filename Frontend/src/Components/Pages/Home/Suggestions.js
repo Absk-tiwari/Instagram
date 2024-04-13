@@ -7,7 +7,7 @@ const Suggestions = () => {
   const [profiles, setProfiles] = useState([])
   useEffect(()=>{
 
-	fetch(`http://https://instagram-api-one.vercel.app//api/profile/getProfiles`,{
+	fetch(`https://instagram-api-one.vercel.app/api/profile/getProfiles`,{
 		headers:headers()
 	}).then(res=>res.json()).then(resp=>{
 		setProfiles(resp.profiles)

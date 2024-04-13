@@ -20,7 +20,7 @@ function Chat(props) {
   const [theme,setTheme] = useState('')
   const [chosen, choose] = useState('')
   const unsend = (from, _id) => {   // handle un-sending message
-    fetch('http://https://instagram-api-one.vercel.app//api/messages/unsend',{
+    fetch('https://instagram-api-one.vercel.app/api/messages/unsend',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({_id,of:from})
@@ -34,7 +34,7 @@ function Chat(props) {
   }
 
   const remove = (me, _id) => {   // handle delete message
-    fetch('http://https://instagram-api-one.vercel.app//api/messages/delete',{
+    fetch('https://instagram-api-one.vercel.app//api/messages/delete',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({me,_id,username})
@@ -185,7 +185,7 @@ function Chat(props) {
     }
     socket.on('receive', receive)  // handle 
  
-    fetch('http://https://instagram-api-one.vercel.app//api/messages/of',{
+    fetch('https://instagram-api-one.vercel.app//api/messages/of',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({cID:me+'&'+username})

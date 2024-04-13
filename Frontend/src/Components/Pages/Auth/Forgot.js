@@ -8,7 +8,7 @@ function Forgot() {
   const [message, setMessage] = useState('')
   const [sent, setStage] = useState(false)
   const [progress, setProgress] = useState(0) 
-  const host = 'http://https://instagram-api-one.vercel.app/';
+  const host = 'https://instagram-api-one.vercel.app';
   const [input, setInput] = useState('')
 
   const sendMail = async event => {
