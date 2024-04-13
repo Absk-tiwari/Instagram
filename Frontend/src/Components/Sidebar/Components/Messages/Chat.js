@@ -5,7 +5,6 @@ import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 import ContextMenu from '../../../StateComponents/ContextMenu';
 import headers from '../../../../APIs/Headers';
 import {howLong, randomStr} from '../../../../helpers'
-import { Link } from 'react-router-dom';
 
 function Chat(props) {
   const {me,username,launch,update,till,changeMsg,details} = props    

@@ -28,10 +28,7 @@ import Reset from "./Components/Pages/Auth/Reset";
 import { useEffect } from "react";
 import { socket } from "./socket";
 import headers from "./APIs/Headers";
-import { useDispatch, useSelector } from "react-redux";
 function App() {
- const dispatch = useDispatch()
- const {userInfo} = useSelector(state=>state.auth)
 // console.log(userInfo)
  useEffect(()=>{
 	if(localStorage.getItem('token')){
