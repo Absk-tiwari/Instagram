@@ -6,7 +6,8 @@ const getUserDetails = async() => {
 	try{
 		const data = await fetch(`${host}/api/auth/getuser`,{
 			method:'GET',
-			headers : headers()
+			headers : headers(),
+			mode:'no-cors'
 		});
 		const resp = await data.json()
 		return resp;

@@ -36,7 +36,8 @@ function App() {
 		socket.connect()
 		fetch(`https://instagram-api-one.vercel.app/api/messages/count/${me.username}`,{
 			method:'GET',
-			headers:headers()
+			headers:headers(),
+			mode:'no-cors'
 		}).then(res=>res.json()).then(data=>{
 			if(data.status){
 				let elem = document.getElementById('msg-badge') 

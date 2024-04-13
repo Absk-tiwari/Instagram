@@ -4,7 +4,8 @@ import headers from './APIs/Headers'
 const URL = process.env.NODE_ENV === 'production' ? undefined : 'https://instagram-api-one.vercel.app';
  const userdata = await fetch('https://instagram-api-one.vercel.app/api/auth/getuser',{
     method:'GET',
-    headers: headers()
+    headers: headers(),
+	mode:'no-cors'
 });
 
 const data = await userdata.json()
