@@ -9,7 +9,7 @@ const getUserDetails = async() => {
 			headers : headers(),
 			mode:'no-cors'
 		});
-		const resp = await data.json()
+		const resp = await data.json();
 		return resp;
 		
 	} catch (err){

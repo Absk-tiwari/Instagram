@@ -8,9 +8,9 @@ const URL = process.env.NODE_ENV === 'production' ? undefined : 'https://instagr
 	mode:'no-cors'
 });
 
-const data = await userdata.json()
-localStorage.setItem('userLogin',JSON.stringify(data))
-const username = data.username ?? ''
+const data = await userdata.json();
+localStorage.setItem('userLogin',JSON.stringify(data));
+const username = data.username ?? '';
 export const socket = io(URL, {
     maxHttpBufferSize:1e8,
     autoConnect: false,
