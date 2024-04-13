@@ -12,7 +12,7 @@ connection();
 const app = express();
 app.use(cors({
 	origin:["https://instagram-dun-eta.vercel.app"],
-	methods:['GET','POST','PUT','DELETE'],
+	methods:['GET','POST'],
 	credentials:true
 }));
 const port = 1901;
