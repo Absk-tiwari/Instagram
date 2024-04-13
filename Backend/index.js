@@ -10,11 +10,7 @@ const Followers = require('./Models/Followers');
 const { updateLastActive } = require('./helper');
 connection();
 const app = express();
-app.use(cors({
-	origin:["https://instagram-dun-eta.vercel.app"],
-	methods:["GET","POST"],
-	credentials:true
-}));
+app.use(cors());
 const port = 1901;
 
 app.use(express.json());
