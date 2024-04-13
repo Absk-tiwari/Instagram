@@ -33,7 +33,7 @@ const Messages = () => {
   const deleteChat = username => {  // handle delete chat
     if(username){
       let me = user.username
-      fetch(`http://localhost:1901/api/messages/clear`,{
+      fetch(`http://https://instagram-api-one.vercel.app//api/messages/clear`,{
 		method:'POST',
 		headers:headers(),
 		body:JSON.stringify({me,username})
@@ -180,7 +180,7 @@ const Messages = () => {
     setLoading(true)
     e.preventDefault();
  
-      fetch('http://localhost:1901/api/profile/search',{
+      fetch('http://https://instagram-api-one.vercel.app//api/profile/search',{
                 method:'POST',
                 headers:headers(),
                 body:JSON.stringify({param:searchParam})

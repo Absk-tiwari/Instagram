@@ -11,7 +11,7 @@ const Post = () => {
 		let stopRequest =false
 		const fetchData = async () => { 
 		if(!stopRequest){   // continue only if last request had a response 
-			fetch('http://localhost:1901/api/post',{
+			fetch('http://https://instagram-api-one.vercel.app//api/post',{
 			   method:'POST',
 			   headers:headers(),
 			   body:JSON.stringify({skip})

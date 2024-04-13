@@ -27,7 +27,7 @@ const Notifications = (props) => {
 	}
   }
   const remove = _id => {
-    fetch('http://localhost:1901/api/notifications/delete',{
+    fetch('http://https://instagram-api-one.vercel.app//api/notifications/delete',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({_id})
@@ -91,7 +91,7 @@ const Notifications = (props) => {
       socket.on('unnotify', remNotification)
     document.addEventListener('click',rem)
     if(ting===false){
-      fetch('http://localhost:1901/api/notifications',{
+      fetch('http://https://instagram-api-one.vercel.app//api/notifications',{
         headers:headers()
       })
 	  .then(r=> r.json())

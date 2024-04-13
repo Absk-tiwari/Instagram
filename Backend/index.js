@@ -10,7 +10,11 @@ const Followers = require('./Models/Followers');
 const { updateLastActive } = require('./helper');
 connection();
 const app = express();
-app.use(cors());
+app.use(cors({
+	origin:["https://instagram-dun-eta.vercel.app"],
+	methods:['GET','POST','PUT','DELETE'],
+	credentials:true
+}));
 const port = 1901;
 
 //io.on('connection' , socket=>console.log(socket.id))
@@ -27,7 +31,7 @@ app.use("/api/notifications", require("./Routes/notifiy"));
 app.get("/", (req, res) => res.send("Hello abhishek!"));
 
 const server = app.listen(port);
-const socket = io(server, { cors: "http://localhost:3306" });
+const socket = io(server, { cors: "https://instagram-dun-eta.vercel.app" });
 
 let users = new Map();
 let disconnecting = []

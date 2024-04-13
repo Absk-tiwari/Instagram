@@ -9,7 +9,7 @@ function Reset() {
 	let navigator = useNavigate()
 	let location = useLocation()
 	const [passwords, setPassword] = useState({pass1:'',pass2:''})
-	const host = 'http://localhost:1901';
+	const host = 'http://https://instagram-api-one.vercel.app/';
 	const [progress, setProgress] = useState(0)
 	const doneReset = event => {
 		event.preventDefault()

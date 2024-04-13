@@ -43,7 +43,7 @@ const ProfileSetting = () => {
 	let formData = new FormData()
 	formData.append('image', file)
 	formData.append('bio', fields.bio)
-	fetch('http://localhost:1901/api/profile/update',{
+	fetch('http://https://instagram-api-one.vercel.app//api/profile/update',{
 		method:'POST',
 		headers:{
 			'auth-token':localStorage.getItem('token')

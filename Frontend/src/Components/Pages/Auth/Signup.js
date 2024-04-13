@@ -9,7 +9,7 @@ const Signup = () => {
   const [progress,setProgress] = useState(0)
   const signup = async({name, email, username, password}) =>{
 	try {
-	   const json = await fetch(`http://localhost:1901/api/auth/signup`,{
+	   const json = await fetch(`http://https://instagram-api-one.vercel.app//api/auth/signup`,{
 			method : 'POST',
 			headers : headers(),
 			body : JSON.stringify({name, email, username, password})

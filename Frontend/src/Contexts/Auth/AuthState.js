@@ -3,7 +3,7 @@ import headers from "../../APIs/Headers";
 
 const AuthState=(props)=>{
   
-    const host = 'http://localhost:1901';
+    const host = 'http://https://instagram-api-one.vercel.app/';
 
     const getUserDetails = async() => {
         try{

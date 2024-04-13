@@ -43,7 +43,7 @@ const Profile = () => {
 
   const reaction =  (act,targetUsername)  => {  // update profile based on follow btn change
     let type = act ? 'follow':'unfollow'
-    fetch('http://localhost:1901/api/post/update',{
+    fetch('http://https://instagram-api-one.vercel.app//api/post/update',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({type,targetUsername})
@@ -83,7 +83,7 @@ const Profile = () => {
       term = JSON.parse(localStorage.getItem('userLogin'))
       term = term.username
     }
-      fetch('http://localhost:1901/api/profile/getuser',{
+      fetch('http://https://instagram-api-one.vercel.app//api/profile/getuser',{
         method:'POST',
         headers:headers(),
         body:JSON.stringify({username:term})
@@ -95,7 +95,7 @@ const Profile = () => {
           setUser(data.user)
           if(data.isFollowing) setReact(true)
           
-          fetch('http://localhost:1901/api/post/getPostsOf',{
+          fetch('http://https://instagram-api-one.vercel.app//api/post/getPostsOf',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({username:data.user.username})
@@ -105,7 +105,7 @@ const Profile = () => {
         }
       })
      
-	  fetch('http://localhost:1901/api/profile/test',{
+	  fetch('http://https://instagram-api-one.vercel.app//api/profile/test',{
 		headers:headers()
 	  }).then(r=>r.json())
 	  .then(da=>console.log(da))

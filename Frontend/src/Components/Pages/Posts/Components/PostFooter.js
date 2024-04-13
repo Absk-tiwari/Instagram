@@ -47,7 +47,7 @@ const PostFooter = (props) => {
   }
   const addComment = (reply=false,another=false) => {
 	let cmt = another? addAnthorComment : reply ? repliedTo : comment
-    fetch('http://localhost:1901/api/post/addComment',{
+    fetch('http://https://instagram-api-one.vercel.app//api/post/addComment',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({username:post.username,comment:cmt, postID:post._id,reply})
@@ -71,7 +71,7 @@ const PostFooter = (props) => {
   const updatePost = type => {
     type = type?'unlike':'like'
     reactPost(!like)    
-    fetch('http://localhost:1901/api/post/update',{
+    fetch('http://https://instagram-api-one.vercel.app//api/post/update',{
       method : 'POST',
       headers: headers(),
       body:JSON.stringify({ type:type,postID:post._id})
@@ -94,7 +94,7 @@ const PostFooter = (props) => {
   }
 
   const getComments = (outside=true) => {
-    fetch(`http://localhost:1901/api/post/comments/${post._id}`,{
+    fetch(`http://https://instagram-api-one.vercel.app//api/post/comments/${post._id}`,{
       method:'GET',
       headers:headers()
     }).then(res=>res.json()).then(data=>{
@@ -109,7 +109,7 @@ const PostFooter = (props) => {
   }
 
   const remove = _id => {
-    fetch(`http://localhost:1901/api/post/comment/delete/${_id}`,{
+    fetch(`http://https://instagram-api-one.vercel.app//api/post/comment/delete/${_id}`,{
       method:'DELETE',
       headers:headers()
     }).then(res=>res.json())
