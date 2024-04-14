@@ -91,7 +91,7 @@ const Notifications = (props) => {
       socket.on('unnotify', remNotification)
     document.addEventListener('click',rem)
     if(ting===false){
-      fetch('https://instagram-vquy.onrender.com//api/notifications',{
+      fetch('https://instagram-vquy.onrender.com/api/notifications',{
         headers:headers()
       })
 	  .then(r=> r.json())
