@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import headers from './APIs/Headers'
 // "undefined" means the URL will be computed from the `window.location` object
-const URL = process.env.NODE_ENV === 'production' ? undefined : 'https://instagram-vquy.onrender.com';
+const URL = 'https://instagram-vquy.onrender.com';
  const userdata = await fetch(`${URL}/api/auth/getuser`,{
     method:'GET',
     headers: headers(),

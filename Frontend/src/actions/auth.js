@@ -1,5 +1,5 @@
 import headers from "../APIs/Headers";
-const host = 'https://instagram-vquy.onrender.com';
+const host = "https://instagram-vquy.onrender.com";
 
 
 const getUserDetails = async() => {
