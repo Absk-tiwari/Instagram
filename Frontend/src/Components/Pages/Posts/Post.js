@@ -11,7 +11,7 @@ const Post = () => {
 		let stopRequest =false
 		const fetchData = async () => { 
 		if(!stopRequest){   // continue only if last request had a response 
-			fetch('https://instagram-vquy.onrender.com/api/post',{
+			fetch(process.env.REACT_APP_SERVER_URI+'/api/post',{
 			   method:'POST',
 			   headers:headers(),
 			   body:JSON.stringify({skip})

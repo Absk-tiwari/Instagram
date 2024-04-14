@@ -9,11 +9,10 @@ import headers from "../../../APIs/Headers";
 
 const Login = () => {
   const [progress, setProgress] = useState(0)
-  let navigator = useNavigate();
-  const host = 'https://instagram-vquy.onrender.com';
+  let navigator = useNavigate(); 
   const login = async({username, password}) =>{
 	try {
-		const resp =await fetch(`${host}/api/auth/login`,{
+		const resp =await fetch(`${process.env.REACT_APP_SERVER_URI}/api/auth/login`,{
 			method : 'POST',
 			headers : headers(),
 			body : JSON.stringify({username, password})

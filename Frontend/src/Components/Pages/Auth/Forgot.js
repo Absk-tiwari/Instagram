@@ -8,7 +8,7 @@ function Forgot() {
   const [message, setMessage] = useState('')
   const [sent, setStage] = useState(false)
   const [progress, setProgress] = useState(0) 
-  const host = 'https://instagram-vquy.onrender.com';
+  const host = process.env.REACT_APP_SERVER_URI || 'https://instagram-vquy.onrender.com';
   const [input, setInput] = useState('')
 
   const sendMail = async event => {

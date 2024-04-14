@@ -20,7 +20,7 @@ function Chat(props) {
   const [theme,setTheme] = useState('')
   const [chosen, choose] = useState('')
   const unsend = (from, _id) => {   // handle un-sending message
-    fetch('https://instagram-vquy.onrender.com/api/messages/unsend',{
+    fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/unsend`,{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({_id,of:from})
@@ -34,7 +34,7 @@ function Chat(props) {
   }
 
   const remove = (me, _id) => {   // handle delete message
-    fetch('https://instagram-vquy.onrender.com/api/messages/delete',{
+    fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/delete`,{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({me,_id,username})
@@ -185,7 +185,7 @@ function Chat(props) {
     }
     socket.on('receive', receive)  // handle 
  
-    fetch('https://instagram-vquy.onrender.com/api/messages/of',{
+    fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/of`,{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({cID:me+'&'+username})

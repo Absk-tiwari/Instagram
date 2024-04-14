@@ -180,7 +180,7 @@ const Messages = () => {
     setLoading(true)
     e.preventDefault();
  
-      fetch('https://instagram-vquy.onrender.com/api/profile/search',{
+      fetch(process.env.REACT_APP_SERVER_URI+'/api/profile/search',{
                 method:'POST',
                 headers:headers(),
                 body:JSON.stringify({param:searchParam})

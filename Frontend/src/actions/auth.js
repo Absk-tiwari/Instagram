@@ -1,5 +1,5 @@
 import headers from "../APIs/Headers";
-const host = process.env.REACT_APP_SERVER_URI || "https://instagram-vquy.onrender.com";
+const host = process.env.REACT_APP_LOCAL_SERVER || "https://instagram-vquy.onrender.com";
 
 
 const getUserDetails = async() => {

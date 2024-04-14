@@ -31,7 +31,7 @@ const PostHead = (props) => {
 	console.log('block user',post)
   }
   const save =()=> {
-	fetch('https://instagram-vquy.onrender.com/api/post/save',{
+	fetch(process.env.REACT_APP_SERVER_URI+'/api/post/save',{
 		method:'POST',
 		headers:headers(),
 		body:JSON.stringify({post_id:post._id})

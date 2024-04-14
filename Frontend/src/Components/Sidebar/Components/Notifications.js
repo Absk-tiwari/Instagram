@@ -27,7 +27,7 @@ const Notifications = (props) => {
 	}
   }
   const remove = _id => {
-    fetch('https://instagram-vquy.onrender.com/api/notifications/delete',{
+    fetch(process.env.REACT_APP_SERVER_URI+'/api/notifications/delete',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({_id})
@@ -91,7 +91,7 @@ const Notifications = (props) => {
       socket.on('unnotify', remNotification)
     document.addEventListener('click',rem)
     if(ting===false){
-      fetch('https://instagram-vquy.onrender.com/api/notifications',{
+      fetch(process.env.REACT_APP_SERVER_URI+'/api/notifications',{
         headers:headers()
       })
 	  .then(r=> r.json())

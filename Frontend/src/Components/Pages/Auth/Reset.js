@@ -9,12 +9,11 @@ function Reset() {
 	let navigator = useNavigate()
 	let location = useLocation()
 	const [passwords, setPassword] = useState({pass1:'',pass2:''})
-	const host = 'https://instagram-vquy.onrender.com';
 	const [progress, setProgress] = useState(0)
 	const doneReset = event => {
 		event.preventDefault()
 		const token = location.pathname.split('/')[2]
-		fetch(`${host}/api/auth/changePassword`, {
+		fetch(`${process.env.REACT_APP_SERVER_URI}/api/auth/changePassword`, {
 			method:'POST',
 			headers:headers(),
 			body:JSON.stringify({tokenedID:token, password:passwords.pass1})

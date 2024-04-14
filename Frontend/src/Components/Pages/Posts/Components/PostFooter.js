@@ -47,7 +47,7 @@ const PostFooter = (props) => {
   }
   const addComment = (reply=false,another=false) => {
 	let cmt = another? addAnthorComment : reply ? repliedTo : comment
-    fetch('https://instagram-vquy.onrender.com/api/post/addComment',{
+    fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/addComment`,{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({username:post.username,comment:cmt, postID:post._id,reply})
@@ -71,7 +71,7 @@ const PostFooter = (props) => {
   const updatePost = type => {
     type = type?'unlike':'like'
     reactPost(!like)    
-    fetch('https://instagram-vquy.onrender.com/api/post/update',{
+    fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/update`,{
       method : 'POST',
       headers: headers(),
       body:JSON.stringify({ type:type,postID:post._id})

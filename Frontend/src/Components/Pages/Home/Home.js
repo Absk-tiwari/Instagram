@@ -6,6 +6,7 @@ import Post from "../Posts/Post";
 import Respond from '../../../respond'
 
 function Home() {
+	console.log(process.env)
  
   useEffect(()=>{
 	// Respond();

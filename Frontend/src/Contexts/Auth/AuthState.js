@@ -3,11 +3,9 @@ import headers from "../../APIs/Headers";
 
 const AuthState=(props)=>{
   
-    const host = 'https://instagram-vquy.onrender.com';
-
     const getUserDetails = async() => {
         try{
-            const data = await fetch(`${host}/api/auth/getuser`,{
+            const data = await fetch(`${process.env.REACT_APP_SERVER_URI}/api/auth/getuser`,{
                 method:'GET',
                 headers : headers()
             });

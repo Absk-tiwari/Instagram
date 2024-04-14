@@ -54,7 +54,7 @@ function SidebarComponent() {
     }
   }
   const submit = () => document.getElementById("create").click();
-  const markRead = () => fetch('https://instagram-vquy.onrender.com/api/notifications/read',{
+  const markRead = () => fetch(`${process.env.REACT_APP_SERVER_URI}/api/notifications/read`,{
     headers:headers()
   })
   .then(r=>r.json())
@@ -109,7 +109,7 @@ function SidebarComponent() {
 
   const searchUser = term => {
     setLoading(true)
-      fetch('https://instagram-vquy.onrender.com/api/profile/search',{
+      fetch(`${process.env.REACT_APP_SERVER_URI}/api/profile/search`,{
 			method:'POST',
 			headers:headers(),
 			body:JSON.stringify({param:term})
