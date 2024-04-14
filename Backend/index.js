@@ -10,9 +10,9 @@ const Followers = require('./Models/Followers');
 const { updateLastActive } = require('./helper');
 connection();
 const app = express();
-console.log(process.env.LOCAL_UI)
+ 
 app.use(cors({
-	origin:process.env.LOCAL_UI
+	origin:process.env.UI
 }));
 const port = process.env.PORT || 1901;
 
@@ -28,7 +28,7 @@ app.use("/api/notifications", require("./Routes/notifiy"));
 app.get("/", (req, res) => res.send("Hello abhishek!"));
 
 const server = app.listen(port);
-const socket = io(server, { cors: process.env.LOCAL_UI });
+const socket = io(server, { cors: process.env.UI });
 
 let users = new Map();
 let disconnecting = []
