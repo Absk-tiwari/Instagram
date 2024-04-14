@@ -54,7 +54,7 @@ function SidebarComponent() {
     }
   }
   const submit = () => document.getElementById("create").click();
-  const markRead = () => fetch('https://instagram-api-one.vercel.app/api/notifications/read',{
+  const markRead = () => fetch('https://instagram-vquy.onrender.com/api/notifications/read',{
     headers:headers()
   })
   .then(r=>r.json())
@@ -109,7 +109,7 @@ function SidebarComponent() {
 
   const searchUser = term => {
     setLoading(true)
-      fetch('https://instagram-api-one.vercel.app//api/profile/search',{
+      fetch('https://instagram-vquy.onrender.com//api/profile/search',{
 			method:'POST',
 			headers:headers(),
 			body:JSON.stringify({param:term})

@@ -34,7 +34,7 @@ function App() {
 	if(localStorage.getItem('token')){
 		let me= JSON.parse(localStorage.getItem('userLogin'))
 		socket.connect()
-		fetch(`https://instagram-api-one.vercel.app/api/messages/count/${me.username}`,{
+		fetch(`https://instagram-vquy.onrender.com/api/messages/count/${me.username}`,{
 			method:'GET',
 			headers:headers(),
 			mode:'no-cors'

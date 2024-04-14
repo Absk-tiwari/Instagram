@@ -10,7 +10,7 @@ import headers from "../../../APIs/Headers";
 const Login = () => {
   const [progress, setProgress] = useState(0)
   let navigator = useNavigate();
-  const host = 'https://instagram-api-one.vercel.app';
+  const host = 'https://instagram-vquy.onrender.com';
   const login = async({username, password}) =>{
 	try {
 		const resp =await fetch(`${host}/api/auth/login`,{

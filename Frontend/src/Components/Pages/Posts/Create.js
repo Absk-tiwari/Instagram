@@ -27,7 +27,7 @@ const Create = () => {
 	body.append('caption',fields.caption)
 	body.append('location',fields.location)
   
-	fetch(`https://instagram-api-one.vercel.app/api/post/create`,{
+	fetch(`https://instagram-vquy.onrender.com/api/post/create`,{
 		method:'POST',
 		headers:{
 			'auth-token':localStorage.getItem('token')

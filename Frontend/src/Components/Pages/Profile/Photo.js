@@ -20,7 +20,7 @@ const Photo = (props) => {
       if(e.target.id==='modal' || e.target.classList.contains('postImg')) setmodal(!open)
     }
 	const getComments = ()=> {
-		fetch(`https://instagram-api-one.vercel.app/api/post/comments/${post._id}`,{
+		fetch(`https://instagram-vquy.onrender.com/api/post/comments/${post._id}`,{
 			method:'GET',
 			headers:headers()
 		})
@@ -59,7 +59,7 @@ const Photo = (props) => {
 	}
 
 	const addComment = (reply=false) => {
-		fetch('https://instagram-api-one.vercel.app//api/post/addComment',{
+		fetch('https://instagram-vquy.onrender.com//api/post/addComment',{
 		  method:'POST',
 		  headers:headers(),
 		  body:JSON.stringify({username:post.username,comment, postID:post._id,reply})

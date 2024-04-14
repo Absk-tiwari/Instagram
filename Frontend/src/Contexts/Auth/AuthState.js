@@ -3,7 +3,7 @@ import headers from "../../APIs/Headers";
 
 const AuthState=(props)=>{
   
-    const host = 'https://instagram-api-one.vercel.app';
+    const host = 'https://instagram-vquy.onrender.com';
 
     const getUserDetails = async() => {
         try{

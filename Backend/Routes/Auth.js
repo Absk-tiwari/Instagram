@@ -120,7 +120,7 @@ router.post('/forgotPassword', async(req, res) =>{
 
 		mailOptions.to= req.body.email
 		mailOptions.subject= 'Reset your password'
-		mailOptions.html=`<p>Please click <a href='https://instagram-dun-eta.vercel.app/reset/${authToken}'>here</a> to verify your email.</p>`
+		mailOptions.html=`<p>Please click <a href='https://instagram-vquy.onrender.com/reset/${authToken}'>here</a> to verify your email.</p>`
 
 		transporter.sendMail(mailOptions, (err, info) => {
 
