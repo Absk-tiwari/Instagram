@@ -83,7 +83,7 @@ const Profile = () => {
       term = JSON.parse(localStorage.getItem('userLogin'))
       term = term.username
     }
-      fetch('https://instagram-vquy.onrender.com//api/profile/getuser',{
+      fetch('https://instagram-vquy.onrender.com/api/profile/getuser',{
         method:'POST',
         headers:headers(),
         body:JSON.stringify({username:term})
@@ -95,7 +95,7 @@ const Profile = () => {
           setUser(data.user)
           if(data.isFollowing) setReact(true)
           
-          fetch('https://instagram-vquy.onrender.com//api/post/getPostsOf',{
+          fetch('https://instagram-vquy.onrender.com/api/post/getPostsOf',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({username:data.user.username})
@@ -105,7 +105,7 @@ const Profile = () => {
         }
       })
      
-	  fetch('https://instagram-vquy.onrender.com//api/profile/test',{
+	  fetch('https://instagram-vquy.onrender.com/api/profile/test',{
 		headers:headers()
 	  }).then(r=>r.json())
 	  .then(da=>console.log(da))

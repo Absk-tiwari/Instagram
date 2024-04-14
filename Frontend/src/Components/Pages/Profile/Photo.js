@@ -59,7 +59,7 @@ const Photo = (props) => {
 	}
 
 	const addComment = (reply=false) => {
-		fetch('https://instagram-vquy.onrender.com//api/post/addComment',{
+		fetch('https://instagram-vquy.onrender.com/api/post/addComment',{
 		  method:'POST',
 		  headers:headers(),
 		  body:JSON.stringify({username:post.username,comment, postID:post._id,reply})

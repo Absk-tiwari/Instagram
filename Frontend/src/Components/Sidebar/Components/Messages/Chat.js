@@ -34,7 +34,7 @@ function Chat(props) {
   }
 
   const remove = (me, _id) => {   // handle delete message
-    fetch('https://instagram-vquy.onrender.com//api/messages/delete',{
+    fetch('https://instagram-vquy.onrender.com/api/messages/delete',{
       method:'POST',
       headers:headers(),
       body:JSON.stringify({me,_id,username})
@@ -185,7 +185,7 @@ function Chat(props) {
     }
     socket.on('receive', receive)  // handle 
  
-    fetch('https://instagram-vquy.onrender.com//api/messages/of',{
+    fetch('https://instagram-vquy.onrender.com/api/messages/of',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({cID:me+'&'+username})

@@ -109,7 +109,7 @@ function SidebarComponent() {
 
   const searchUser = term => {
     setLoading(true)
-      fetch('https://instagram-vquy.onrender.com//api/profile/search',{
+      fetch('https://instagram-vquy.onrender.com/api/profile/search',{
 			method:'POST',
 			headers:headers(),
 			body:JSON.stringify({param:term})

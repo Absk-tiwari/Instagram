@@ -23,7 +23,7 @@ const ProfileState = (props) => {
                 usernames.push(user1)
             }
         });
-        let users =await fetch('https://instagram-vquy.onrender.com//api/profile/users',{
+        let users =await fetch('https://instagram-vquy.onrender.com/api/profile/users',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({users:usernames})
@@ -48,7 +48,7 @@ const ProfileState = (props) => {
 
    const updateProfile = async(formData, image) => {
         formData.image = image
-        fetch('https://instagram-vquy.onrender.com//api/profile/update',{
+        fetch('https://instagram-vquy.onrender.com/api/profile/update',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify(formData)
@@ -76,7 +76,7 @@ const ProfileState = (props) => {
         };
  
         const getChatsOf = async(cID) => {
-        let res = await fetch('https://instagram-vquy.onrender.com//api/messages/of',{
+        let res = await fetch('https://instagram-vquy.onrender.com/api/messages/of',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({cID})
@@ -89,7 +89,7 @@ const ProfileState = (props) => {
 
     const searchUser = async (param)=>{
         try{
-            let resp = await fetch('https://instagram-vquy.onrender.com//api/profile/search',{
+            let resp = await fetch('https://instagram-vquy.onrender.com/api/profile/search',{
                 method:'POST',
                 headers:headers(),
                 body:JSON.stringify({param})
@@ -103,7 +103,7 @@ const ProfileState = (props) => {
     }
 
     const updateChat = async(me,username) => {
-        let resp = await fetch('https://instagram-vquy.onrender.com//api/messages/update',{
+        let resp = await fetch('https://instagram-vquy.onrender.com/api/messages/update',{
             method:'POST',
             headers:headers(),
             body:JSON.stringify({me,username})

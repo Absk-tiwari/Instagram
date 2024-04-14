@@ -4,7 +4,7 @@ function Test() {
    const [photos, set] =  useState([])
 
    useEffect(()=>{
-    fetch('https://instagram-vquy.onrender.com//api/profile/test').then(res=>{
+    fetch('https://instagram-vquy.onrender.com/api/profile/test').then(res=>{
         return res.json()
     }).then(data=>{
         set(data)
