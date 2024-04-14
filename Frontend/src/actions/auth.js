@@ -4,15 +4,18 @@ const host = "https://instagram-vquy.onrender.com";
 
 const getUserDetails = async() => {
 	try{
-		const data = await fetch(`${host}/api/auth/getuser`,{
+		let resp;
+		await fetch(`${host}/api/auth/getuser`,{
 			method:'GET',
-			headers : headers(),
-			mode:'no-cors'
-		});
-		const resp = await data.json();
+			headers : headers()
+		}).then(res=>res.json())
+		.then(data=>{
+			resp = data
+		}) 
 		return resp;
 		
 	} catch (err){
+		console.log(err);
 	}
 }
 export {getUserDetails}

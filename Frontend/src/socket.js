@@ -4,8 +4,7 @@ import headers from './APIs/Headers'
 const URL = 'https://instagram-vquy.onrender.com';
  const userdata = await fetch(`${URL}/api/auth/getuser`,{
     method:'GET',
-    headers: headers(),
-	mode:'no-cors'
+    headers: headers()
 });
 
 const data = await userdata.json();

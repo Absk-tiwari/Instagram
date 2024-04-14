@@ -36,8 +36,7 @@ function App() {
 		socket.connect()
 		fetch(`https://instagram-vquy.onrender.com/api/messages/count/${me.username}`,{
 			method:'GET',
-			headers:headers(),
-			mode:'no-cors'
+			headers:headers()
 		}).then(res=>res.json()).then(data=>{
 			if(data.status){
 				let elem = document.getElementById('msg-badge') 
