@@ -94,7 +94,7 @@ const PostFooter = (props) => {
   }
 
   const getComments = (outside=true) => {
-    fetch(`https://instagram-vquy.onrender.com/api/post/comments/${post._id}`,{
+    fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/comments/${post._id}`,{
       method:'GET',
       headers:headers()
     }).then(res=>res.json()).then(data=>{
@@ -109,7 +109,7 @@ const PostFooter = (props) => {
   }
 
   const remove = _id => {
-    fetch(`https://instagram-vquy.onrender.com/api/post/comment/delete/${_id}`,{
+    fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/comment/delete/${_id}`,{
       method:'DELETE',
       headers:headers()
     }).then(res=>res.json())

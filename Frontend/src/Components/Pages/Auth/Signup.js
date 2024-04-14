@@ -9,7 +9,7 @@ const Signup = () => {
   const [progress,setProgress] = useState(0)
   const signup = async({name, email, username, password}) =>{
 	try {
-	   const json = await fetch(`https://instagram-vquy.onrender.com/api/auth/signup`,{
+	   const json = await fetch(`${process.env.REACT_APP_SERVER_URI}/api/auth/signup`,{
 			method : 'POST',
 			headers : headers(),
 			body : JSON.stringify({name, email, username, password})

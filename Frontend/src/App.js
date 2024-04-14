@@ -29,12 +29,12 @@ import { useEffect } from "react";
 import { socket } from "./socket";
 import headers from "./APIs/Headers";
 function App() {
-// console.log(userInfo)
+                    
  useEffect(()=>{
 	if(localStorage.getItem('token')){
 		let me= JSON.parse(localStorage.getItem('userLogin'))
 		socket.connect()
-		fetch(`https://instagram-vquy.onrender.com/api/messages/count/${me.username}`,{
+		fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/count/${me.username}`,{
 			method:'GET',
 			headers:headers()
 		}).then(res=>res.json()).then(data=>{

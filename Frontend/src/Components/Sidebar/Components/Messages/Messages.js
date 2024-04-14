@@ -33,7 +33,7 @@ const Messages = () => {
   const deleteChat = username => {  // handle delete chat
     if(username){
       let me = user.username
-      fetch(`https://instagram-vquy.onrender.com/api/messages/clear`,{
+      fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/clear`,{
 		method:'POST',
 		headers:headers(),
 		body:JSON.stringify({me,username})

@@ -27,7 +27,7 @@ const Create = () => {
 	body.append('caption',fields.caption)
 	body.append('location',fields.location)
   
-	fetch(`https://instagram-vquy.onrender.com/api/post/create`,{
+	fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/create`,{
 		method:'POST',
 		headers:{
 			'auth-token':localStorage.getItem('token')

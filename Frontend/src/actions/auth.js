@@ -1,18 +1,14 @@
 import headers from "../APIs/Headers";
-const host = "https://instagram-vquy.onrender.com";
+const host = process.env.REACT_APP_SERVER_URI || "https://instagram-vquy.onrender.com";
 
 
 const getUserDetails = async() => {
 	try{
-		let resp;
-		await fetch(`${host}/api/auth/getuser`,{
+		let resp = await fetch(`${host}/api/auth/getuser`,{
 			method:'GET',
 			headers : headers()
-		}).then(res=>res.json())
-		.then(data=>{
-			resp = data
-		}) 
-		return resp;
+		})  
+		return await resp.json();
 		
 	} catch (err){
 		console.log(err);

@@ -25,7 +25,7 @@ app.use("/api/notifications", require("./Routes/notifiy"));
 app.get("/", (req, res) => res.send("Hello abhishek!"));
 
 const server = app.listen(port);
-const socket = io(server, { cors: "https://instagram-vquy.onrender.com" });
+const socket = io(server, { cors: process.env.REACT_APP_SERVER_URI });
 
 let users = new Map();
 let disconnecting = []

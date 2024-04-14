@@ -7,7 +7,7 @@ const Suggestions = () => {
   const [profiles, setProfiles] = useState([])
   useEffect(()=>{
 
-	fetch(`https://instagram-vquy.onrender.com/api/profile/getProfiles`,{
+	fetch(`${process.env.REACT_APP_SERVER_URI}/api/profile/getProfiles`,{
 		headers:headers()
 	}).then(res=>res.json()).then(resp=>{
 		setProfiles(resp.profiles)

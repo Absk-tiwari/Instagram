@@ -15,7 +15,7 @@ const PostHead = (props) => {
   useEffect(()=>{},[])
 
   const del =()=> {
-	fetch(`https://instagram-vquy.onrender.com/api/post/delete/${post._id}`,{
+	fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/delete/${post._id}`,{
 		headers:headers(),
 		method:'DELETE'
 	})
