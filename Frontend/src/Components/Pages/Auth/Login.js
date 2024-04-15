@@ -12,7 +12,7 @@ const Login = () => {
   let navigator = useNavigate(); 
   const login = async({username, password}) =>{
 	try {
-		const resp =await fetch(`${process.env.REACT_APP_SERVER_URI}/api/auth/login`,{
+		const resp =await fetch(`${process.env.REACT_APP_SERVER_URI??'https://instagram-vquy.onrender.com'}/api/auth/login`,{
 			method : 'POST',
 			headers : headers(),
 			body : JSON.stringify({username, password})
