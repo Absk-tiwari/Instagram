@@ -5,13 +5,11 @@ import headers from "../../../APIs/Headers";
 import { useNavigate } from "react-router-dom";
 import { toast,ToastContainer } from "react-toastify";
 const Signup = () => {
-  const nav = useNavigate();
-  const host = process.env.REACT_APP_SERVER_URI
-  console.log(process.env)
+  const nav = useNavigate(); 
   const [progress,setProgress] = useState(0)
   const signup = async({name, email, username, password}) =>{
 	try {
-	   const json = await fetch(`${host??'https://instagram-vquy.onrender.com'}/api/auth/signup`,{
+	   const json = await fetch(`https://instagram-vquy.onrender.com/api/auth/signup`,{
 			method : 'POST',
 			headers : headers(),
 			body : JSON.stringify({name, email, username, password})
@@ -19,11 +17,9 @@ const Signup = () => {
 		const resp = await json.json();
 		if(resp.status){
 			toast.success(resp.message)
-			setTimeout(() => {
-				nav('/login') 
-			}, 2500);
+			setTimeout(() => nav('/login'), 2500);
 		}else{
-			validate({...validatefields, [resp.key] : {...validatefields[resp.key], bad:true, message:resp.message }})
+		    validate({...validatefields, [resp.key] : {...validatefields[resp.key], bad:true, message:resp.message }})
 		}
 	} catch (error) {
 		console.log(error.message);
