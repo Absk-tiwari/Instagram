@@ -10,6 +10,7 @@ import headers from "../../../APIs/Headers";
 const Login = () => {
   const [progress, setProgress] = useState(0)
   let navigator = useNavigate(); 
+  console.log(process.env)
   const login = async({username, password}) =>{
 	try {
 		const resp =await fetch(`${process.env.REACT_APP_SERVER_URI??'https://instagram-vquy.onrender.com'}/api/auth/login`,{
