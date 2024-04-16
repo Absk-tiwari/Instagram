@@ -5,11 +5,13 @@ import headers from "../../../APIs/Headers";
 import { useNavigate } from "react-router-dom";
 import { toast,ToastContainer } from "react-toastify";
 const Signup = () => {
-  const nav = useNavigate()
+  const nav = useNavigate();
+  const host = process.env.REACT_APP_SERVER_URI
+  console.log(process.env)
   const [progress,setProgress] = useState(0)
   const signup = async({name, email, username, password}) =>{
 	try {
-	   const json = await fetch(`${process.env.REACT_APP_SERVER_URI}/api/auth/signup`,{
+	   const json = await fetch(`${host??'https://instagram-vquy.onrender.com'}/api/auth/signup`,{
 			method : 'POST',
 			headers : headers(),
 			body : JSON.stringify({name, email, username, password})
