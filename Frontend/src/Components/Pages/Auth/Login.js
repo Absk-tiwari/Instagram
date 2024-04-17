@@ -27,10 +27,12 @@ const Login = () => {
 			setTimeout(() => window.location.reload(), 2500);
 		}else{
 			toast.error(response.message) 
+			setLoading(false)
 		}
 
 	} catch (err) {
 		alert(err.message); 
+		setLoading(false)
 	}
 }
 
