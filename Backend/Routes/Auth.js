@@ -43,8 +43,8 @@ router.post('/signup',[
         // Finally create one
         user= User.create({
             name : req.body.name,
-            email : req.body.email,
-            username : req.body.username,
+            email : req.body.email.toLowerCase(),
+            username : req.body.username.toLowerCase(),
             password : secPass
         })
 
@@ -69,7 +69,14 @@ router.post('/login',[
         if(!errors.isEmpty()){
             return res.status(400).json({errors : errors.array()})
         } 
-        let user = await User.findOne({username : req.body.username})
+	let username = req.body.username.toLowerCase()
+        let user = await User.findOne({
+		$or:[
+		    {username},
+		    {email:username},
+		    {phone:username}
+		]
+	});
         if(!user){
             error.message = "User not found, please create an account to start!"
             return res.status(400).json(error)
