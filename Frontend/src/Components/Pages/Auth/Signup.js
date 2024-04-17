@@ -53,7 +53,7 @@ const Signup = () => {
 			validate({...validatefields, email:{...validatefields.email, bad:true, message:'Field is required'}})
 			return false
 		}
-		if(ref.current.value !== 10){
+		if(ref.current.value.length !== 10){
 			validate({...validatefields, email:{...validatefields.email, bad:true, message:'Invalid phone number'}})
 		}else{
 			validate({...validatefields, email:{...validatefields.email, bad:false }})
