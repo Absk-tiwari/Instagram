@@ -65,13 +65,9 @@ const Signup = () => {
 	if(e.target.name!=='email'){ 
 		console.log('should not be email')
 		if(validatefields[e.target.name].length > e.target.value.length){
-			if(e.target.value.length===0){
-			  validate({...validatefields, [e.target.name] : {...validatefields[e.target.name], bad:true, message:`Field is required`} })
-			}else{
-			  validate({...validatefields, [e.target.name] : {...validatefields[e.target.name], bad:true} })
-			}
+		  validate({...validatefields, [e.target.name] : {...validatefields[e.target.name], bad:true} })
 		}else{
-			validate({...validatefields, [e.target.name] : {...validatefields[e.target.name], bad:false} })
+		  validate({...validatefields, [e.target.name] : {...validatefields[e.target.name], bad:false} })
 		}
 	} 
   }
