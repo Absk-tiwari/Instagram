@@ -56,7 +56,7 @@ const PostHead = (props) => {
            <img height={20} width={20} src={verified} className={`mx-1`} alt={''}/> 
           :'' 
         }
-        <small className="text-secondary mx-2">{ howLong(new Date(post.created_at)) }</small> <br/>
+        <small className="text-secondary mx-1">{ howLong(new Date(post.created_at)) }</small> <br/>
         <small className="mb-2">{post.location}</small>
       </div>
 	  <div className="col-5">
