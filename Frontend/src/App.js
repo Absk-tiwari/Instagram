@@ -93,7 +93,7 @@ function App() {
                 <Routes>
                   <Route exact path="/login" element={<Login />} />
                   <Route exact path="/signup" element={<Signup />} />
-                  <Route exact path="/" element={<Home />} />
+                  <Route exact path="/" element={<Home />} middleware={checkAuth}/>
                   <Route exact path="/search" element={<Search />} />
                   <Route exact path="/explore" element={<Explore />} />
                   <Route exact path="/messages" element={<Messages />} />
