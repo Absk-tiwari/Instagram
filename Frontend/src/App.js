@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes, Redirect } from "react-router-dom";
 import {ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import "./App.css";
@@ -28,6 +28,25 @@ import Reset from "./Components/Pages/Auth/Reset";
 import { useEffect } from "react";
 import { socket } from "./socket";
 import headers from "./APIs/Headers";
+
+const PrivateRoute = ({ component: Component, middleware, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      middleware() ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+      )
+    }
+  />
+);
+
+const checkAuth = () => {
+	let token = localStorage.getItem(`token`)
+	if(token) return true
+	else return false
+}	    
 function App() {
                     
  useEffect(()=>{
