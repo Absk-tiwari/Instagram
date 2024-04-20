@@ -97,7 +97,7 @@ function App() {
                   <Route exact path="/search" element={<Search />} />
                   <Route exact path="/explore" element={<Explore />} />
                   <Route exact path="/messages" element={<Messages />} />
-                  <Route exact path="/test" element={<Test />} />
+                  <Route exact path="/test" element={<Test />} middleware={checkAuth}/>
                   <Route exact path="/forgotPassword" element={<Forgot />} />
                   <Route exact path="/reset/:token" element={<Reset />} />
                   <Route
