@@ -8,6 +8,7 @@ import Notifications from "../../assets/icons/notifications.png";
 import Create from "../../assets/icons/create.png";
 import Profile from "../../assets/icons/profile.png";
 const me = JSON.parse(localStorage.getItem('userLogin'))
+const pfp = me?.profile??Profile
 const refer = e => { 
     if (e.target.dataset.refer !== "/search")
       document.querySelector(".close").click();
@@ -55,7 +56,7 @@ export const SidebarData = [
   },
   {
     title: "Notifications",
-    icon: <img onClick={refer} className="icons" data-refer="/notifications" src={Notifications} alt={``} />,
+    icon: <img onClick={refer} className="icons" data-bs-toggle="offcanvas" data-bs-target="#notifications" data-refer="/notifications" src={Notifications} alt={``} />,
     link: "/notifications",
     modal: "#notifications",
   },
@@ -66,7 +67,7 @@ export const SidebarData = [
   },
   {
     title: "Profile",
-    icon: <img onClick={refer} className="pfpicture" src={me?.profile??Profile} style={{height:'30px',width:'30px'}} alt="" data-refer="/profile" />,
+    icon: <img onClick={refer} className="pfpicture" src={pfp} style={{height:'30px',width:'30px'}} alt="" data-refer="/profile" />,
     link: "/profile",
   },
 ];

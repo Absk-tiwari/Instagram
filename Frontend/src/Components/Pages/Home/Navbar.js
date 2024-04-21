@@ -21,13 +21,13 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg mt-5 mx-4" style={{position:'static'}}>
-        <div style={{position:'relative', marginBottom:'15px'}} onClick={addToStory}>
+      <nav className="navbar navbar-expand-lg mt-5 mx-4" style={{position:'static'}}> 
+      { Loaded===false ?
+        <div className="stories" >
+		 <div style={{position:'relative', marginBottom:'15px'}} onClick={addToStory}>
           <Link to={`/stories/itachi/view`} style={{marginBottom:`auto`}} ><Stories img={user.profile??ob}/></Link>
           <div className="userStory"><i className="fa fa-plus text-white" ></i></div>
         </div>
-      { Loaded===false ?
-        <div className="container-fluid" style={{ overflow: "auto" }}>
          { stories.map(story => {
             return <Link key={story.sno} to={`/stories/${story.username}/view`}><Stories img={story.cover}/></Link>;
           }) }

@@ -48,10 +48,12 @@ html{
 	position: static!important;
 }
 .user-row{
-	display: none;
+	/* display: none; */
+	width: 89vw!important;
 }
 .chat-open-screen{
-	width:97%;
+	display: none;
+	width:100%;
 	margin-left: 20%;
 	position: fixed;
 }
@@ -84,7 +86,7 @@ html{
 }
 @media screen and (max-width:1000px) {
 	.user-row{
-		display: none;
+		/* display: none; */
 	}
 	.chat-open-screen{
 		width:66%;
@@ -115,7 +117,7 @@ html{
 		font-size: small;
 	}
 	.info-container .col-md-8 .row{
-		width: max-content;
+		width: 300px;
 	}
 	li.text-secondary{
 		width: 70px;
@@ -158,8 +160,75 @@ html{
 	.Profile .col-12{
 		width: 300px;
 	}
+	.offcanvas-body{
+		margin-left: -14px;
+	}
+	.notification{
+		font-size: small;
+		margin-left: 0px;
+	}
+	.cpo{
+		margin: auto;
+	}
+	.cpo p{
+		margin-left: 5px;
+	}
+	.row .list-item{
+		margin-left: 20px;
+	}
+	.searchbox{
+		width: 78%!important;
+		margin-left: 5px;
+	}
+	.cpo i{
+		margin-left: 40%;
+	}
+	.spinner-container{
+		margin-left: -5px;
+		margin-top: 50px;
+	}
+	.spinner-container .spinner{
+		margin-left: 0px!important;
+	}
+	.outer .spinner{
+		height: 100px!important;
+		width: 100px!important;
+		margin-left: 160px!important;
+	}
+	.bakwaas{
+		padding-left: 40px;
+	}
+	.openchat .col-sm-2{
+		width: 20%!important;
+	}
+	.openchat .col-sm-10{
+		width: 70%!important;
+	}
+	.openchat{
+		margin-left:10px!important
+	}
+	.user-row strong:first-child, h4{
+		margin-left:15px!important
+	}
+	.user-row strong:last-child, .fa-edit{
+		margin-left:110px!important
+	}
+	.stories{
+		width: 280px!important;
+	}
+	.home .col-md-8 {
+		margin-top: 10px!important;
+	}
+	.stories div{
+		margin-bottom: 0px!important;
+	}
 }
 /* mobile version ended above */
+.stories{    
+	display: flex;
+    width: 546px;
+    overflow-x: scroll;
+}
 .loginContainer{ 
 	display:block;
 	position: absolute;
@@ -642,7 +711,7 @@ html{
 	}
   }
   .page{
-	width: 82vw;
+	width: 79vw;
   }
   .custom-sidebar{
 	width: 18vw
@@ -765,7 +834,7 @@ html{
   }
   .user-row{
 	height: 100vh;
-	width: 28vw!important;
+	width: 28vw;/*!important; */
 	overflow-y: scroll!important;
 	position:fixed;
 	border-right: 1px solid lightgray

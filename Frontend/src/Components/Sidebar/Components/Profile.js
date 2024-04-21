@@ -212,7 +212,7 @@ const Profile = () => {
         
       </div>}
     </div>
-    ):<Loader height={200} left={350}/>
+    ):<Loader height={200} left={350} Class={`outer`}/>
   }
     </>
   );
