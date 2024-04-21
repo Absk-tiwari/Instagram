@@ -6,13 +6,14 @@ import Loader from "../../StateComponents/Loader";
 import {toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import headers from "../../../APIs/Headers";
+const host = process.env.REACT_APP_SERVER_URI
 
 const Login = () => {
   const [progress, setProgress] = useState(0)
   let navigator = useNavigate();  
   const login = async({username, password}) =>{
 	try {
-		const resp =await fetch(`https://instagram-vquy.onrender.com/api/auth/login`,{
+		const resp =await fetch(`${host}/api/auth/login`,{
 			method : 'POST',
 			headers : headers(),
 			body : JSON.stringify({username, password})
@@ -82,12 +83,12 @@ const Login = () => {
                       value={`Log in`} disabled={fields.username.length < 5 || fields.password.length < 7 } onClick={()=>setProgress(100)} />
 	                    {isLoading && <Loader height='30'/>}
 
-                    <small className="text-secondary offset-3 mt-5">
+                    <center className="text-secondary mt-5">
                       Forgot password? Click 
 					  <Link to={'/forgotPassword'} className='fw-bold text-decoration-none'>
 						&nbsp;Here 
 					  </Link> to reset
-                    </small>
+                    </center>
                   </form>
                 </div>
               </div>

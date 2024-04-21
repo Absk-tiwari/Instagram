@@ -4,11 +4,12 @@ import Suggestions from "./Suggestions";
 import Post from "../Posts/Post";
 // eslint-disable-next-line
 import Respond from '../../../respond'
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-	console.log(process.env)
- 
+  const navigator = useNavigate()
   useEffect(()=>{
+	if(!localStorage.getItem('token')) return navigator('/login')
 	// Respond();
   },[])
   return (

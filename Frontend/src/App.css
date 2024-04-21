@@ -78,6 +78,12 @@ html{
 .head .col-6{
 	width: 44%;
 }
+.form-floating label{
+	font-size: small;
+}
+.form-floating > .form-control:not(:placeholder-shown) ~ label::after{
+	background-color: transparent!important
+}
 .fa-bookmark{
 	display: none;
 }
@@ -969,4 +975,7 @@ li span .fa{
   .uname{  
 	  margin-top:10px; 
 	  margin-left:6px;
+  }
+  center{
+	font-size: small;
   }

@@ -38,14 +38,15 @@ function SidebarComponent() {
     if (searched) {
       setSearch(JSON.parse(searched));
     }
-  }, [formtriggered]);
+	if(!localStorage.getItem(`token`)) return navigator('/login')
+}, [formtriggered]);
 
 
   const createPost = () => {
-
-    let fileInput = document.getElementById("create")
-    if (fileInput?.files?.length) {
-      var selectedFile = fileInput.files[0]
+	  
+	  let fileInput = document.getElementById("create")
+	  if (fileInput?.files?.length) {
+		  var selectedFile = fileInput.files[0]
       dispatch(setImageURL(selectedFile))  
       setTriggered(!formtriggered)
       navigator('/createPost')
