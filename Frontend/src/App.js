@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes, Redirect } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import {ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import "./App.css";
@@ -28,32 +28,14 @@ import Reset from "./Components/Pages/Auth/Reset";
 import { useEffect } from "react";
 import { socket } from "./socket";
 import headers from "./APIs/Headers";
-
-const PrivateRoute = ({ component: Component, middleware, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      middleware() ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-      )
-    }
-  />
-);
-
-const checkAuth = () => {
-	let token = localStorage.getItem(`token`)
-	if(token) return true
-	else return false
-}	    
+const HOST = process.env.REACT_APP_SERVER_URI
 function App() {
                     
  useEffect(()=>{
 	if(localStorage.getItem('token')){
 		let me= JSON.parse(localStorage.getItem('userLogin'))
 		socket.connect()
-		fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/count/${me.username}`,{
+		fetch(`${HOST}/api/messages/count/${me.username}`,{
 			method:'GET',
 			headers:headers()
 		}).then(res=>res.json()).then(data=>{
@@ -93,11 +75,11 @@ function App() {
                 <Routes>
                   <Route exact path="/login" element={<Login />} />
                   <Route exact path="/signup" element={<Signup />} />
-                  <Route exact path="/" element={<Home />} middleware={checkAuth}/>
+                  <Route exact path="/" element={<Home />} />
                   <Route exact path="/search" element={<Search />} />
                   <Route exact path="/explore" element={<Explore />} />
                   <Route exact path="/messages" element={<Messages />} />
-                  <Route exact path="/test" element={<Test />} middleware={checkAuth}/>
+                  <Route exact path="/test" element={<Test />} />
                   <Route exact path="/forgotPassword" element={<Forgot />} />
                   <Route exact path="/reset/:token" element={<Reset />} />
                   <Route
