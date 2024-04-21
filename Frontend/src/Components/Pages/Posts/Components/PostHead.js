@@ -43,7 +43,7 @@ const PostHead = (props) => {
   }
   return (
 	<> 
-    <div className='row d-flex rel'>
+    <div className='row d-flex'>
       <div className="d-flex head">
       <div className="col-2" onClick={refer}>
         <img className="pfpicture" src={post.profile??pfp} alt={``}/>
@@ -64,7 +64,7 @@ const PostHead = (props) => {
 		(<Button text={post.shouldFollow?'Follow':'Following'} Class={post.shouldFollow?`followbtn`:'followingbtn'} alt={post.shouldFollow?'Following':'Follow'}/>):''} 
       </div>
 
-	<i className={`fa fa-ellipsis-h dropup`} data-post={JSON.stringify(post)} data-bs-toggle={`dropdown`} />
+	<i className={`fa fa-ellipsis-h dropup`} data-post={JSON.stringify(post)} data-bs-toggle={`dropdown`} style={{position:'static'}} />
         <ul className={`dropdown-menu absoluteAtPoint`}>
           <li>
             <span className={`dropdown-item px-4`} onClick={rep} > Report </span>

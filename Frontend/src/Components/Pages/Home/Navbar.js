@@ -21,8 +21,8 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg mt-5 mx-4 navbar">
-        <div style={{position:'relative',marginBottom:'15px'}} onClick={addToStory}>
+      <nav className="navbar navbar-expand-lg mt-5 mx-4" style={{position:'static'}}>
+        <div style={{position:'relative', marginBottom:'15px'}} onClick={addToStory}>
           <Link to={`/stories/itachi/view`} style={{marginBottom:`auto`}} ><Stories img={user.profile??ob}/></Link>
           <div className="userStory"><i className="fa fa-plus text-white" ></i></div>
         </div>

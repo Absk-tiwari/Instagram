@@ -126,14 +126,14 @@ const Profile = () => {
         </div>
         <div className="col-md-8">
 
-          <div className="row">
-            <div className="col-md-6 d-flex">
+          <div className="row col-12">
+            <div className="col-6 d-flex">
               <h4>{user.username??'Instagram User'}</h4>
 			  {user.username==='absk.tiwari' || user.verified ? 
 			  	<img height={20} width={20} src={verified} className={`mx-1`} alt={''}/> :''}
             </div>
             {user && me.username===user.username?
-            (<div className="col-md-6">
+            (<div className="col-6">
               <Link to={'/edit-profile'} className="btn editprofile text-decoration-none text-dark fw-bold btn-secondary">
                 Edit Profile
                </Link>
@@ -141,14 +141,14 @@ const Profile = () => {
             ):''}
           </div>
 
-          <div className="row">
-            <div className="col-sm-3 stats">
+          <div className="row col-12">
+            <div className="col-4 stats">
               <strong>{posts ? posts.length : 0}</strong> posts
             </div>
-            <div className="col-sm-4 stats">
+            <div className="col-4 stats">
               <strong >{user.followers}</strong> followers
             </div>
-            <div className="col-sm-4 stats">
+            <div className="col-4 stats">
               <strong>{user.following}</strong> following
             </div>
           </div>

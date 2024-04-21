@@ -41,10 +41,11 @@ html{
 	display: none;
 }
 .navbar{
-	z-index:99999 !important;;
-	display: flex!important;
+	/* z-index:99999 !important; */
+	display: inline-flex!important;
 	flex-direction: column!important;
-	overflow: scroll!important;
+	overflow-x: scroll!important;
+	position: static!important;
 }
 .user-row{
 	display: none;
@@ -146,6 +147,16 @@ html{
 	}
 	.sgnup .loginContainer{
 		transform: translate(-50%, -50%);
+	}
+	.home{
+		position: static;
+		margin-left: 13%;
+	}
+	#modal h3{
+		margin-top:25px
+	}
+	.Profile .col-12{
+		width: 300px;
 	}
 }
 /* mobile version ended above */
@@ -282,6 +293,7 @@ html{
   }
   .profileHead {
 	line-height: 1;
+	margin: 0;
   }
   .followingbtn {
 	background-color:#e4e9ed!important;
@@ -295,8 +307,10 @@ html{
   }
   
   .postContent {
-	height: auto;
+	height: 300px;
 	width: 100%;
+	object-fit: contain;
+	background-color: #3a3838;
   }
   
   .userPost {
@@ -387,7 +401,7 @@ html{
   }
   .info-container img {
 	height: 80%;
-	margin-top: 5%;
+	margin-top: 2%;
 	border-radius: 90%;
   }
   .info-container .row {
@@ -871,7 +885,8 @@ html{
 	cursor: pointer;
   }
   .navbar{
-	z-index: 2;
+	/* z-index: 0; */
+	position: static;
   }
   .cLI{
 	align-items: center;
@@ -994,7 +1009,7 @@ html{
 	background-color: #3a3838;
   }
   .fa-ellipsis-h{
-	  position:relative;
+	  position:static;
 	  right:12%;
 	  top:10px
   }
@@ -1011,4 +1026,8 @@ html{
   }
   center{
 	font-size: small;
+  }
+  .post .card-body{
+	margin-top: 0!important;
+	padding-top:0px!important
   }
