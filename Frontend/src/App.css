@@ -59,69 +59,102 @@ html{
 	display: block;
 }
 }
-@media screen and (max-width:1000px) {
-.user-row{
-	display: none;
-}
-.chat-open-screen{
-	width:66%;
-} 
-.head .col-6{
-	margin-left: 10px;
-}
-.home .post{
-	margin-left: 8px;
-}
-.row .col-sm-1{
-	width: 30px;
-} 
-.head .col-6{
-	width: 44%;
-}
-.form-floating label{
-	font-size: small;
-}
 .form-floating > .form-control:not(:placeholder-shown) ~ label::after{
 	background-color: transparent!important
 }
-.fa-bookmark{
-	display: none;
+/* Mobile version started */
+@media screen and (min-width:768px) {
+	.loginContainer{
+		width: 30%!important;
+		display:block;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	.signupContainer{
+		width: 30%!important;
+		display:block;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -45%);
+	}
 }
-.info-container{
-	flex-direction: column;
+@media screen and (max-width:1000px) {
+	.user-row{
+		display: none;
+	}
+	.chat-open-screen{
+		width:66%;
+	} 
+	.head .col-6{
+		margin-left: 10px;
+	}
+	.home .post{
+		margin-left: 8px;
+	}
+	.row .col-sm-1{
+		width: 30px;
+	} 
+	.head .col-6{
+		width: 44%;
+	}
+	.form-floating label{
+		font-size: small;
+	} 
+	.fa-bookmark{
+		display: none;
+	}
+	.info-container{
+		flex-direction: column;
+	}
+	.stats{
+		width:30%!important;
+		font-size: small;
+	}
+	.info-container .col-md-8 .row{
+		width: max-content;
+	}
+	li.text-secondary{
+		width: 70px;
+		font-size: small;
+	}
+	li span{
+		padding-left: 0px;
+	}
+	li span .fa{
+		display: none;
+		font-size: small;
+	}
+	.posts-of-logged-in-user{
+		height: 25%;
+		width: 25%;
+	}
+	.postImg{
+		width: 30px;
+		height: 30px;
+	}
+	.custom-logo{
+		justify-content: center!important;
+		align-items: center!important;
+		text-align: center!important;
+		margin-left: -22px;
+	}
+	.loginContainer{ 
+		width: 80vw!important;
+	}
+	.sgnup .loginContainer{
+		transform: translate(-50%, -50%);
+	}
 }
-.stats{
-	width:30%!important;
-	font-size: small;
-}
-.info-container .col-md-8 .row{
-	width: max-content;
-}
-li.text-secondary{
-	width: 70px;
-	font-size: small;
-}
-li span{
-	padding-left: 0px;
-}
-li span .fa{
-	display: none;
-	font-size: small;
-}
-.posts-of-logged-in-user{
-	height: 25%;
-	width: 25%;
-}
-.postImg{
-	width: 30px;
-	height: 30px;
-}
-.custom-logo{
-	justify-content: center!important;
-	align-items: center!important;
-	text-align: center!important;
-	margin-left: -22px;
-}
+/* mobile version ended above */
+.loginContainer{ 
+	display:block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 .custom-sidebar .custom-logo {
 	height: 10vh;

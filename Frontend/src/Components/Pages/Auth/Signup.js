@@ -76,8 +76,8 @@ const Signup = () => {
     <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
 	<ToastContainer position='top-center' autoClose={5000} hideProgressBar={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='dark' />           
       <div className='container-fluid justify-contents-center'>
-        <div className='container d-flex mt-5'>
-          <div className='col-md-5 offset-4 mt-3'>
+        <div className='container sgnup'>
+          <div className='col-md-5 loginContainer'>
             <div className="card d-flex" style={{ zIndex: 4 }}>
               <div className='formTitle align-items-center text-center mt-3'>
                 <img src={logo} alt="" style={{height:'15vh',width:'25vw'}} />
