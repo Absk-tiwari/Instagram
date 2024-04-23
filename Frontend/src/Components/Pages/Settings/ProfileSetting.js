@@ -77,7 +77,7 @@ const ProfileSetting = () => {
         <div className='row offset-1 mt-2'>
             <div className='col-md-12 d-flex'>
                 <div className='col-md-1'>
-                    <img src={image} className='pfpicture' style={{height:'10vh',width:'10vw'}} alt='nhi dikha?' />
+                    <img src={image} className='pfpicture' style={{height:'10vh',width:'10vw!important'}} alt='nhi dikha?' />
                 </div>
                 <div className='col-md-7' style={{lineHeight:'0.5'}}>
                     <p className='text-dark fw-bold px-3 pt-3'>{user.username}</p>
