@@ -126,7 +126,7 @@ html{
 	.info-container .col-md-8 .row{
 		width: 300px;
 	}
-	.info-container img{
+	.info-container img:first-child{
 		width: 130px!important;
 		height:130px!important;
 		object-fit:cover!important 
