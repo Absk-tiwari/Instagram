@@ -127,7 +127,7 @@ router.post('/forgotPassword', async(req, res) =>{
 
 		mailOptions.to= req.body.email
 		mailOptions.subject= 'Reset your password'
-		mailOptions.html=`<h3>Please click <a href='${process.env.SERVER_URI}/reset/${authToken}'>here</a> to reset your password.</h3>`
+		mailOptions.html=`<h3>Please click <a href='${process.env.UI}/reset/${authToken}'>here</a> to reset your password.</h3>`
 
 		transporter.sendMail(mailOptions, (err, info) => {
 
