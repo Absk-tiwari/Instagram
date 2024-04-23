@@ -15,7 +15,7 @@ const ProfileSetting = () => {
   const [open, setmodal] = useState(false);
   const [progress,setProgress] = useState(0)
   const [image,setImage] = useState(user.profile??LoggedIn.pfp)
-  const [fields, setFields] = useState({bio: user.bio?? LoggedIn.bio , website:''})
+  const [fields, setFields] = useState({bio: user.bio?? LoggedIn.bio , website:'', private:false})
   useEffect(()=>{
     setProgress(100)
   },[])
@@ -43,6 +43,7 @@ const ProfileSetting = () => {
 	let formData = new FormData()
 	formData.append('image', file)
 	formData.append('bio', fields.bio)
+	formData.append('private',fields.private)
 	fetch(process.env.REACT_APP_SERVER_URI+'/api/profile/update',{
 		method:'POST',
 		headers:{
@@ -112,6 +113,12 @@ const ProfileSetting = () => {
             <div className='col-md-12 d-flex' >
 				<p className='fw-bold pt-3'>Active Status</p>
 				<input type='checkbox' checked className='mx-2'/>
+            </div>
+        </div>
+	<div className='row offset-1 mt-4 '>
+            <div className='col-md-12 d-flex' >
+	        <p className='fw-bold pt-3'>Private Account</p>
+	        <input type='checkbox' checked={fields.private} className='mx-2'/>
             </div>
         </div>
         
