@@ -120,7 +120,7 @@ html{
 		flex-direction: column;
 	}
 	.info-container h4{
-		margin-left: 10px!important;
+		margin-left: 0px!important;
 	}
 	.stats{
 		width:30%!important;
@@ -132,7 +132,8 @@ html{
 	.info-container img:first-child{
 		width: 130px!important;
 		height:130px!important;
-		object-fit:cover!important 
+		object-fit:cover!important;
+		margin-left:0px!important
 	}
 	li.text-secondary{
 		width: 70px;
