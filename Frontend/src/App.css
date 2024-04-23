@@ -89,9 +89,11 @@ html{
 		/* display: none; */
 	}
 	.random {
-	  height: 30vh;
-	  width: 30vh!important;
+	  height: 40vh!important;
+	  width: 40vh!important;
 	  border-radius: 50%;
+	  margin-left:-30%;
+	  margin-top:20%
 	}
 	.chat-open-screen{
 		width:66%;
@@ -123,6 +125,11 @@ html{
 	}
 	.info-container .col-md-8 .row{
 		width: 300px;
+	}
+	.info-container img{
+		width: 130px!important;
+		height:130px!important;
+		object-fit:cover!important 
 	}
 	li.text-secondary{
 		width: 70px;
@@ -484,7 +491,7 @@ html{
 	text-align: center;
   }
   .info-container img {
-	height: 80%;
+	height: 60%;
 	margin-top: 2%;
 	border-radius: 90%;
   }
@@ -605,7 +612,7 @@ html{
   
   .random {
 	height: 60vh;
-	width: 60vh!important;
+	width: 60vh;
 	border-radius: 50%;
   }
   .form-control:focus {
