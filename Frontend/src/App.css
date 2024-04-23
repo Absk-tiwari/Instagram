@@ -119,6 +119,9 @@ html{
 	.info-container{
 		flex-direction: column;
 	}
+	.info-container h4{
+		margin-left: 10px!important;
+	}
 	.stats{
 		width:30%!important;
 		font-size: small;
