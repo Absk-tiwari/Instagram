@@ -18,18 +18,14 @@ router.get('/test', async(req,res)=>{
 
 router.post('/update',[ upload.single('image'), fetchuser], async(req,res)=>{
     try {
-		let updateSet
+		let updateSet= {
+                          bio : req.body.bio
+		}
 		if(req.file) {
 			const uploaded = await uploadOnCloudnary(req.file.path)
-			updateSet = {
-                profile:uploaded.url,
-                bio : req.body.bio
-            }
-		}else{
-			updateSet = {
-                bio : req.body.bio
-            }
+			updateSet.profile:uploaded.url
 		}
+	        updateSet.private = req.body.private?true:false
         const update = {
             $set: updateSet
         };
