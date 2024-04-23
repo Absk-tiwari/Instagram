@@ -133,7 +133,8 @@ html{
 		width: 130px!important;
 		height:130px!important;
 		object-fit:cover!important;
-		margin-left:0px!important
+		margin-left:0px!important;
+		left:10%!important;
 	}
 	li.text-secondary{
 		width: 70px;
