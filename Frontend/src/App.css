@@ -88,6 +88,11 @@ html{
 	.user-row{
 		/* display: none; */
 	}
+	.random {
+	  height: 30vh;
+	  width: 30vh!important;
+	  border-radius: 50%;
+	}
 	.chat-open-screen{
 		width:66%;
 	} 
