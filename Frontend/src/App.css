@@ -222,6 +222,16 @@ html{
 	.stories div{
 		margin-bottom: 0px!important;
 	}
+	.info-container .row:last-child{
+		width: 300px;
+		display:flex!important 
+	}
+	.info-container .row:last-child .col-sm-4{
+		width: 120px!important;
+	}
+	.info-container .row:last-child .col-sm-4:nth-child(even){
+		nargin-left: 30px!important;
+	}
 }
 /* mobile version ended above */
 .stories{    
