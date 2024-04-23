@@ -167,9 +167,10 @@ const Profile = () => {
                 <div className={`col-sm-4 ${react? 'editprofile':'btn-primary'} btn mx-1 fw-bold`} onClick={()=>reaction(!react,user.username)}>
                   {react? 'Following':'Follow'}
                 </div>
-                <div className="col-sm-4 editprofile btn mx-3 fw-bold" onClick={()=> setupChat(!chatopened)}>
+               {user.private===false ? 
+	        <div className="col-sm-4 editprofile btn mx-3 fw-bold" onClick={()=> setupChat(!chatopened)}>
                   Message
-                </div>
+                </div>:""}
             </div>
           ):!Object.entries(me).length ? ('Ye User poori tarah se kaalpanik hai, Iska vastavikta se koi taalukaat nhi hai'):''}
 
