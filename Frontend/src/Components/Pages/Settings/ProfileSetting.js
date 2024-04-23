@@ -68,7 +68,7 @@ const ProfileSetting = () => {
   return (
     <>
    <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
-    <div className='container mt-4 d-flex' style={{ flexDirection:'column' }}>
+    <div className='container mt-4 d-flex pfpSetting' style={{ flexDirection:'column' }}>
         <div className='row offset-1 mt-3 mb-3'>
             <h2 className='fw-bold'>Edit Profile</h2>
         </div>
@@ -77,7 +77,7 @@ const ProfileSetting = () => {
         <div className='row offset-1 mt-2'>
             <div className='col-md-12 d-flex'>
                 <div className='col-md-1'>
-                    <img src={image} className='rounded-circle img-fluid' style={{height:'10vh',width:'5vw'}} alt='nhi dikha?' />
+                    <img src={image} className='pfpicture' style={{height:'10vh',width:'10vw'}} alt='nhi dikha?' />
                 </div>
                 <div className='col-md-7' style={{lineHeight:'0.5'}}>
                     <p className='text-dark fw-bold px-3 pt-3'>{user.username}</p>
