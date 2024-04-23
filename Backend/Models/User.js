@@ -62,6 +62,10 @@ const userSchema= new mongoose.Schema({
         type: Date,
         default:null
     },
+    private:{
+        type:Boolean,
+        default:false
+    }
 });
 const User=mongoose.model('User', userSchema);
 User.createIndexes();
