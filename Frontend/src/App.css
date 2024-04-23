@@ -242,7 +242,7 @@ html{
 		width: 120px!important;
 	}
 	.info-container .row:last-child .col-sm-4:nth-child(even){
-		nargin-left: 30px!important;
+		margin-left: 30px!important;
 	}
 }
 /* mobile version ended above */
