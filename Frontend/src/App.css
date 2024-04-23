@@ -88,6 +88,10 @@ html{
 	.user-row{
 		/* display: none; */
 	}
+	.pfpSetting{
+		margin-left:40px!important;
+		left:10%!important
+	}
 	.random {
 	  height: 40vh!important;
 	  width: 40vh!important;
