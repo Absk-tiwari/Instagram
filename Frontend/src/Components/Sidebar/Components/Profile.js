@@ -129,7 +129,7 @@ const Profile = () => {
           <div className="row col-12">
             <div className="col-6 d-flex">
               <h4>{user.username??'Instagram User'}</h4>
-			  {user.username==='absk.tiwari' || user.verified ? 
+{user.verified ? 
 			  	<img style={{height:10px,width:20px}} src={verified} className={`mx-1`} alt={''}/> :''}
             </div>
             {user && me.username===user.username?
