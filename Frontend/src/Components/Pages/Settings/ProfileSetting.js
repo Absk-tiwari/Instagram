@@ -13,7 +13,7 @@ const ProfileSetting = () => {
   const [file,setFile] = useState('')
   const {LoggedIn} = useContext(ProfileContext);
   const [open, setmodal] = useState(false);
-  const [stat,setPrivacy]=useState(false)
+  const [stat,setPrivacy]=useState(user.private)
   const [progress,setProgress] = useState(0)
   const [image,setImage] = useState(user.profile??LoggedIn.pfp)
   const [fields, setFields] = useState({bio: user.bio?? LoggedIn.bio , website:'', private:false})
