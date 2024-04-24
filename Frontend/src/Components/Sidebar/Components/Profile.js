@@ -167,7 +167,7 @@ const Profile = () => {
                 <div className={`col-sm-4 ${react? 'editprofile':'btn-primary'} btn mx-1 fw-bold`} onClick={()=>reaction(!react,user.username)}>
                   {react? 'Following':'Follow'}
                 </div>
-               {(user.private===false && react ) || react ? 
+               {(user.private && react ) || user.private===false ? 
 	        <div className="col-sm-4 editprofile btn mx-3 fw-bold" onClick={()=> setupChat(!chatopened)}>
                   Message
                 </div>:""}
