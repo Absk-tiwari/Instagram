@@ -252,6 +252,9 @@ html{
 	.info-container .row:last-child .col-sm-4:nth-child(even){
 		margin-left: 30px!important;
 	}
+	.navbar span.placeholder:nth-child(even){
+		display:none
+	}
 }
 /* mobile version ended above */
 .stories{    
