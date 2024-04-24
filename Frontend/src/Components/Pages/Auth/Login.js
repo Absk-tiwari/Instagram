@@ -11,7 +11,7 @@ const host = process.env.REACT_APP_SERVER_URI
 const Login = () => {
   const [progress, setProgress] = useState(0)
   let navigator = useNavigate();  
-  if(localStorage.getItem(`token`)) navigator('/’)
+  if(localStorage.getItem(`token`)) return navigator('/’);
   const login = async({username, password}) =>{
 	try {
 		const resp =await fetch(`${host}/api/auth/login`,{
