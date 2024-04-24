@@ -33,7 +33,7 @@ const Navbar = () => {
           }) }
         </div>
         : 
-          <p className="placeholder-glow mb-3 mx-2">
+          <p className="placeholder-glow mb-3 mx-2 d-flex">
             <span className="placeholder col-1" style={placeholderStyle}></span>&nbsp;
             <span className="placeholder col-1" style={placeholderStyle}></span>&nbsp;
             <span className="placeholder col-1" style={placeholderStyle}></span>&nbsp;
