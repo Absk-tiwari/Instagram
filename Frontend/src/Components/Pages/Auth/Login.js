@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState,useEffect } from "react";
 import logo from "../../../assets/icons/insta.svg";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
@@ -12,8 +12,10 @@ const Login = () => {
   const [progress, setProgress] = useState(0)
   let navigator = useNavigate();
 	useEffect(()=>{
-	   if(localStorage.getItem(`token`)) return navigator('/’);
-	},[])
+	   if( localStorage.getItem(`token`) ){
+	     return navigator('/');
+	   }
+	},[]);
   
   const login = async({username, password}) =>{
 	try {
