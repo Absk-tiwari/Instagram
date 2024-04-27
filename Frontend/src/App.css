@@ -101,16 +101,7 @@ html{
 	}
 }
 @media screen and (max-width:1000px) {
-	.pictureAtProfile{
-		margin-left:0px!important;
-		left:20%!important;
-	}
-	.info-container .container{
-		display:flex;
-		height:100%!important;
-		justify-content:flex-start;
-		text-align:left
-	}
+	
 	.customModal .col-6:not(.theFooter){
 		flex-direction:column!important;
 	}
