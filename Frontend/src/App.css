@@ -245,11 +245,15 @@ html{
 		margin-left: -14px;
 	}
 	.notification{
-		font-size: small;
+		font-size: smaller;
 		margin-left: 0px;
+		width:310px!important;
+		max-height:820px!important;
+		overflow:scroll!important
 	}
 	.cpo{
 		margin: auto;
+		margin-left:2px!important;
 	}
 	.cpo p{
 		margin-left: 5px;
@@ -300,7 +304,7 @@ html{
 	.home .col-md-8 {
 		margin-top: 10px!important;
 	}
-	.stories div{
+	.stories div:first-child{
 		margin-bottom: 0px!important;
 	}
 	.info-container .row:last-child{
@@ -312,6 +316,9 @@ html{
 	}
 	.info-container .row:last-child .col-sm-4:nth-child(even){
 		margin-left: 30px!important;
+	}
+	.navbar span.placeholder:first-child{
+		margin-left:0px!important;
 	}
 	.navbar span.placeholder:nth-child(even){
 		display:none
