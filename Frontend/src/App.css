@@ -104,9 +104,6 @@ html{
 	.customModal .col-6:not(.theFooter){
 		flex-direction:column!important;
 	}
-	.customModal .comments{
-		margin-left:0px!important
-	}
 	div.posts-of-logged-in-user{
 		flex-direction:row!important;
 		width:80px!important;
@@ -115,6 +112,7 @@ html{
 	.posts-of-logged-in-user .postImg{
 		height:80px!important;
 		width:80px!important;
+	}
 	.reelDiv{
 		width:300px!important;
 		margin-left:30px!important;
@@ -247,9 +245,8 @@ html{
 		margin-left: -14px;
 	}
 	.notification{
-		font-size: smaller;
+		font-size: small;
 		margin-left: 0px;
-		width:310px;
 	}
 	.cpo{
 		margin: auto;
@@ -299,9 +296,6 @@ html{
 	}
 	.stories{
 		width: 280px!important;
-	}
-	.stories div:first-child{
-		margin-left:0px!important;
 	}
 	.home .col-md-8 {
 		margin-top: 10px!important;
