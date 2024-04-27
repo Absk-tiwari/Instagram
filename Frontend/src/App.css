@@ -107,12 +107,12 @@ html{
 	}
 	div.posts-of-logged-in-user{
 		flex-direction:row!important;
-		width:80px!important;
-		height:80px!important;
+		width:100px!important;
+		height:100px!important;
 	}
 	.posts-of-logged-in-user .postImg{
-		height:80px!important;
-		width:80px!important;
+		height:100px!important;
+		width:100px!important;
 	}
 	.reelDiv{
 		width:300px!important;
@@ -251,7 +251,7 @@ html{
 	.notification{
 		font-size: smaller;
 		margin-left: 0px;
-		width:310px!important;
+		width:320px!important;
 		max-height:820px!important;
 		overflow:scroll!important
 	}
