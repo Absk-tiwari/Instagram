@@ -19,6 +19,13 @@ h3{
 	height:50px;
 	width:100px;
 }
+.postPreview{
+	height:60vh;
+	width:32vw;
+	object-fit:cover;
+	border:3px solid gray;
+	border-radius:8px
+}
 @media screen and (max-width:1000px) {
 html{
     position: relative;
@@ -111,6 +118,13 @@ html{
 	}
 	.postCreateDiv div{
 		max-width:300px!important;
+	}
+	.postPreview{
+	      height:60vh;
+	      width:250px!important;
+	      object-fit:cover!important;
+	      border:3px solid gray;
+	      border-radius:8px
 	}
 	.postCreateButton{
 		width:100px;
