@@ -241,6 +241,9 @@ html{
 	.Profile .col-12{
 		width: 300px;
 	}
+	.Profile .row>small{
+		margin-bottom:10px!important;
+	}
 	.offcanvas-body{
 		margin-left: -14px;
 	}
@@ -305,7 +308,7 @@ html{
 		margin-top: 10px!important;
 	}
 	.stories div:first-child{
-		margin-bottom: 0px!important;
+		margin-left: 0px!important;
 	}
 	.info-container .row:last-child{
 		width: 300px;
