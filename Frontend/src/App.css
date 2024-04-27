@@ -101,7 +101,7 @@ html{
 	}
 }
 @media screen and (max-width:1000px) {
-	.customModal div:first-child{
+	.customModal .col-6{
 		flex-direction:column!important;
 	}
 	.reelDiv{
@@ -112,7 +112,7 @@ html{
 		position:absolute;
 		left:30px!important;
 		height:820px!important;
-	        width:320px!important;
+	        width:335px!important;
 	}
 	.reelDiv div:nth-child(2){
 		top:58vh;left:280px!important;
@@ -131,7 +131,7 @@ html{
 	}
 	.postCreateDiv form{
 		flex-direction:column!important;
-		margin-left:35px!important;
+		margin-left:45px!important;
 	}
 	.postCreateDiv div{
 		max-width:300px!important;
@@ -149,7 +149,7 @@ html{
 		left:10%!important;
 		height:30px!important;
 		width:120px!important;
-		top:560px!important
+		top:500px!important
 	}
 	.random {
 	  height: 40vh!important;
