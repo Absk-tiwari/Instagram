@@ -109,8 +109,8 @@ html{
 		left:10%!important
 	}
 	.postCreateDiv{
-		margin-left:13%;
-		left:13%;
+		margin-left:15%!important;
+		left:15%!important;
 		width:300pximportant;
 	}
 	.postCreateDiv form{
@@ -120,19 +120,19 @@ html{
 		max-width:300px!important;
 	}
 	.postPreview{
-	      height:60vh;
-	      width:250px!important;
+	      height:500px;
+	      width:190px!important;
 	      object-fit:cover!important;
-	      border:3px solid gray;
+	      border:1px solid gray;
 	      border-radius:8px
 	}
 	.postCreateButton{
 		width:100px;
 		font-size:smaller!important;
-		left:13%!important;
+		left:10%!important;
 		height:30px!important;
 		width:120px!important;
-		top:780px!important
+		top:600px!important
 	}
 	.random {
 	  height: 40vh!important;
