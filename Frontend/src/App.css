@@ -103,7 +103,7 @@ html{
 @media screen and (max-width:1000px) {
 	.reelDiv{
 		width:300px!important;
-		margin-left:40px!important;
+		margin-left:35px!important;
 	}
 	.reelDiv div:first-child{
 		position:absolute;
@@ -115,7 +115,9 @@ html{
 		/*height:auto!important;
 		width:auto!important;
 		margin-left:40px!important;*/
-		top:58vh;left:280px!important
+		position:absolute;
+		top:58vh!important;
+		left:280px!important;
 		
 	}
         .reelParallel{
@@ -1199,5 +1201,5 @@ html{
 	  width:35vw;
   }
 .reelDiv i,svg{
-	top:55vh;left:28vw;
+	position:absolute;top:55vh;left:28vw;
 }
