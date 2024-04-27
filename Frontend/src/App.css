@@ -104,11 +104,14 @@ html{
 	.customModal .col-6:not(.theFooter){
 		flex-direction:column!important;
 	}
-	#menu1 .posts-of-logged-in-user{
+	div.posts-of-logged-in-user{
 		flex-direction:row!important;
 		width:80px!important;
 		height:80px!important;
 	}
+	.posts-of-logged-in-user .postImg{
+		height:80px!important;
+		width:80px!important;
 	.reelDiv{
 		width:300px!important;
 		margin-left:30px!important;
@@ -214,14 +217,7 @@ html{
 		display: none;
 		font-size: small;
 	}
-	.posts-of-logged-in-user{
-		height: 25%;
-		width: 25%;
-	}
-	.postImg{
-		width: 30px;
-		height: 30px;
-	}
+	
 	.custom-logo{
 		justify-content: center!important;
 		align-items: center!important;
