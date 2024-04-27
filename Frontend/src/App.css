@@ -251,7 +251,7 @@ html{
 	.notification{
 		font-size: smaller;
 		margin-left: 0px;
-		width:320px!important;
+		width:325px!important;
 		max-height:820px!important;
 		overflow:scroll!important
 	}
