@@ -101,8 +101,12 @@ html{
 	}
 }
 @media screen and (max-width:1000px) {
-	.user-row{
-		/* display: none; */
+	.reelDiv{
+		width:300px!important;
+		margin-left:40px:important
+	}
+	.reelDiv div:first-child{
+		left:15%!important
 	}
 	.pfpSetting{
 		margin-left:40px!important;
