@@ -61,7 +61,7 @@ const Create = () => {
         <div className='col-lg-4 mx-5'>
           <div style={{position:'relative'}}>
             <h4>Preview</h4><br/>
-            <img src={orgPost} style={{height:`60vh`,width:'32vw',objectFit:'cover', border:'3px solid gray',borderRadius:'8px'}} alt='' />
+            <img src={orgPost} className={`postPreview`} alt='' />
             <button type='submit' className={'btn text-white postCreateButton'}>Post</button>
           </div>
         </div>    
