@@ -101,7 +101,7 @@ html{
 	}
 }
 @media screen and (max-width:1000px) {
-	.customModal .col-6{
+	.customModal .col-6:not(.row){
 		flex-direction:column!important;
 	}
 	.reelDiv{
