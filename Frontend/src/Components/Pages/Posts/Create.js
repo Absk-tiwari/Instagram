@@ -46,7 +46,7 @@ const Create = () => {
   }
   return (
     <>
-    <div className='d-flex mt-5 mb-3 mx-1'>
+    <div className='d-flex mt-5 mb-3 mx-1 postCreateDiv'>
       <form onSubmit={handleSubmit} style={{display:'flex'}}>
         <div className='col-lg-8 col-sm-12'>
             <div className='col-md-12 col-sm-12'>
@@ -62,7 +62,7 @@ const Create = () => {
           <div style={{position:'relative'}}>
             <h4>Preview</h4><br/>
             <img src={orgPost} style={{height:`60vh`,width:'32vw',objectFit:'cover', border:'3px solid gray',borderRadius:'8px'}} alt='' />
-            <button type='submit' className='btn text-white' style={{position:'absolute', borderRadius:'5px', background:'linear-gradient(to right, #84513f, #ea595f)',top:'75vh',left:`335px`,height:'50px',width:'100px'}}>Post</button>
+            <button type='submit' className={'btn text-white postCreateButton'}>Post</button>
           </div>
         </div>    
         </form>
