@@ -105,6 +105,10 @@ html{
 		margin-left:0px!important;
 		left:20%!important;
 	}
+	.info-container .container{
+		display:block;
+		height:100%!important;
+	}
 	.customModal .col-6:not(.theFooter){
 		flex-direction:column!important;
 	}
