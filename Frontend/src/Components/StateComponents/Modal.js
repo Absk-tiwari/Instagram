@@ -8,7 +8,7 @@ const Modal = ({ isOpen, dimens, onClose, children }) => {
 
   return (
     <div
-    id="modal"
+    id="modal" className={`customModal`}
       onClick={onClose}
       style={{
         position: "fixed",
