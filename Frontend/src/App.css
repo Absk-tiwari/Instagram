@@ -103,13 +103,18 @@ html{
 @media screen and (max-width:1000px) {
 	.reelDiv{
 		width:300px!important;
-		margin-left:40px:important
+		margin-left:40px!important;
 	}
 	.reelDiv div:first-child{
 		position:absolute;
 		left:15%!important;
-		height:650px!important
+		height:650px!important;
 	        width:300px!important;
+	}
+	.reelDiv video{
+		height:auto!important;
+		width:auto!important;
+		margin-left:40px!important;
 	}
         .reelParallel{
 		display:none!important;
