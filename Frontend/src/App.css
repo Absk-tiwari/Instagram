@@ -111,10 +111,11 @@ html{
 		height:800px!important;
 	        width:320px!important;
 	}
-	.reelDiv svg{
+	.reelDiv i,svg{
 		/*height:auto!important;
 		width:auto!important;
 		margin-left:40px!important;*/
+		top:65vh;left:50vw
 		
 	}
         .reelParallel{
@@ -1197,3 +1198,6 @@ html{
 	  height:100vh;
 	  width:35vw;
   }
+.reelDiv i,svg{
+	top:55vh;left:28vw;
+}
