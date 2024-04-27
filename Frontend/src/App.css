@@ -307,12 +307,6 @@ html{
 	.home .col-md-8 {
 		margin-top: 10px!important;
 	}
-	.stories div:first-child{
-		margin-left: 0px!important;
-	}
-	.stories div{
-		margin-left:20px;
-	}
 	.info-container .row:last-child{
 		width: 300px;
 		display:flex!important 
