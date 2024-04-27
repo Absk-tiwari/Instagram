@@ -107,14 +107,15 @@ html{
 	}
 	.reelDiv div:first-child{
 		position:absolute;
-		left:15%!important;
-		height:650px!important;
-	        width:300px!important;
+		left:13%!important;
+		height:800px!important;
+	        width:320px!important;
 	}
-	.reelDiv video{
-		height:auto!important;
+	.reelDiv svg{
+		/*height:auto!important;
 		width:auto!important;
-		margin-left:40px!important;
+		margin-left:40px!important;*/
+		
 	}
         .reelParallel{
 		display:none!important;
