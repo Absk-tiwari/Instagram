@@ -10,6 +10,15 @@ body {
 h3{
 	font-family: sans-serif;
 }
+.postCreateButton{
+	position:absolute;
+	border-radius:5px;
+	background:linear-gradient(to right, #84513f, #ea595f);
+	top:75vh;
+	left:335px;
+	height:50px;
+	width:100px;
+}
 @media screen and (max-width:1000px) {
 html{
     position: relative;
@@ -91,6 +100,25 @@ html{
 	.pfpSetting{
 		margin-left:40px!important;
 		left:10%!important
+	}
+	.postCreateDiv{
+		margin-left:13%;
+		left:13%;
+		width:300pximportant;
+	}
+	.postCreateDiv form{
+		flex-direction:column!important;
+	}
+	.postCreateDiv div{
+		max-width:300px!important;
+	}
+	.postCreateButton{
+		width:100px;
+		font-size:smaller!important;
+		left:13%!important;
+		height:30px!important;
+		width:120px!important;
+		top:780px!important
 	}
 	.random {
 	  height: 40vh!important;
