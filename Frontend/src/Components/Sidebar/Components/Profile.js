@@ -121,7 +121,7 @@ const Profile = () => {
       <div className="col-md-12 info-container">
         <div className="col-md-4">
           <div className="container">
-            <img src={user && user.profile?user.profile:obito} alt="not yet?" style={{objectFit:'cover',width:'60%'}} onClick={preview} />
+            <img src={user && user.profile?user.profile:obito} alt="not yet?" style={{objectFit:'cover',width:'60%'}} className={`pictureAtProfile`} onClick={preview} />
           </div>
         </div>
         <div className="col-md-8">
