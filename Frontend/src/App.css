@@ -101,6 +101,9 @@ html{
 	}
 }
 @media screen and (max-width:1000px) {
+	.Profile img:first-child{
+		margin-left:5px!important;
+	}
 	.customModal .col-6:not(.theFooter){
 		flex-direction:column!important;
 	}
