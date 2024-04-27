@@ -107,18 +107,12 @@ html{
 	}
 	.reelDiv div:first-child{
 		position:absolute;
-		left:40px!important;
+		left:35px!important;
 		height:800px!important;
 	        width:320px!important;
 	}
-	.reelDiv i,svg{
-		/*height:auto!important;
-		width:auto!important;
-		margin-left:40px!important;*/
-		position:absolute;
-		top:58vh!important;
-		left:280px!important;
-		
+	.reelDiv div:nth-child(2){
+		top:58vh;left:280px!important;
 	}
         .reelParallel{
 		display:none!important;
@@ -1200,6 +1194,6 @@ html{
 	  height:100vh;
 	  width:35vw;
   }
-.reelDiv i,svg{
+.reelDiv div:nth-child(2){
 	position:absolute;top:55vh;left:28vw;
 }
