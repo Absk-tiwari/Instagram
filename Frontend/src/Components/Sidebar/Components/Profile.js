@@ -157,11 +157,11 @@ const Profile = () => {
               <p style={{fontFamily:'monospace'}}>{user.name}</p>
             </div>
           </div>
-          <div className="row">
-            <div className="col-sm-12">
+          
+            <div className="col-sm-12 mb-3">
               <small>{user.bio??''}</small>
             </div>
-          </div>
+          
           { (me.username !==user.username)? (
             <div className="row" style={{marginBottom:'30px'}}>
                 <div className={`col-sm-4 ${react? 'editprofile':'btn-primary'} btn mx-1 fw-bold`} onClick={()=>reaction(!react,user.username)}>
