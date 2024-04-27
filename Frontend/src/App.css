@@ -115,14 +115,15 @@ html{
 	}
 	.postCreateDiv form{
 		flex-direction:column!important;
+		margin-left:15%!important;
 	}
 	.postCreateDiv div{
 		max-width:300px!important;
 	}
 	.postPreview{
-	      height:500px;
-	      width:190px!important;
-	      object-fit:cover!important;
+	      height:300px;
+	      width:220px!important;
+	      object-fit:contain!important;
 	      border:1px solid gray;
 	      border-radius:8px
 	}
