@@ -151,7 +151,7 @@ const PostFooter = (props) => {
   return (
     <>
       <ContextMenu {...contextMenu}  />
-      <div className="row">
+      <div className="row theFooter">
         <div className="col-sm-1">
           <i className={`fa${!like ? '-regular': ''} fa-heart${like ? ' animate': ''} mt-1`} style={{transition: "0.2s",fontSize: "25px",
           color: like ? 'red':''}} onClick={() =>updatePost(like)} title={like?'Unlike':'Like'}/>
