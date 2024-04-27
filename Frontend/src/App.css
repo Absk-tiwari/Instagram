@@ -101,6 +101,9 @@ html{
 	}
 }
 @media screen and (max-width:1000px) {
+	.customModal div:first-child{
+		flex-direction:column!important;
+	}
 	.reelDiv{
 		width:300px!important;
 		margin-left:30px!important;
@@ -108,7 +111,7 @@ html{
 	.reelDiv div:first-child{
 		position:absolute;
 		left:30px!important;
-		height:800px!important;
+		height:820px!important;
 	        width:320px!important;
 	}
 	.reelDiv div:nth-child(2){
@@ -122,8 +125,8 @@ html{
 		left:10%!important
 	}
 	.postCreateDiv{
-		margin-left:30px!important;
-		left:30px!important;
+		margin-left:40px!important;
+		left:40px!important;
 		width:300pximportant;
 	}
 	.postCreateDiv form{
@@ -134,8 +137,8 @@ html{
 		max-width:300px!important;
 	}
 	.postPreview{
-	      height:300px;
-	      width:220px!important;
+	      height:350px;
+	      width:280px!important;
 	      object-fit:contain!important;
 	      border:1px solid gray;
 	      border-radius:4px
@@ -146,7 +149,7 @@ html{
 		left:10%!important;
 		height:30px!important;
 		width:120px!important;
-		top:600px!important
+		top:560px!important
 	}
 	.random {
 	  height: 40vh!important;
