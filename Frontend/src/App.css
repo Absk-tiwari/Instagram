@@ -266,13 +266,7 @@ html{
 		max-height:820px!important;
 		overflow:scroll!important
 	}
-	.cpo{
-		margin: auto;
-		margin-left:2px!important;
-	}
-	.cpo p{
-		margin-left: 5px;
-	}
+	
 	.row .list-item{
 		margin-left: 20px;
 	}
