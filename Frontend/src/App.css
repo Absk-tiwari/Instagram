@@ -101,6 +101,10 @@ html{
 	}
 }
 @media screen and (max-width:1000px) {
+	.userStory{
+	  position:absolute;
+	  left:68%;
+	}
 	.myStory{
 		margin-left:0px!important;
 	}
