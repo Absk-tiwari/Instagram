@@ -105,6 +105,11 @@ html{
 	  position:absolute;
 	  left:68%;
 	}
+	.fa-ellipsis-h{
+	  position:static;
+	  right:15%;
+	  top:10px
+	}
 	div.myStory img{
 		margin-left:0px!important;
 	}
