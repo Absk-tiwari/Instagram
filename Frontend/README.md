@@ -1,4 +1,4 @@
-This is just my side-work ; and if you are reading this you must not be a beginner, if not so then you are quick to your destinations.
+
 
 
 # Getting Started with Create React App
