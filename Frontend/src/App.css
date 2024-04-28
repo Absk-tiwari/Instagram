@@ -107,11 +107,11 @@ html{
 	}
 	.fa-ellipsis-h{
 	  position:static;
-	  right:15%;
+	  right:25%;
 	  top:10px
 	}
 	.Profile .customModal .col-6{
-		display:block!important;
+		flex-direction:column!important;
 		width:100%!important;
 	}
 	.Profile .customModal .imgContainer{
