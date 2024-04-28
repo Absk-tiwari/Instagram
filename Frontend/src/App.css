@@ -101,7 +101,7 @@ html{
 	}
 }
 @media screen and (max-width:1000px) {
-	.stories div:first-child{
+	.myStory{
 		margin-left:0px!important;
 	}
 	.customModal .col-6:not(.theFooter){
