@@ -105,7 +105,7 @@ html{
 	  position:absolute;
 	  left:68%;
 	}
-	.myStory{
+	div.myStory img{
 		margin-left:0px!important;
 	}
 	.customModal .col-6:not(.theFooter){
