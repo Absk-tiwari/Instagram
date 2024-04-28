@@ -110,6 +110,15 @@ html{
 	  right:15%;
 	  top:10px
 	}
+	.Profile .customModal .col-6{
+		display:block!important;
+		width:100%!important;
+	}
+	.Profile .customModal .imgContainer{
+		height:400px!important;
+		width:320px!important;
+		object-fit:contain!important;
+	}
 	.Profile .cpo img.pfpicture{
 		margin-left:-30px!important;
 	}
