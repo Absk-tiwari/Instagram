@@ -52,7 +52,7 @@ const PostHead = (props) => {
         <Link className={`text-decoration-none text-dark fw-bold linkToProfile`} id="link" to={`/profile/${post.username}`}>
            {post.username}
         </Link>
-        {post.username==='absk.tiwari' || post.verified ?
+        { post.verified ?
            <img height={20} width={20} src={verified} className={`mx-1`} alt={''}/> 
           :'' 
         }
