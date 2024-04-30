@@ -23,6 +23,7 @@ router.post("/", fetchuser, async (req, res) => {
 	for(let post of posts){ // customizing the follow btn state on post heads
 		
 		let pfp = await User.findById(post.user_id).select('profile -_id')
+    if(pfp===null) continue
 		post._doc.profile = pfp.profile
 
 		let found = await Followers.find({of:post.username,username:thisUser.username})

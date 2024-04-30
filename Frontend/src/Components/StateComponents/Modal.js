@@ -34,6 +34,7 @@ const Modal = ({ isOpen, dimens, onClose, children }) => {
           boxShadow: "10px solid gray",
 		  overflow:dimens.overflow??'auto'
         }}
+        className={`firstChild`}
       >
         {children}
       </div>

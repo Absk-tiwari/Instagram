@@ -21,7 +21,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg mt-5 mx-4" style={{position:'static'}}> 
+      <nav className="navbar-expand-lg mt-4 mx-4" style={{position:'static'}}> 
       { Loaded===false ?
         <div className="stories" >
          <div className={`myStory`} style={{position:'relative', marginBottom:'15px'}} onClick={addToStory}>
