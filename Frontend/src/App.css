@@ -1,7 +1,6 @@
 .App {
   height: 100vh;
   width: 100%;
-  max-width: 350px;
 }
 body {
   margin: 0;
@@ -470,8 +469,8 @@ html{
 	width: 100%!important;
   }
   .pfpicture {
-	height: 50px!important;
-	width: 50px!important;
+	height: 50px;
+	width: 50px;
 	border-radius: 100%;
 	background-color: aliceblue;
 	object-fit: cover;
