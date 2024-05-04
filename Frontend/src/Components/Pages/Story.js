@@ -1,8 +1,43 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect,useState, useRef } from 'react'
 import { Link } from 'react-router-dom';
 import StoryContext from '../../Contexts/Stories/StoryContext';
 
 const Story = () => {
+    const closer = useRef(null)
+    const [pageX , setX] = useState(0)
+    const [touchStart, setTouchStart] = useState(null)
+    const [touchEnd, setTouchEnd] = useState(null)
+    // the required distance between touchStart and touchEnd to be detected as a swipe
+    const minSwipeDistance = 60 
+
+    const onTouchStart = e => { 
+        
+        setTouchEnd(null) // otherwise the swipe is fired even with usual touch events
+        if(e.type==='click') {setX(e.pageX); return }
+        setTouchStart(e.targetTouches[0].clientY)
+    }
+
+    const onTouchMove = e => setTouchEnd(e.targetTouches[0].clientY)
+
+    const onTouchEnd = e => {
+        if (!touchStart || !touchEnd)
+        { 
+            change(e)
+            return
+        } 
+
+        const distance = touchStart - touchEnd
+        const topSwipe = distance > minSwipeDistance
+        const bottomSwipe = distance < -minSwipeDistance
+        if (topSwipe || bottomSwipe) console.log('swipe', topSwipe ? 'top' : 'bottom')
+        if(topSwipe) alert('story viewers')
+        if(bottomSwipe)
+        {
+            //alert('close story')
+            closer.current.click()
+        }
+    // add your conditional logic here
+    }
     const all = useContext(StoryContext)
     let nextRef = useRef(null)
     let list = [];
@@ -14,30 +49,35 @@ const Story = () => {
     useEffect(()=>{
         document.getElementById('progres-bar').children[0].classList.add('seen');
         document.getElementById('contents').childNodes[0].setAttribute('id','list-active')
-    })
+        return ()=> null
+    },[])
  
     const change = e => {
-
-        let ele = e.target 
+  
         let list = document.getElementById('contents').children
         let progressList = document.getElementById('progres-bar').children
         let activeImg = document.getElementById('list-active');
         let activeImgIndex = Array.from(list).indexOf(activeImg);
 
-        if(ele.getAttribute('data-type') === 'right' && activeImgIndex < list.length){
+        if(pageX > window.screen.width / 2  
+            && activeImgIndex < list.length)
+        {
+            console.log(`activeImgIndex `+activeImgIndex+` activeImg `,activeImg  )
             if(list[activeImgIndex+1]!==undefined){
                 // progressList[activeImgIndex].classList.remove('active')
                 progressList[activeImgIndex+1].classList.add('seen')
-                activeImg.removeAttribute('id');
+                activeImg.id=null;
                 list[activeImgIndex+1].setAttribute('id','list-active')
             }
         } 
         if(activeImgIndex+1 >= list.length){
-            document.querySelector('.exit').click()
+            closer.current.click()
         }
         
-        if(ele.getAttribute('data-type') === 'left' && activeImgIndex !==0 ){
+        if( pageX < window.screen.width / 2 && activeImgIndex !==0 ){
+            console.log(`its a left click`);
             if(list[activeImgIndex-1]!==undefined){
+                console.log(` and it should work`);
                 progressList[activeImgIndex].classList.remove('seen')
                 progressList[activeImgIndex-1].classList.add('active')
                 activeImg.removeAttribute('id');
@@ -47,7 +87,7 @@ const Story = () => {
  
     }
     return ( 
-     <div id='storyviewer' >
+     <div id={'storyviewer'} onClick={onTouchStart} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         <section id='progres-bar' className='d-flex' style={{position:"absolute"}}>
             {list}
         </section>
@@ -65,7 +105,7 @@ const Story = () => {
         <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
         </svg>  
          
-        <Link className='fs-2 exit' style={{position:'absolute', top:'3%', left:'80%'}} to={'/'}><i className='btn btn-close' style={{ color:'white'}}></i></Link>
+        <Link className='fs-2 exit' ref={closer} style={{position:'absolute', top:'3%', left:'80%'}} to={'/'}><i className='btn btn-close' style={{ color:'white'}}/></Link>
     </div>
       );
     } 

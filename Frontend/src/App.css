@@ -121,7 +121,7 @@ html{
 	.firstChild .container{
 		flex-direction: column!important;
 	}
-	div.myStory img{
+	div.myStory .story{
 		margin-left:0px!important;
 	}
 	.customModal .col-6:not(.theFooter){
@@ -260,7 +260,9 @@ html{
 	}
 	.home{
 		position: static;
-		margin-left: 13%;
+		margin-left: 12%;
+		width: 90vw;
+		overflow-x: hidden;
 	}
 	#modal h3{
 		margin-top:25px
@@ -348,7 +350,26 @@ html{
 	}
 	.custom-sidebarList {
 		/* width: 12%!important; */
+		display:flex!important;
+		flex-direction: column!important;
+		justify-content: center!important;
 	}
+	.postContent{
+		width: 101%!important;
+		object-fit: fill!important;
+	}
+	#storyviewer li{
+		width: 100vw;
+		left: 0%!important;
+	}
+	#storyviewer img{
+		height: 100vh!important;
+		width: 100vw!important;
+		margin-top: -25px;
+	}
+	#storyviewer svg{
+		display: none;
+	}	
 }
 /* mobile version ended above */
 .stories{    
@@ -754,6 +775,12 @@ html{
 	position: relative;
 	z-index: 1;
 	background: #3a3838;
+  }
+  #progress-bar{
+	width: -webkit-fill-available!important;
+  }
+  section{
+	width: -webkit-fill-available;
   }
   .progress-item{
 	margin-top: 5px!important;

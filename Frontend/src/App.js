@@ -28,11 +28,13 @@ import Reset from "./Components/Pages/Auth/Reset";
 import { useEffect } from "react";
 import { socket } from "./socket";
 import headers from "./APIs/Headers";
+import { useSelector } from "react-redux";
 const HOST = process.env.REACT_APP_SERVER_URI
 function App() {
-                    
+ const state = useSelector(state=> state.auth)
  useEffect(()=>{
-	if(localStorage.getItem('token')){
+    console.log(state )
+   if(localStorage.getItem('token')){
 		let me= JSON.parse(localStorage.getItem('userLogin'))
 		socket.connect()
 		fetch(`${HOST}/api/messages/count/${me.username}`,{

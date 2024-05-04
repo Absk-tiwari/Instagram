@@ -1,4 +1,5 @@
-const { createSlice } = require("@reduxjs/toolkit")
+import { createSlice } from "@reduxjs/toolkit"
+import {getUserDetails}  from "../actions/auth";
 
 const userToken = localStorage.getItem('token')
   ? localStorage.getItem('token')
@@ -19,12 +20,11 @@ const authSlice = createSlice({
 		logout:state=>{},
 		setCredentials:(state, {payload})=>{
 			state.userInfo = payload
-		}
-	},
-	extraReducers:{
-		getUser: (state) => {
+		},
+		getUser: state => {
 			state.loading = true
 			state.error = null
+			state.userInfo= getUserDetails()
 		}
 	}
 })

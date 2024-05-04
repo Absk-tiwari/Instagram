@@ -70,7 +70,7 @@ const Notifications = (props) => {
   const rem = () => setContext({isVisible : false})
 
     useEffect(() => { 
-    
+      if(localStorage.getItem('token')===null) return 
       const notify = data =>{
         let temp = notifications
         temp.unshift(data)
