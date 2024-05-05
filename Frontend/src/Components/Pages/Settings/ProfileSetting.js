@@ -9,6 +9,7 @@ import Loader from '../../StateComponents/Loader';
 const ProfileSetting = () => {
 	let navigator = useNavigate()
 	let user = JSON.parse(localStorage.getItem('userLogin'))
+  const pageX = window.screen.width 
   const [isLoading, setLoading] = useState(false)
   const [file,setFile] = useState('')
   const {LoggedIn} = useContext(ProfileContext);
@@ -77,35 +78,35 @@ const ProfileSetting = () => {
         <form>
 
         <div className='row offset-1 mt-2'>
-            <div className='col-md-12 d-flex'>
-                <div className='col-md-1'>
-                    <img src={image} className='pfpicture' style={{height:'10vh',width:'10vw!important'}} alt='nhi dikha?' />
+            <div className={`col-md-12 ${pageX > 500?'d-flex':''}`}>
+                <div className='col-md-2'>
+                    <img src={image} className='pfpicture' alt='nhi dikha?'/>
                 </div>
                 <div className='col-md-7' style={{lineHeight:'0.5'}}>
-                    <p className='text-dark fw-bold px-3 pt-3'>{user.username}</p>
-                    <label htmlFor='pfpUpdate' className='fw-bold px-3 text-primary cpo'>Change Profile Photo</label>
+                    <p className={`text-dark fw-bold ${pageX>500?'px-3':''} pt-3`}>{user.username}</p>
+                    <label htmlFor='pfpUpdate' className={`fw-bold ${pageX>500?'px-3':''} text-primary cpo`}>Change Profile Photo</label>
                     <input type='file' id='pfpUpdate' className='d-none' onChange={submitFile}/>
                 </div>
      
             </div>
         </div>
         <div className='row offset-1 mt-4 '>
-            <div className='col-md-12 d-flex' >
+            <div className={`col-md-12 ${pageX > 500?'d-flex':''}`} >
                 <div className='col-md-1'>
                     <p className='fw-bold pt-2'>Website</p>
                 </div>
-                <div className='col-md-9 mx-3'>
-                    <input type='text' name='website' autoComplete='false' placeholder='Website' className='form-control searchbox' value={fields.website} onChange={(e)=>setFields({...fields,[e.target.name]:e.target.value})} id='website' />
+                <div className={`col-md-9 ${pageX>500?'mx-3':''}`}>
+                    <input type='text' name='website' autoComplete='false' placeholder='Website' className={`form-control ${pageX>500?'searchbox':''}`} value={fields.website} onChange={(e)=>setFields({...fields,[e.target.name]:e.target.value})} id='website' />
                 </div>
             </div>
         </div>
         <div className='row offset-1 mt-4 '>
-            <div className='col-md-12 d-flex' >
+            <div className={`col-md-12 ${pageX > 500?'d-flex':''}`} >
                 <div className='col-md-1'>
                     <p className='fw-bold pt-2'>Bio</p>
                 </div>
-                <div className='col-md-9 mx-3'>
-                    <textarea  autoComplete='false' name='bio' placeholder='Bio' value={fields.bio} onChange={(e)=>setFields({...fields,[e.target.name] : e.target.value})} className='form-control searchbox' id='website' />
+                <div className={`col-md-9 ${pageX>500?'mx-3':''}`}>
+                    <textarea  autoComplete='false' name='bio' placeholder='Bio' value={fields.bio} onChange={(e)=>setFields({...fields,[e.target.name] : e.target.value})} className={`form-control ${pageX>500?'searchbox':''}`} id='website' />
                     <small >{fields.bio.length} / 150 characters</small>
                 </div>
             </div>

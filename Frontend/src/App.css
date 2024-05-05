@@ -113,6 +113,9 @@ html{
 	  position:absolute;
 	  left:68%;
 	}
+	.fa-heart{
+		font-size: x-large;
+	}
 	.fa-ellipsis-h{
 	  position:static;
 	  right:25%;
@@ -189,9 +192,12 @@ html{
 	.reelParallel{
 		display:none!important;
 	}
-	.pfpSetting{
-		margin-left:40px!important;
-		left:10%!important
+	.pfpSetting textarea,input{
+		width: 75vw!important;
+	}
+	.pfpSetting .pfpicture{
+		width:65px!important;
+		height: 65px!important;
 	}
 	.postCreateDiv{
 		margin-left:40px!important;
@@ -208,11 +214,14 @@ html{
 	.postCreateDiv h4,p{
 		margin-left: 0px!important;
 	}
-	.postCreateDiv textarea, input{
+	.postCreateDiv>textarea,input{
 		border:0.5px solid lightgray;
 		width:93%!important;
 		height:auto!important;
 		margin-left: 0px!important;
+	}
+	.pfpSetting input[type="checkbox"]{
+		width: 17px!important;
 	}
 	.postCreateDiv div:last-child{
 		margin-top: 10px!important;
@@ -341,7 +350,7 @@ html{
 		max-width: 96vw;
 		justify-content: space-between;
 	}
-	.searchbox{
+	.searchbox:not(.pfpSetting){
 		width: 78%!important;
 		margin-left: 5px;
 	}

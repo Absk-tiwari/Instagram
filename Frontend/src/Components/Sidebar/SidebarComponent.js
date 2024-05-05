@@ -211,6 +211,7 @@ function SidebarComponent() {
        
         <div className="offcanvas-header header-notification">
           <h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">Notifications </h5>
+          {window.screen.width < 500 ?  <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> :''}
         </div>
         <div className="offcanvas-body"> 
           <Notifications read={hasRead}/>

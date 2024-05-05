@@ -216,9 +216,15 @@ const Profile = () => {
     ):<Loader height={200} left={350} Class={`outer`}/>
   }
   {loaded && 
-  <div id="moreOnProfile" className="dropup custom-row" data-bs-toggle="dropdown" aria-expanded="false">
-	<div id="icon" style={{height:`20px`,marginTop:'40px',left:'35vw'}}>
-	<img className="icons" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAp0lEQVR4nO3asQ2DUAwFwLdGBiEbAYuSdeipfoTECoktuJM8gF3YhV8CAAAAAAAAALT2TvJJciQZN6/j6vXsuYVXkr3BYMafa796L7c2GMYoqiUNLA0GMYpqTgNWUAPnQdoedIS3JFP10AEAAAAAAOA55IIKecoXkwsqJhdUzApqQC4IAAAAAAAA+CG5oEKe8sXkgorJBRWzghqQCwIAAAAAAAAA0soXCrVQlGy0EVkAAAAASUVORK5CYII=" alt="not yet?"/></div><a id="title" href="/profile">  More  </a><ul className={"dropdown-menu"} ><li><a className="dropdown-item px-4" href="/profile"> Settings </a></li><li><a className="dropdown-item px-4" href="/profile"> Saved </a></li><li><a className="dropdown-item px-4 openModal" href="/profile"> Log out </a></li></ul></div>}
+  <div id="moreOnProfile" className="dropdown custom-row" data-bs-toggle="dropdown" aria-expanded="false">
+	<div id="icon" style={{height:`20px`,marginTop:'40px',left:'35vw',fontSize:'20px'}}>
+	 &#x2630;</div> 
+    <ul className={"dropdown-menu"} >
+      <li><a className="dropdown-item px-4" href="/profile"> Settings </a></li>
+      <li><a className="dropdown-item px-4" href="/profile"> Saved </a></li>
+      <li><a className="dropdown-item px-4 openModal" href="/profile"> Log out </a></li>
+    </ul>
+  </div>}
     </>
   );
 };

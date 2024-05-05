@@ -56,7 +56,7 @@ export const SidebarData = [
   },
   {
     title: "Notifications",
-    icon: <img onClick={refer} className="icons" data-bs-toggle="offcanvas" data-bs-target="#notifications" data-refer="/notifications" src={Notifications} alt={``} />,
+    icon: <i onClick={refer} className="icons fa-regular fa-heart fs-4" data-bs-toggle="offcanvas" data-bs-target="#notifications" data-refer="/notifications" />,
     link: "/notifications",
     modal: "#notifications",
   },
