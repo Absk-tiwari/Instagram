@@ -137,22 +137,22 @@ function SidebarComponent() {
 		  <img src={logo} alt="" height="40" className="d-none" />
         </div>
         <div className="custom-sidebarList">
-          {SidebarData.map((val, key) => {
+          {SidebarData.map((menu, key) => {
             return (
-              <div className={`custom-row ${location.pathname === val.link && "active"}`} key={key}
-               onClick={refer} data-refer={val.link} >
-                <div id="icon" style={{ height: "20px" }} data-refer={val.link} onClick={refer}>
-                  {val.icon}
-				  {val.add??''}
-                  {val.link === "/notifications" && <span className="arrived d-none">.</span>}
+              <div className={`custom-row ${location.pathname === menu.link && "active"} `+menu.title} key={key}
+               onClick={refer} data-refer={menu.link} >
+                <div id="icon" style={{ height: "20px" }} data-refer={menu.link} onClick={refer}>
+                  {menu.icon}
+				  {menu.add??''}
+                  {menu.link === "/notifications" && <span className="arrived d-none">.</span>}
                 </div>
-                {val.link === "/notifications" || val.link === "/search" ? (
+                {menu.link === "/notifications" || menu.link === "/search" ? (
                   <>
-                  <Link id="title" to={val.link} onClick={val.title === "Create" ? submit: val.link==='/notifications' && markRead}
-                    data-refer={val.link} data-bs-toggle="offcanvas" data-bs-target={val.modal} >
-                   {val.title} 
+                  <Link id="title" to={menu.link} onClick={menu.title === "Create" ? submit: menu.link==='/notifications' && markRead}
+                    data-refer={menu.link} data-bs-toggle="offcanvas" data-bs-target={menu.modal} >
+                   {menu.title} 
                   </Link>
-                 {val.link === "/notifications" && <div className="likenotif d-none">
+                 {menu.link === "/notifications" && <div className="likenotif d-none">
                     <div className="rectangle">
                       <div className="heart"></div>
                       <div className="number">4</div>
@@ -161,8 +161,8 @@ function SidebarComponent() {
                   </div>}
                   </>
                 ) : (
-                  <Link id="title" to={val.link} onClick={val.title === "Create" && submit} data-refer={val.link} >
-                    {val.title}
+                  <Link id="title" to={menu.link} onClick={menu.title === "Create" && submit} data-refer={menu.link} >
+                    {menu.title}
                   </Link>
                 )}
               </div>

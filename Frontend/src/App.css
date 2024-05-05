@@ -1,6 +1,7 @@
 .App {
   height: 100vh;
   width: 100%;
+  overflow-x: hidden;
 }
 body {
   margin: 0;
@@ -63,9 +64,16 @@ html{
 	overflow-x: scroll!important;
 	position: static!important;
 }
+/* Chat screen */
+.openModal{
+	margin-right:23px
+}
 .user-row{
-	/* display: none; */
-	width: 89vw!important;
+	width: 100vw!important;
+	padding: 5px;
+}
+.user-row .hstack{
+	justify-content: space-between;
 }
 .chat-open-screen{
 	display: none;
@@ -121,35 +129,64 @@ html{
 	.firstChild .container{
 		flex-direction: column!important;
 	}
+	.firstChild{
+		margin-top: 20vh!important;
+		height: 80vh!important; 	
+	}
 	div.myStory .story{
 		margin-left:0px!important;
 	}
-	.customModal .col-6:not(.theFooter){
-		flex-direction:column!important;
+	.customModal .container{
+		flex-direction: column;
 	}
-	div.posts-of-logged-in-user{
-		flex-direction:row!important;
-		width:90px!important;
-		height:90px!important;
+	.customModal .secondChild{
+		margin-top:60px!important 
+	}
+	.customModal .imgContainer{
+		width: auto!important;
+		max-width: 90vw;
+	}
+	/* the profile section */
+	.tab-content{
+		margin-left: 6%;
+	}
+	div.posts-of-logged-in-user{ 
+		width: 90px !important;
+        height: 115px !important;
 	}
 	.posts-of-logged-in-user .postImg{
-		height:85px!important;
-		width:85px!important;
+		height:111px!important;
+		width:111px!important;
 	}
 	.reelDiv{
-		width:300px!important;
-		margin-left:30px!important;
+		width:100vw!important; 
+	}
+	.reelDiv svg {
+		font-size: 35px;
+		width: 35px;
+	}
+	.reelDiv i {
+		font-size: 35px!important;
+	}
+	.reelDiv .account{
+		width: 100vw!important;
+	}
+	.reelDiv video{
+		margin-top: 80px;
+	} 
+	.reelDiv button{
+		height: 40px;
 	}
 	.reelDiv div:first-child{
 		position:absolute;
-		left:30px!important;
-		height:820px!important;
-	        width:335px!important;
+		/* left:30px!important; */
+		height:100vh!important;
+		width:100vw!important;
 	}
 	.reelDiv div:nth-child(2){
-		top:58vh;left:280px!important;
+		top:58vh;left:85vw!important;
 	}
-        .reelParallel{
+	.reelParallel{
 		display:none!important;
 	}
 	.pfpSetting{
@@ -159,17 +196,30 @@ html{
 	.postCreateDiv{
 		margin-left:40px!important;
 		left:40px!important;
-		width:300pximportant;
+		width:auot!important;
 	}
 	.postCreateDiv form{
 		flex-direction:column!important;
-		margin-left:45px!important;
+		margin-left:5%!important;
 	}
 	.postCreateDiv div{
 		max-width:300px!important;
 	}
+	.postCreateDiv h4,p{
+		margin-left: 0px!important;
+	}
+	.postCreateDiv textarea, input{
+		border:0.5px solid lightgray;
+		width:93%!important;
+		height:auto!important;
+		margin-left: 0px!important;
+	}
+	.postCreateDiv div:last-child{
+		margin-top: 10px!important;
+		margin-left: 0px!important;
+	}
 	.postPreview{
-	      height:350px;
+	      height:280px;
 	      width:280px!important;
 	      object-fit:contain!important;
 	      border:1px solid gray;
@@ -178,10 +228,10 @@ html{
 	.postCreateButton{
 		width:100px;
 		font-size:smaller!important;
-		left:10%!important;
-		height:30px!important;
+		left:0%!important;
+		height:40px!important;
 		width:120px!important;
-		top:500px!important
+		top:370px!important
 	}
 	.random {
 	  height: 40vh!important;
@@ -217,6 +267,8 @@ html{
 	}
 	.info-container{
 		flex-direction: column;
+		width: fit-content;
+		padding-inline-start: 40px;
 	}
 	.info-container h4{
 		margin-left: 0px!important;
@@ -226,7 +278,7 @@ html{
 		font-size: small;
 	}
 	.info-container .col-md-8 .row{
-		width: 300px;
+		width: 100vw;
 	}
 	.info-container img:first-child{
 		width: 130px!important;
@@ -268,7 +320,7 @@ html{
 		margin-top:25px
 	}
 	.Profile .col-12{
-		width: 300px;
+		width: 90vw;
 	}
 	.Profile .row>small{
 		margin-bottom:10px!important;
@@ -285,8 +337,8 @@ html{
 	}
 	
 	.row .list-item{
-		margin-left: 20px;
-		max-width: 270px;
+		margin-left: 5px;
+		max-width: 96vw;
 		justify-content: space-between;
 	}
 	.searchbox{
@@ -306,13 +358,13 @@ html{
 	.outer .spinner{
 		height: 100px!important;
 		width: 100px!important;
-		margin-left: 160px!important;
+		margin-top: 30vh!important;
 	}
 	.bakwaas{
 		padding-left: 40px;
 	}
 	.openchat .col-sm-2{
-		width: 10%!important;
+		width: 18%!important;
 	}
 	.openchat .col-sm-10{
 		width: 70%!important;
@@ -327,7 +379,7 @@ html{
 		margin-left:110px!important
 	}
 	.stories{
-		width: 300px!important;
+		width: 90vw!important;
 	}
 	.home .col-md-8 {
 		margin-top: 10px!important;
@@ -342,17 +394,59 @@ html{
 	.info-container .row:last-child .col-sm-4:nth-child(even){
 		margin-left: 30px!important;
 	}
-	.navbar span.placeholder:first-child{
-		margin-left:-5px!important;
+	/* Story placeholder glow  and sidebar put to down */
+	.home nav p.placeholder-glow:first-child{
+		margin-left:-42px!important;
+	}  
+	.App{
+		flex-direction: column;
+		overflow-x: hidden;
+		height: auto;
 	}
-	.navbar span.placeholder:nth-child(even){
-		display:none
+	.custom-logo, .Explore{
+		display: none!important;
+	}
+	div#more{
+		position: fixed;
+		top: 20px;
+		left: 79vw;
+		width: 20%;
+	}
+	.offcanvas.offcanvas-start{
+		left: 0%!important;
+		width: 101vw!important;
+		padding: 17px;
+	}
+	.home, .page{
+		width: 100%!important;
+		margin-left: 0%!important;
+		left: 0%!important;
+		overflow-x: hidden;
+	} 
+	.custom-sidebar{
+		display: flex;
+		position: absolute;
+		top: 80vh;
+	}
+	div#more{
+		display: none!important 
+	}
+	.offcanvas-body li.d-flex{
+		justify-content: space-between;
 	}
 	.custom-sidebarList {
-		/* width: 12%!important; */
+		width: 100%!important;
 		display:flex!important;
-		flex-direction: column!important;
-		justify-content: center!important;
+		flex-direction: row!important;
+		justify-content: space-evenly!important;
+		z-index: 2000;
+		height: 74px !important;
+        padding-top: 0px !important;
+        margin-top: 12vh;
+		background-color: white;
+		padding-inline: 15px;
+        padding-left: 0px;
+		border-top: 0.5px solid gray;
 	}
 	.postContent{
 		width: 101%!important;
@@ -370,6 +464,20 @@ html{
 	#storyviewer svg{
 		display: none;
 	}	
+	.post .card-body{
+		width: 107vw!important;
+		margin-left:-23px!important;
+	}
+	/*comment Modal for POSTS on homepage */
+	.cpo .col-sm-2{
+		width: 20%;
+	}
+	.cpo .col-sm-10{
+		width: 80%;
+	}
+	form#commentForm{
+		display: flex;
+	}
 }
 /* mobile version ended above */
 .stories{    
@@ -587,9 +695,6 @@ html{
   }
   
   .Profile {
-	/* background-color: #16a516; */
-	/* margin-block: 35px!important;
-	margin-inline: 65px!important; */
 	margin-top: 20px;
 	margin-left: 20px;
 	float: left;
@@ -598,9 +703,7 @@ html{
   }
   
   .info-container {
-	/* background-color:burlywood; */
 	margin: 0;
-	/* margin-inline:0px; */
 	height: 38%;
 	display: flex;
 	border-bottom: 1px solid darkgray;
@@ -608,14 +711,12 @@ html{
   
   .info-container .col-md-4 {
 	height: 100%;
-	/* background-color: yellowgreen; */
   }
   .info-container .container {
 	height: 100%;
 	display: block;
 	align-items: center;
 	justify-content: center;
-	/* background-color: turquoise; */
 	text-align: center;
   }
   .info-container img {
@@ -689,7 +790,7 @@ html{
   }
   
   .offcanvas.offcanvas-start {
-	left: 16% !important;
+	left: 16%;
   }
   .header-notification {
 	border-bottom: 2px solid darkgray;

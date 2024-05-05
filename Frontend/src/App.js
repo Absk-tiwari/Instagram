@@ -31,6 +31,7 @@ import headers from "./APIs/Headers";
 import { useSelector } from "react-redux";
 const HOST = process.env.REACT_APP_SERVER_URI
 function App() {
+console.log('window.width is ', window.screen )
  const state = useSelector(state=> state.auth)
  useEffect(()=>{
     console.log(state )

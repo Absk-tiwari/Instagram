@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react'
 import {toast} from 'react-toastify'
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux'; 
-
+import Loader from '../../StateComponents/Loader'
 const Create = () => {
   const post = useSelector(state=> state.image.imageURL) 
   const navigator = useNavigate()
   const [orgPost, setPost] = useState('')
   const [fields, setfields] = useState({caption : '', location:''})
+  const [isLoading, setLoading] = useState(false)
 
   useEffect(()=>{
     var fileReader = new FileReader()
     fileReader.onload = function (e) {
       setPost(e.target.result) 
     }
+	if(typeof post!=='Blob') return navigator('/')
     fileReader.readAsDataURL(post); // Change to readAsDataURL  
     //console.log(typeof post, post)
   },[post])
@@ -22,6 +24,7 @@ const Create = () => {
 
   const handleSubmit = async(event) =>{
     event.preventDefault()
+	setLoading(true)
   	let body= new FormData()
 	body.append('post',post)
 	body.append('caption',fields.caption)
@@ -62,7 +65,8 @@ const Create = () => {
           <div style={{position:'relative'}}>
             <h4>Preview</h4><br/>
             <img src={orgPost} className={`postPreview`} alt='' />
-            <button type='submit' className={'btn text-white postCreateButton'}>Post</button>
+			{isLoading? <Loader />:
+            <button type='submit' className={'btn text-white postCreateButton'}>Post</button>}
           </div>
         </div>    
         </form>

@@ -2,15 +2,18 @@ import React, {  useEffect, useState}  from "react";
 import PostHead from "./Components/PostHead";
 import PostFooter from "./Components/PostFooter";
 import headers from "../../../APIs/Headers";
+import Loader from "../../StateComponents/Loader";
 
 const Post = () => {
 	const  [posts, setPosts] = useState([])
+	const [loading, setLoaing] = useState(false)
 	const reflection = updatedPosts => setPosts(updatedPosts)
 	useEffect(()=>{ 
 		let skip = 0
 		let stopRequest =false
 		const fetchData = async () => { 
 		if(!stopRequest){   // continue only if last request had a response 
+			setLoaing(true)
 			fetch(process.env.REACT_APP_SERVER_URI+'/api/post',{
 			   method:'POST',
 			   headers:headers(),
@@ -24,6 +27,7 @@ const Post = () => {
 			   }else{ 
 				stopRequest= true
 			   }
+			  setTimeout(() => setLoaing(false) , 1000); 
 		   });  
 		}
 	  };
@@ -57,8 +61,8 @@ const Post = () => {
             </div>
           </div>
         );
-      })
-      :  <> 
+	})
+	:  <> 
         <div className="col-md-8 post card mt-5" >
           <div className="card-body">
             <h5 className="card-title placeholder-glow">
@@ -73,6 +77,7 @@ const Post = () => {
         </div> 
         </>
       }
+	{loading && <Loader height={50}/>}
     </>
   );
 };
