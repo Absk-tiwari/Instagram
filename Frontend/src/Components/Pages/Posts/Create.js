@@ -12,12 +12,11 @@ const Create = () => {
 
   useEffect(()=>{
     var fileReader = new FileReader()
-    fileReader.onload = function (e) {
-      setPost(e.target.result) 
-    }
-	if(typeof post!=='Blob') return navigator('/')
+    fileReader.onload = e=>setPost(e.target.result) 
+  	if(typeof post!=='object') return navigator('/')
     fileReader.readAsDataURL(post); // Change to readAsDataURL  
     //console.log(typeof post, post)
+    return ()=>null
   },[post])
 
   const onchange = e => setfields({...fields, [e.target.name]:e.target.value})
