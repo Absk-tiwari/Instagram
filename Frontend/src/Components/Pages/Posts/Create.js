@@ -11,11 +11,14 @@ const Create = () => {
   const [isLoading, setLoading] = useState(false)
 
   useEffect(()=>{
+	  try{
     var fileReader = new FileReader()
     fileReader.onload = e=>setPost(e.target.result) 
-  	if(typeof post!=='object') return navigator('/')
     fileReader.readAsDataURL(post); // Change to readAsDataURL  
     //console.log(typeof post, post)
+	  }catch(err){
+	return navigator('/')	  
+	  }
     return ()=>null
   },[post])
 
