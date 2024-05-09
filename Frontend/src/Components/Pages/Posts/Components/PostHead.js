@@ -59,7 +59,7 @@ const PostHead = (props) => {
         <small className="text-secondary mx-1">{ howLong(new Date(post.created_at)) }</small> <br/>
         <small className="mb-2">{post.location}</small>
       </div>
-	  <div className="col-5">
+	  <div className="col-4">
 	  {post.username!==me.username?
 		(<Button text={post.shouldFollow?'Follow':'Following'} Class={post.shouldFollow?`followbtn`:'followingbtn'} alt={post.shouldFollow?'Following':'Follow'}/>):''} 
       </div>

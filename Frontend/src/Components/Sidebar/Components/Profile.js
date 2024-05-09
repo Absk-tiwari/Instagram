@@ -9,6 +9,7 @@ import Loader from "../../StateComponents/Loader";
 import headers from "../../../APIs/Headers";
 import Chat from '../Components/Messages/Chat'
 import { socket } from "../../../socket";
+import Modal from "../../StateComponents/Modal";
 
 const Profile = () => {
   const location = useLocation()
@@ -16,10 +17,14 @@ const Profile = () => {
   const [chatopened, setupChat] = useState(false)
   const [user, setUser] = useState([])
   const [posts, setPost] = useState([])
+  const [open, setmodal] = useState(false);
+  const lstyle = { listStyleType: "none" };
   const [react, setReact] = useState(false)
   
   let me = JSON.parse(localStorage.getItem('userLogin')) 
-
+  const toggleModal = e => {
+    if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
+  };
   const preview =  e => {
     let div = document.createElement("div"); 
     div.classList.add('randomDiv') ;
@@ -216,16 +221,30 @@ const Profile = () => {
     ):<Loader height={200} left={350} Class={`outer`}/>
   }
   {loaded && 
+  (<>
   <div id="moreOnProfile" className="dropdown custom-row" data-bs-toggle="dropdown" aria-expanded="false">
 	<div id="icon" style={{height:`20px`,marginTop:'40px',left:'35vw',fontSize:'20px'}}>
 	 &#x2630;</div> 
-    <ul className={"dropdown-menu"} >
-      <li><a className="dropdown-item px-4" href="/profile"> Settings </a></li>
-      <li><a className="dropdown-item px-4" href="/profile"> Saved </a></li>
-      <li><a className="dropdown-item px-4 openModal" href="/profile"> Log out </a></li>
+    <ul className={"dropdown-menu"} style={{position:'absolute',left:'70vw'}}> 
+      <li><Link className="dropdown-item px-4 text-danger openModal" to="/profile" onClick={setmodal}> Log out </Link></li>
     </ul>
-  </div>}
-    </>
+  </div>
+  <Modal isOpen={open} dimens={{ height: 250, width: 360 }} onClose={toggleModal} className="profiler">
+    <h3 className="text-center">Are you sure?</h3>
+    <li style={lstyle} className="text-center mt-5 mb-4" >
+      <Link onClick={()=>{localStorage.clear();navigator('/login')}} className="text-primary text-decoration-none fs-4">Logout</Link>
+    </li>
+    <li style={lstyle}>
+      <hr className="dropdown-divider" />
+    </li>
+    <li style={lstyle} className="text-center align-items-center justify-contents-center"onClick={()=>setmodal(false)} >
+      <Link className="text-secondary text-decoration-none">Cancel</Link>
+    </li>
+  </Modal>
+  </>
+  )
+  }
+  </>
   );
 };
 

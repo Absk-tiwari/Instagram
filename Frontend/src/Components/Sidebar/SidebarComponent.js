@@ -48,7 +48,7 @@ function SidebarComponent() {
 	  if (fileInput?.files?.length) {
 		  var selectedFile = fileInput.files[0]
       dispatch(setImageURL(selectedFile))  
-      setTriggered(!formtriggered)
+      // setTriggered(!formtriggered)
       navigator('/createPost')
     } else {
       console.log('No file selected.')
@@ -82,19 +82,19 @@ function SidebarComponent() {
   const refer = e => {
     setProgress(100) 
     let elem = e.target;
-	let target=elem.dataset.refer
+  	let target=elem.dataset.refer
  
     if (target) {
-		if(!['/notifications','/search','#create'].includes(target)){
-			document.querySelector(`a[href="${target}"]`).click()
-		}else{
-			if(target==='#create'){
-				document.getElementById(`create`).click()	
-			}
-		}
+      if(!['/notifications','/search','#create'].includes(target)){
+        document.querySelector(`a[href="${target}"]`).click()
+      }else{
+        if(target==='#create'){
+          document.getElementById(`create`).click()	
+        }
+      }
     }else{
    	  e.preventDefault()
-	}
+  	}
   }
 
   const removeItem = index => {
@@ -168,24 +168,24 @@ function SidebarComponent() {
               </div>
             );
           })}
+          {window.screen.width > 500 ?
           <div id={"more"} className={`dropup custom-row`}  data-bs-toggle="dropdown" >
             <div id="icon" style={{ height: "20px" }} onClick={refer}>
               <img className="icons" src={More} alt="not yet?" />
             </div>
-
             <Link id="title" to={"#"}>  More  </Link>
-
-          <ul className="dropdown-menu">
-            <li>
-              <Link className="dropdown-item px-4" to="#"> Settings </Link>
-            </li>
-            <li>
-              <Link className="dropdown-item px-4" to="#"> Saved </Link>
-            </li>
-            <li>
-              <Link className="dropdown-item px-4 openModal" to="#" onClick={toggleModal}> Log out </Link>
-            </li>
-          </ul>
+            <ul className="dropdown-menu">
+              <li>
+                <Link className="dropdown-item px-4" to="#"> Settings </Link>
+              </li>
+              <li>
+                <Link className="dropdown-item px-4" to="#"> Saved </Link>
+              </li>
+              <li>
+                <Link className="dropdown-item px-4 openModal" to="#" onClick={toggleModal}> Log out </Link>
+              </li>
+            </ul>
+          </div>:''}
           <Modal isOpen={open} dimens={{ height: 250, width: 360 }}  onClose={toggleModal} >
             <>
               <h3 className="text-center">Are you sure?</h3>
@@ -201,7 +201,6 @@ function SidebarComponent() {
             </>
 
           </Modal>
-        </div>
       </div>
       <form id="createPost" method="post" className="d-none">
         <input type="file" onChange={createPost} id="create" data- className="d-none" name="file" />

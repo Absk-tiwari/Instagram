@@ -2,7 +2,7 @@
 
 import React from "react";
 
-const Modal = ({ isOpen, dimens, onClose, children }) => {
+const Modal = ({ isOpen, dimens, onClose, children,className='' }) => {
   if (!isOpen) return null;
   const { height, width } = dimens;
 
@@ -20,6 +20,7 @@ const Modal = ({ isOpen, dimens, onClose, children }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        backdropFilter: "blur(2px)",
       }}
     >
       <div
@@ -32,9 +33,9 @@ const Modal = ({ isOpen, dimens, onClose, children }) => {
           border: "none",
           borderRadius: "12px",
           boxShadow: "10px solid gray",
-		  overflow:dimens.overflow??'auto'
+          overflow:dimens.overflow??'auto'
         }}
-        className={`firstChild`}
+        className={`firstChild `+className}
       >
         {children}
       </div>

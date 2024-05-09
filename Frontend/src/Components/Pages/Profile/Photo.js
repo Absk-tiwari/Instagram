@@ -84,7 +84,7 @@ const Photo = (props) => {
             <i className={`fa fa-heart mb-3 fs-5`}/>
             <p >{post && post.likes?post.likes.length:0}</p>
         </div>
-        <Modal isOpen={open} dimens={{height:500 ,width:920,overflow:'hidden' }} onClose={toggle}>
+        <Modal isOpen={open} dimens={{height:500 ,width:920 }} onClose={toggle}>
           <>
           <div className='container d-flex'>
             <div className='col-6 rel'>
