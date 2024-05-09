@@ -409,7 +409,6 @@ html{
 	.App{
 		flex-direction: column;
 		overflow-x: hidden;
-		height: auto;
 	}
 	.custom-logo, .Explore, .Messages{
 		display: none!important;
