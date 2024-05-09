@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import obito from "../../../assets/icons/profile.png";
 import verified from '../../../assets/icons/verified.png'
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
@@ -12,7 +12,7 @@ import { socket } from "../../../socket";
 import Modal from "../../StateComponents/Modal";
 
 const Profile = () => {
-  const location = useLocation()
+  const navigator = useNavigate()
   const [active, setStat] = useState(1);
   const [chatopened, setupChat] = useState(false)
   const [user, setUser] = useState([])
