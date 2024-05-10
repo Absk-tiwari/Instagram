@@ -10,7 +10,7 @@ import Modal from "../StateComponents/Modal";
 import LoadingBar from "react-top-loading-bar";
 import headers from "../../APIs/Headers";
 import Notifications from "../Sidebar/Components/Notifications";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setImageURL } from "../../actions/setImageURL";
 import logo from '../../assets/log.svg'
 
@@ -18,6 +18,8 @@ function SidebarComponent() {
   const location = useLocation();
   const searchbox = useRef(null)
   const lstyle = { listStyleType: "none" };
+  const isPhone = window.screen.width < 500 
+  const chatState = useSelector(state=>state.auth.chatUser)
   const dispatch = useDispatch() 
   let navigator = useNavigate();
   let [hasRead,read] = useState(false)
@@ -122,6 +124,7 @@ function SidebarComponent() {
       })
   }
   if(location.pathname.includes('reset')) return null
+  if(isPhone && Object.keys(chatState).length) return null
   return (
     !['/login', '/signup', '/forgotPassword'].includes(location.pathname) && (
       <div className="custom-sidebar">

@@ -6,6 +6,7 @@ import profile from '../../../assets/icons/profile.png'
 import { howLong } from '../../../helpers';
 import Placeholder from '../../StateComponents/Placeholder'; 
 const Photo = (props) => {
+	const isPhone = window.screen.width < 500 
     const post = props.post;
     const [open, setmodal] = useState(false);
     const [state, setState]= useState(false);
@@ -87,10 +88,10 @@ const Photo = (props) => {
         <Modal isOpen={open} dimens={{height:500 ,width:920 }} onClose={toggle}>
           <>
           <div className='container d-flex'>
-            <div className='col-6 rel'>
-              <img src={src} className='imgContainer' style={{ height:'-webkit-fill-available',maxHeight:'456px',marginRight:'24px', width:'-webkit-fill-available',objectFit:'contain'}} alt=''/>
+            <div className={isPhone?'col-12 rel text-center':'col-6 rel'}>
+              <img src={src} className='imgContainer' style={{ height:'-webkit-fill-available',maxHeight:'456px',marginRight:isPhone?'':'24px', width:'-webkit-fill-available',objectFit:'contain'}} alt=''/>
             </div>
-            <div className='col-6'>
+            <div className={isPhone?'col-12':'col-6'} >
               <div className='col-12 placeholder-glow mt-3 mx-2 rel' >
                 <PostFooter post={post} alt={{details:false}} c={false} />
 				<form id="commentForm" onSubmit={submitComment}>

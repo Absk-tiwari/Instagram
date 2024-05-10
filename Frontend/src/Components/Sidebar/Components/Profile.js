@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import obito from "../../../assets/icons/profile.png";
 import verified from '../../../assets/icons/verified.png'
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
@@ -13,6 +13,8 @@ import Modal from "../../StateComponents/Modal";
 
 const Profile = () => {
   const navigator = useNavigate()
+  const location = useLocation()
+  const isPhone = window.screen.width < 500
   const [active, setStat] = useState(1);
   const [chatopened, setupChat] = useState(false)
   const [user, setUser] = useState([])
@@ -30,7 +32,8 @@ const Profile = () => {
     div.classList.add('randomDiv') ;
     const img = e.target
     const cloned = img.cloneNode(true)
-    cloned.classList.add('random') ;  
+	if(isPhone) cloned.classList.add('random-phone') ;  
+	else cloned.classList.add('random') ;  
     document.querySelector('#root').classList.add('addCover') 
     div.appendChild(cloned); 
     setTimeout(()=>{

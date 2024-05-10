@@ -5,8 +5,14 @@ import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 import ContextMenu from '../../../StateComponents/ContextMenu';
 import headers from '../../../../APIs/Headers';
 import {howLong, randomStr} from '../../../../helpers'
+import { useDispatch, useSelector } from 'react-redux';
 
 function Chat(props) {
+  const isChatOpened = useSelector(state=> state.auth.chatUser)
+  const dispatch = useDispatch()
+  const remC = () => {
+	dispatch({type:'REMOVE_CHAT'})
+  }
   const {me,username,launch,update,till,changeMsg,details} = props    
   const [parent,setParent] = useState(false) // reflection to parent
   const {updateChat} = useContext(ProfileContext) // for target user api
@@ -19,6 +25,7 @@ function Chat(props) {
   const file = useRef(null) // its child has all you need
   const [theme,setTheme] = useState('')
   const [chosen, choose] = useState('')
+  const isPhone = window.screen.width < 500
   const unsend = (from, _id) => {   // handle un-sending message
     fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/unsend`,{
       method:'POST',
@@ -228,6 +235,7 @@ function Chat(props) {
   const checkTheme = () => {
 	setTheme(chosen)
   }
+  if(Object.keys(isChatOpened).length===0) return null;
 
   return (
       <>
@@ -237,12 +245,21 @@ function Chat(props) {
         <div className={`container-fluid ${theme}`} style={{margin:0,padding:0,position:'',height:`100vh`}}>
             <section className='header' style={{backgroundColor:'#e9ecef'}}>
                 <div className='hstack'>
+					{isPhone ? 
+					(<i className={'fa-solid fa-arrow-left'} 
+					style={{
+						position: 'absolute',
+						left: '13px',
+						fontSize: 'xx-large'
+					}}
+					onClick={remC}
+					/>): null }
                     <div className='col-9 hstack'>
                         <div className='img-container mx-5 col-1'>
                             <img src={details && (details[0].profile??img)} style={{height:'63px',width:'63px'}} className='pfpicture' alt={username} />
                         </div>
                         <div className='col-10' style={{paddingTop:'15px'}}>
-                            <h3>{username}</h3>
+                            {isPhone? <h5>{username}</h5>:  <h3>{username}</h3>}
 							{details[0].active?
 							<p> Active {details.onlines.includes(username)? 'now' 
 							:`${howLong(details[0].active)} ago`}</p>
@@ -332,7 +349,7 @@ function Chat(props) {
             </section>
             <section className='footer mt-4'>
                 <form className='hstack rel' onSubmit={sendMessage} >
-                    <input type='text' className='chat-input' name='message' value={msg} onChange={OnKeyUp} autoComplete='off' onBlur={()=>socket.emit('stopped',{is:me,to:username})} />
+                    <input type='text' className={isPhone?'chat-input-phone':'chat-input'} name='message' value={msg} onChange={OnKeyUp} autoComplete='off' onBlur={()=>socket.emit('stopped',{is:me,to:username})} />
                     <span style={{left:'3%',position:'absolute'}}>
                       <i className="fa-regular fs-3 fa-face-smile"/>
                     </span>
@@ -340,7 +357,7 @@ function Chat(props) {
                       <i className={`fa-regular ${msg.length?'d-none':''} fs-3 fa-image`}/>
                     </span>
 					<input className='d-none' type='file' name='sendImage' ref={file}/>
-                    <span type='submit' className={`text-primary abs ${msg.length?'':'d-none'} fs-5 fw-bold`} style={{width:'90%', marginLeft:'15px', left:'85%',fontFamily:'monospace'}} > Send </span>
+                    <span type='submit' className={`text-primary abs ${msg.length?'':'d-none'} fs-5 fw-bold`} style={{width:'90%', marginLeft:'15px', left:isPhone?'78%':'85%',fontFamily:'monospace'}} > Send </span>
                 </form>
             </section>
         </div>

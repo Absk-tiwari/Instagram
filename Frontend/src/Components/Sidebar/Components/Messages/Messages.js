@@ -9,8 +9,13 @@ import profile from '../../../../assets/icons/profile.png'
 import headers from "../../../../APIs/Headers";
 import ContextMenu from "../../../StateComponents/ContextMenu";
 import { howLong } from "../../../../helpers";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentUser } from "../../../../actions/setCurrentUser";
 
 const Messages = () => {
+  const isPhone = window.screen.width < 500
+  const dispatcher = useDispatch()
+  const chatOpened = useSelector(state=>state.auth.chatUser) 
   const [isTyping ,setTyping] = useState([])
   const [totalChats, setChats] = useState([])
   const [selectedUser,setUser] = useState({username:'',name:''})
@@ -150,15 +155,16 @@ const Messages = () => {
   } 
 
   const openChat = event => {
-    let ele = event.target
-	if(ele && ele.dataset.pick){
+	  let ele = event.target
+	  if(ele && ele.dataset.pick){
 		let element = document.getElementById(ele.dataset.pick) 
 		let data = JSON.parse(element.dataset.detail)
-	    let username = data.username
+		let username = data.username
 		let name = data.name
 		let fire = JSON.parse(element.dataset.s)
 		set(fire)
 		openedChat(true); 
+		dispatcher(setCurrentUser(data))
 		let thisUser = totalChats.filter(chat=>chat.username===username)
 		if(!thisUser.length){
 			let clone = totalChats
@@ -198,7 +204,7 @@ const Messages = () => {
     <>
       <ContextMenu {...contextMenu} />
       <div className="page d-flex">
-        <div className="col-md-4 user-row" ref={mapref} >
+        {(chatOpened===null || Object.keys(chatOpened).length) && isPhone ? null :(<div className={ isPhone ? 'user-row-phone col-md-4 ':'user-row col-md-4 '} ref={mapref} >
           <div className="hstack gap-5 mt-5">
             <h4 className="text-dark">{user.username}</h4>
             <i className="fa fa-edit fs-2 offset-sm-4 openModal"
@@ -235,9 +241,10 @@ const Messages = () => {
             })
           }
           </div>
-        </div>
-        <div className="col-md-8 chat-open-screen">
-         { !opened ? <div className="text-center d-flex justify-content-center align-items-center min-vh-100">
+        </div>)}
+        <div className={isPhone ? `chat-open-screen-phone ${opened?'d-block':'d-none'}`:'col-md-8 chat-open-screen'}>
+         { !opened ?
+		  <div className="text-center d-flex justify-content-center align-items-center min-vh-100">
             <div className="container text-center d-block">
               <img src={msg} alt="?" className="rounded-circle style" />
               <br />
@@ -249,7 +256,8 @@ const Messages = () => {
                 Send message
               </button>
             </div>
-          </div> :  <Chat me={user.username} userImage={selectedUser.image} username={selectedUser.username} name={selectedUser.name} details={{...userDetail,onlines}} launch={launch} till={dump} changeMsg={putMessage} update={changeParent} />
+          </div> :  
+		  <Chat me={user.username} userImage={selectedUser.image} username={selectedUser.username} name={selectedUser.name} details={{...userDetail,onlines}} launch={launch} till={dump} changeMsg={putMessage} update={changeParent} />
          }
         </div>
       </div>

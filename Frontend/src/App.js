@@ -28,13 +28,10 @@ import Reset from "./Components/Pages/Auth/Reset";
 import { useEffect } from "react";
 import { socket } from "./socket";
 import headers from "./APIs/Headers";
-import { useSelector } from "react-redux";
 const HOST = process.env.REACT_APP_SERVER_URI
 function App() {
-console.log('window.width is ', window.screen )
- const state = useSelector(state=> state.auth)
+
  useEffect(()=>{
-    console.log(state )
    if(localStorage.getItem('token')){
 		let me= JSON.parse(localStorage.getItem('userLogin'))
 		socket.connect()

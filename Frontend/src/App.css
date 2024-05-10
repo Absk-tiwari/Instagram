@@ -72,14 +72,23 @@ html{
 	width: 100vw!important;
 	padding: 5px;
 }
+.user-row-phone{
+	width: 100vw!important;
+	padding: 5px;
+}
 .user-row .hstack{
 	justify-content: space-between;
 }
-.chat-open-screen{
+.user-row-phone .hstack{
+	justify-content: space-between;
+}
+.chat-open-screen-phone{
 	display: none;
-	width:100%;
-	margin-left: 20%;
+	width: 100%!important;
 	position: fixed;
+}
+.chat-input{
+	
 }
 .custom-sidebarList{
 	width: 200px;
@@ -146,7 +155,7 @@ html{
 		margin-top:60px!important 
 	}
 	.customModal .imgContainer{
-		width: auto!important;
+		width:auto!important;
 		max-width: 90vw;
 	}
 	/* the profile section */
@@ -242,7 +251,7 @@ html{
 		width:120px!important;
 		top:370px!important
 	}
-	.random {
+	.random-phone {
 	  height: 40vh!important;
 	  width: 40vh!important;
 	  border-radius: 50%;
@@ -384,7 +393,13 @@ html{
 	.user-row strong:first-child, h4{
 		margin-left:15px!important
 	}
+	.user-row-phone strong:first-child, h4{
+		margin-left:15px!important
+	}
 	.user-row strong:last-child, .fa-edit{
+		margin-left:110px!important
+	}
+	.user-row-phone strong:last-child, .fa-edit{
 		margin-left:110px!important
 	}
 	.stories{
@@ -603,9 +618,7 @@ html{
   img {
 	cursor: pointer;
   }
-  .Profile .customModal .container .col-6{
-	width: 100%!important;
-  }
+ 
   .pfpicture {
 	height: 50px;
 	width: 50px;
@@ -849,7 +862,7 @@ html{
   
   .random {
 	height: 60vh;
-	width: 60vh;
+	width: 60vh!important;
 	border-radius: 50%;
   }
   .form-control:focus {
@@ -1001,6 +1014,13 @@ html{
 	border-radius:25px; 
 	border: 1px solid gray;
   }
+  .chat-input-phone{
+    padding-left: 50px;
+    width: 100% !important;
+    height: 67px !important; 
+    border-radius: 36px;
+    border: 1px solid gray;
+}
   .arrived{
 	position: absolute;
 	color: red;
@@ -1086,8 +1106,13 @@ html{
   .chat-open-screen{
 	overflow-x:hidden!important;
 	position:fixed;
-	width: 54vw !important;
+	width: 54vw!important;
 	margin-left: 28%;
+  }
+  .chat-open-screen-phone{
+	overflow-x:hidden!important;
+	position:fixed;
+	width: 100vw!important; 
   }
   .online{
 	position:absolute;
@@ -1099,7 +1124,13 @@ html{
   }
   .user-row{
 	height: 100vh;
-	width: 28vw;/*!important; */
+	width: 28vw!important; 
+	overflow-y: scroll!important;
+	position:fixed;
+	border-right: 1px solid lightgray
+  }
+  .user-row-phone{
+	height: 100vh;
 	overflow-y: scroll!important;
 	position:fixed;
 	border-right: 1px solid lightgray
