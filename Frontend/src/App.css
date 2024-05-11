@@ -501,6 +501,35 @@ html{
 	form#commentForm{
 		display: flex;
 	}
+	/* chat screen */
+	#container{
+		padding: 12px 0px 11px 0px;
+	}
+	section.body{
+		height: 80vh!important;
+	}
+	.self{
+		text-align: right;
+		display: block!important;
+		height: auto!important;
+		color: white!important;
+		background-color: #87a2cf!important;
+		width: auto!important;
+		float: right!important;
+		border-radius: 22px!important;
+		padding-top: 3px!important;
+		margin-right: 0px!important;
+		font-size: larger!important;
+		padding-inline: 20px!important;
+		clear: both!important;
+		font-family: cursive!important;
+		max-width: 70%;
+		line-height: 2.5;
+		text-wrap: pretty;
+	}
+	.selfImage{
+		width: 60%!important;
+	}
 }
 /* mobile version ended above */
 .stories{    
@@ -1018,6 +1047,8 @@ html{
     padding-left: 50px;
     width: 100% !important;
     height: 67px !important; 
+	font-size: 25px!important;
+	padding-right: 90px;
     border-radius: 36px;
     border: 1px solid gray;
 }
@@ -1403,4 +1434,8 @@ html{
   }
 .reelDiv div:nth-child(2){
 	position:absolute;top:55vh;left:28vw;
+}
+.rightSide{
+	position: fixed;
+	right: 30px
 }

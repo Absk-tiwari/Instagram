@@ -32,7 +32,7 @@ function Home() {
         <Navbar />
         <Post />
       </div>
-      <Suggestions />
+      { window.screen.width > 500 ? <Suggestions />: null }
     </>
   );
 }

@@ -3,29 +3,36 @@ import PostHead from "./Components/PostHead";
 import PostFooter from "./Components/PostFooter";
 import headers from "../../../APIs/Headers";
 import Loader from "../../StateComponents/Loader";
+import { useDispatch, useSelector } from "react-redux";
 
 const Post = () => {
-	const  [posts, setPosts] = useState([])
-	const [loading, setLoaing] = useState(false)
+	const dispatch = useDispatch()
 	const reflection = updatedPosts => setPosts(updatedPosts)
+	const state = useSelector(state=>state.posts)
+	const {totalPosts,skip,call} = state
+	const [posts, setPosts] = useState(totalPosts)
+	const [loading, setLoaing] = useState(false)
 	useEffect(()=>{ 
-		let skip = 0
-		let stopRequest =false
+		let skipp = skip
+		let stopRequest =call
 		const fetchData = async () => { 
 		if(!stopRequest){   // continue only if last request had a response 
 			setLoaing(true)
 			fetch(process.env.REACT_APP_SERVER_URI+'/api/post',{
 			   method:'POST',
 			   headers:headers(),
-			   body:JSON.stringify({skip})
+			   body:JSON.stringify({skip:skipp})
 		   })
 		   .then(r=>r.json())
 		   .then(data=>{  
 			   if(data?.length){
 				   setPosts(posts=>posts.concat(data)) 
-				   skip = skip + 2
+				   skipp = skipp + 2
+				   let tillPosts = totalPosts
+				   dispatch({type:'SKIP_POSTS',payload:skipp})
+				   dispatch({type:'SET_POSTS',payload:tillPosts.concat(data)})
 			   }else{ 
-				stopRequest= true
+				dispatch({type:'STOP_CALLS'})
 			   }
 			  setTimeout(() => setLoaing(false) , 1000); 
 		   });  

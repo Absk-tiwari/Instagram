@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import obito from "../../../assets/icons/profile.png";
 import verified from '../../../assets/icons/verified.png'
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
@@ -10,20 +10,36 @@ import headers from "../../../APIs/Headers";
 import Chat from '../Components/Messages/Chat'
 import { socket } from "../../../socket";
 import Modal from "../../StateComponents/Modal";
+import { useDispatch, useSelector } from "react-redux";
 
 const Profile = () => {
-  const navigator = useNavigate()
-  const location = useLocation()
+  const navigator = useNavigate() 
+  const dispatch = useDispatch()
   const isPhone = window.screen.width < 500
+  let me = JSON.parse(localStorage.getItem('userLogin')) 
+  const searchedProfile = useSelector(state=>state.auth.searchProfile)
+  let state = useSelector(state=>state.auth)  // post of searched user
+//   let myPosts = useSelector(state=>state.auth.myPosts) // for searched user
+  let userInfo // = useSelector(state=>state.auth.userInfo)  // post of searched user
+  let userPosts //= useSelector(state=>state.auth.userPosts) // for searched user
+  console.log(state)
+  if(searchedProfile===me.username)
+  {
+	userInfo = state.myInfo
+	userPosts = state.myPosts
+  }else{
+	userInfo = state.userInfo
+	userPosts = state.userPosts
+  }
   const [active, setStat] = useState(1);
   const [chatopened, setupChat] = useState(false)
-  const [user, setUser] = useState([])
-  const [posts, setPost] = useState([])
+  const [user, setUser] = useState(userInfo)
+  console.log(userInfo,userPosts)
+  const [posts, setPost] = useState(userPosts)
   const [open, setmodal] = useState(false);
   const lstyle = { listStyleType: "none" };
   const [react, setReact] = useState(false)
   
-  let me = JSON.parse(localStorage.getItem('userLogin')) 
   const toggleModal = e => {
     if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   };
@@ -81,47 +97,63 @@ const Profile = () => {
     })
   }
  
- const [loaded, setLoad] = useState(false)
-  useEffect(()=>{
-    let params = location.pathname.split('/')
-    let term
-    if(params.length===3){  
-      term = params[2] 
-    }else{
-      term = JSON.parse(localStorage.getItem('userLogin'))
-      term = term.username
-    }
-      fetch(`${process.env.REACT_APP_SERVER_URI}/api/profile/getuser`,{
-        method:'POST',
-        headers:headers(),
-        body:JSON.stringify({username:term})
-      })
-	  .then(res=> res.json())
-	  .then(data=>{
-        setLoad(true)
-        if(data?.user){
-          setUser(data.user)
-          if(data.isFollowing) setReact(true)
-          
-          fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/getPostsOf`,{
-            method:'POST',
-            headers:headers(),
-            body:JSON.stringify({username:data.user.username})
-          })
-		  .then(res=> res.json())
-		  .then(data=>setPost(data))
-        }
-      })
-     
-	  fetch(`${process.env.REACT_APP_SERVER_URI}/api/profile/test`,{
-		headers:headers()
-	  }).then(r=>r.json())
-	  .then(da=>console.log(da))
+ const [loaded, setLoad] = useState(Object.keys(userPosts).length)
+  useEffect(()=>{ 
+    let term = searchedProfile
+	console.log(term)
+	const init = () => 
+	{
+		fetch(`${process.env.REACT_APP_SERVER_URI}/api/profile/getuser`,{
+			method:'POST',
+			headers:headers(),
+			body:JSON.stringify({username:term})
+		})
+		.then(res=> res.json())
+		.then(data=>{
+			setLoad(true)
+			if(data?.user){
+				setUser(data.user)
+				if(term===me.username)
+				{
+					dispatch({type:'SET_MY_INFO',payload:data.user}) 
+				}else{
+					dispatch({type:'SET_USER',payload:data.user}) 
+				}
+				if(data.isFollowing) setReact(true)
+				
+				fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/getPostsOf`,{
+					method:'POST',
+					headers:headers(),
+					body:JSON.stringify({username:data.user.username})
+				})
+				.then(res=> res.json())
+				.then(data=>{
+					setPost(data)
+					if(term===me.username)
+					{
+						dispatch({ type:'SET_MY_POSTS', payload:data })
+					}else
+					{ 
+						dispatch({ type:'SET_PROFILE_POSTS', payload:data })
+					}
+				})
+			}
+		})
+	}
+	if(term!==me.username)
+	{
+		init()
+	}else{
+		if(Object.keys(userInfo).length===0)
+		{
+			init()
+		}
+	}
 	  
-  },[react])
+  },[react,searchedProfile])
   return (
     <>
-    { loaded ? chatopened ? (
+     { loaded ? chatopened ? (
       <>
       <Chat me={me.username} userImage={user.profile??obito} username={user.username} name={user.name} details={user} launch={false} />
       </>
@@ -137,7 +169,7 @@ const Profile = () => {
           <div className="row col-12">
             <div className="col-6 d-flex">
               <h4>{user.username??'Instagram User'}</h4>
-{user.verified ? 
+			{user.verified ? 
 			  	<img height={20} width={20} src={verified} className={`mx-1`} alt={''}/> :''}
             </div>
             {user && me.username===user.username?

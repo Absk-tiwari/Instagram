@@ -21,6 +21,7 @@ function SidebarComponent() {
   const isPhone = window.screen.width < 500 
   const chatState = useSelector(state=>state.auth.chatUser)
   const dispatch = useDispatch() 
+  const me = JSON.parse(localStorage.getItem('userLogin'))
   let navigator = useNavigate();
   let [hasRead,read] = useState(false)
   const [term, setTerm] = useState("");
@@ -72,6 +73,7 @@ function SidebarComponent() {
   const gotoProfile = username => {
     let tgetElem = document.getElementById(username)
     tgetElem.click()
+	dispatch({type:'SEARCH_PROFILE',payload:username})
     setTerm('')
 	let a = search 
     if(!search.includes(username)){
@@ -88,6 +90,10 @@ function SidebarComponent() {
  
     if (target) {
       if(!['/notifications','/search','#create'].includes(target)){
+		if(target==='/profile')
+		{
+			dispatch({ type:'SEARCH_PROFILE', payload:me.username }) 
+		}
         document.querySelector(`a[href="${target}"]`).click()
       }else{
         if(target==='#create'){

@@ -15,9 +15,11 @@ import { setCurrentUser } from "../../../../actions/setCurrentUser";
 const Messages = () => {
   const isPhone = window.screen.width < 500
   const dispatcher = useDispatch()
+  const chatState = useSelector(state=>state.messages.data)
+  const metaData = useSelector(state=>state.messages.metaData)
   const chatOpened = useSelector(state=>state.auth.chatUser) 
   const [isTyping ,setTyping] = useState([])
-  const [totalChats, setChats] = useState([])
+  const [totalChats, setChats] = useState(chatState)
   const [selectedUser,setUser] = useState({username:'',name:''})
   const [searchParam, setSearchParam] = useState('');
   const [isLoading, setLoading] = useState(false)
@@ -32,7 +34,7 @@ const Messages = () => {
   const [change , setchange] = useState(false);
   const [onlines , setOnline] = useState([]);
   const [open, setmodal] = useState(false);
-  const [dump, putMessage] = useState([])
+  const [dump, putMessage] = useState(metaData)
   const [contextMenu, setContext] = useState({ isVisible: false, x: 0, y: 0, items: [] })
 
   const deleteChat = username => {  // handle delete chat
@@ -129,20 +131,25 @@ const Messages = () => {
       let texts = await getChats(user.username)
       return texts  
     }
-    init().then(res=>{  
-      if(res){ console.log(res)
-        setChats(res)
-        for(let i of res){
-          let key = i.username
-          let key2 = i.username+'_seen'
-          let key3 = i.username+'_last'
-          tillMessages[key] = i.last          
-          tillMessages[key2] = i.read?' seen '+howLong(i.at):' sent '+howLong(i.at)          
-          tillMessages[key3] = i.sender // its the message by sender(anyone)          
-        }
-        putMessage(tillMessages)     
-      } 
-    })
+    if(totalChats.length===0)
+	{
+		init().then(res=>{  
+		if(res){
+			setChats(res)
+			dispatcher({type:'SET_USERS',payload:res})
+			for(let i of res){
+			let key = i.username
+			let key2 = i.username+'_seen'
+			let key3 = i.username+'_last'
+			tillMessages[key] = i.last          
+			tillMessages[key2] = i.read?' seen '+howLong(i.at):' sent '+howLong(i.at)          
+			tillMessages[key3] = i.sender // its the message by sender(anyone)          
+			} 
+			putMessage(tillMessages)     
+			dispatcher({type:'SET_META',payload:tillMessages})
+		}
+		})
+	} 
 	return ()=>{
 		socket.off('receive')  
 	}
@@ -215,7 +222,7 @@ const Messages = () => {
             <strong className="text-secondary offset-5 px-4">Requests</strong>
           </div>
           <div id="user-row-container"> 
-          {totalChats && totalChats.map((chatuser,index)=>{
+          {totalChats.length ? totalChats.map((chatuser,index)=>{
             let active = onlines?.length ? onlines.includes(chatuser.username) : false;
             return (
             <div key={index} className={`row mt-3 openchat cpo`} id={chatuser._id} data-detail={JSON.stringify(chatuser)} data-s={chatuser.from && chatuser.from!==user.username} onContextMenu={onContext} onClick={openChat} data-pick={chatuser._id}>
@@ -238,7 +245,7 @@ const Messages = () => {
               </div>
             </div> 
             )
-            })
+            }): <Loader/>
           }
           </div>
         </div>)}

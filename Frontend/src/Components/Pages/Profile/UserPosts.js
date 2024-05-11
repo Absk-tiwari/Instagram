@@ -4,7 +4,6 @@ import Photo from "./Photo";
 
 const UserPosts = (props) => {
   const posts = props.posts
-  
   const style = {
     height: "4%",
     width: "7%",

@@ -41,7 +41,6 @@ function App() {
 		}).then(res=>res.json()).then(data=>{
 			if(data.status){
 				let elem = document.getElementById('msg-badge') 
-				console.log(data.count)
 				if(data.count){
 					elem.innerHTML = data.count
 					let usernames = []

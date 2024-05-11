@@ -1,14 +1,24 @@
+import itachi from '../assets/icons/itachi.jpg';
+import obito from '../assets/icons/obito.jpg';
+import profile from '../assets/icons/profile.png';
+import obio from '../assets/icons/pfp.png';
 const userToken = localStorage.getItem('token')
   ? localStorage.getItem('token')
   : null
-
+const me = JSON.parse(localStorage.getItem('userLogin'))
 const initialState = {
 	loading:false,
-	userInfo:{},
+	userInfo:{}, // the other details of user ;
+	userPosts:[], // for the post of user ; 
+	myInfo:{},
+	myPosts:[],
 	userToken,
 	error: null,
 	success: false,
-	chatUser:{}
+	chatUser:{},
+	suggested:[],
+	stories:[],
+	searchProfile:me.username,
 }
 
 const authReducer = (state=initialState,action)=>{
@@ -18,6 +28,11 @@ const authReducer = (state=initialState,action)=>{
 				...state,
 				userInfo:action.payload
 			} 
+		case 'SET_MY_INFO':
+			return {
+				...state,
+				myInfo:action.payload
+			}
 		case 'GET_USER':
 			return state.userInfo
 		case 'SET_CHAT_USER':
@@ -29,6 +44,77 @@ const authReducer = (state=initialState,action)=>{
 			return {
 				...state,
 				chatUser:{}	
+			}
+		case 'SET_SUGGESTED':
+			return {
+				...state,
+				suggested:action.payload
+			}
+		case 'SEARCH_PROFILE':
+			return {
+				...state,
+				searchProfile:action.payload
+			}
+		case 'SET_PROFILE_POSTS':
+			return {
+				...state,
+				userPosts:action.payload
+			}
+		case 'SET_MY_POSTS':
+			return {
+				...state,
+				myPosts:action.payload
+			}
+		case 'GET_STORIES':
+			return {
+				...state,
+				stories:[
+					{ 
+						cover:itachi,
+						content : '',
+						username:'itachi'
+					},
+					{
+						cover:profile,
+						content : '',
+						username:'kiba'
+					},
+					{
+						cover:obio,
+						content : '',
+						username:'obio'
+					},
+					{ 
+						cover:obio,
+						content : '',
+						username:'obio'
+					},
+					{ 
+						cover:obio,
+						content : '',
+						username:'obio'
+					},
+					{ 
+						cover:obio,
+						content : '',
+						username:'obio'
+					},
+					{ 
+						cover:obito,
+						content : '',
+						username:'obio'
+					},
+					{ 
+						cover:profile,
+						content : '',
+						username:'obio'
+					},
+					{ 
+						cover:obito,
+						content : '',
+						username:'obio'
+					}
+				]
 			}
 		default:
 			return state 
