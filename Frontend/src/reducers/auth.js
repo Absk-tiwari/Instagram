@@ -5,7 +5,8 @@ import obio from '../assets/icons/pfp.png';
 const userToken = localStorage.getItem('token')
   ? localStorage.getItem('token')
   : null
-const me = JSON.parse(localStorage.getItem('userLogin'))
+let me = localStorage.getItem('userLogin')
+me = me? JSON.parse(me) : []
 const initialState = {
 	loading:false,
 	userInfo:{}, // the other details of user ;
@@ -18,7 +19,7 @@ const initialState = {
 	chatUser:{},
 	suggested:[],
 	stories:[],
-	searchProfile:me.username,
+	searchProfile:me?.username,
 }
 
 const authReducer = (state=initialState,action)=>{

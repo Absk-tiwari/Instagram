@@ -118,7 +118,7 @@ router.post('/forgotPassword', async(req, res) =>{
     try { 
 		const found = await User.findOne({email:req.body.email}).select('_id')
 		if(!found){ 
-			return res.status(402).json({...error, key: 'email', message:'Invalid email'})
+			return res.status(402).json({...error, key: 'email', message:'This email is not associated to any account'})
 		} 
 		const payload = {
             user_id : found._id

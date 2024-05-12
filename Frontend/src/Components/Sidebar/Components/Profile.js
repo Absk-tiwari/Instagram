@@ -22,8 +22,7 @@ const Profile = () => {
 //   let myPosts = useSelector(state=>state.auth.myPosts) // for searched user
   let userInfo // = useSelector(state=>state.auth.userInfo)  // post of searched user
   let userPosts //= useSelector(state=>state.auth.userPosts) // for searched user
-  console.log(state)
-  if(searchedProfile===me.username)
+  if(searchedProfile===me?.username)
   {
 	userInfo = state.myInfo
 	userPosts = state.myPosts
@@ -34,7 +33,6 @@ const Profile = () => {
   const [active, setStat] = useState(1);
   const [chatopened, setupChat] = useState(false)
   const [user, setUser] = useState(userInfo)
-  console.log(userInfo,userPosts)
   const [posts, setPost] = useState(userPosts)
   const [open, setmodal] = useState(false);
   const lstyle = { listStyleType: "none" };
@@ -100,6 +98,7 @@ const Profile = () => {
  const [loaded, setLoad] = useState(Object.keys(userPosts).length)
   useEffect(()=>{ 
     let term = searchedProfile
+	if(me===undefined) return navigator('/login')
 	console.log(term)
 	const init = () => 
 	{
@@ -140,7 +139,7 @@ const Profile = () => {
 			}
 		})
 	}
-	if(term!==me.username)
+	if(term!==me?.username)
 	{
 		init()
 	}else{
@@ -267,7 +266,7 @@ const Profile = () => {
   <Modal isOpen={open} dimens={{ height: 250, width: 360 }} onClose={toggleModal} className="profiler">
     <h3 className="text-center">Are you sure?</h3>
     <li style={lstyle} className="text-center mt-5 mb-4" >
-      <Link onClick={()=>{localStorage.clear();navigator('/login')}} className="text-primary text-decoration-none fs-4">Logout</Link>
+      <Link onClick={()=>{localStorage.clear();return navigator('/login')}} className="text-primary text-decoration-none fs-4">Logout</Link>
     </li>
     <li style={lstyle}>
       <hr className="dropdown-divider" />
