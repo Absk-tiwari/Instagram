@@ -19,7 +19,8 @@ const Suggestions = () => {
 		}) 
 	}
 
-  },[])
+  },[profiles])
+  if(me===null) return null
   return (
    <>
      <div className='col-md-3 rightSide'>

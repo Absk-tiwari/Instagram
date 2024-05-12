@@ -20,7 +20,6 @@ const Modal = ({ isOpen, dimens, onClose, children,className='' }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backdropFilter: "blur(2px)",
       }}
     >
       <div

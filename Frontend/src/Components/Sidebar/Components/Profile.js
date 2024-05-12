@@ -11,6 +11,7 @@ import Chat from '../Components/Messages/Chat'
 import { socket } from "../../../socket";
 import Modal from "../../StateComponents/Modal";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "../../../toast";
 
 const Profile = () => {
   const navigator = useNavigate() 
@@ -84,11 +85,14 @@ const Profile = () => {
         }
         setReact(act)
         
-        if(type === 'follow'){
+        if(type === 'follow')
+		{
+  		  toast(`following `+data.for)
           if(data.user!==data.for){
             socket.emit('notify',data)
           }
         }else{
+  		  toast(`unfollowed `+data.for)
           socket.emit('remNotified',data)
         }
       }
@@ -259,7 +263,7 @@ const Profile = () => {
     </div>
     ):<Loader height={200} left={350} Class={`outer`}/>
   }
-  {loaded && 
+  {loaded ?
   (<>
   <div id="moreOnProfile" className="dropdown custom-row" data-bs-toggle="dropdown" aria-expanded="false">
 	<div id="icon" style={{height:`20px`,marginTop:'40px',left:'35vw',fontSize:'20px'}}>
@@ -281,7 +285,7 @@ const Profile = () => {
     </li>
   </Modal>
   </>
-  )
+  ):null
   }
   </>
   );
