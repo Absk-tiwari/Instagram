@@ -5,6 +5,7 @@ import Button from "../../../StateComponents/Button";
 import {howLong} from  '../../../../helpers'
 import headers from '../../../../APIs/Headers';
 import verified from '../../../../assets/icons/verified.png'  
+import { toast } from '../../../../toast';
 const PostHead = (props) => { 
   let {post,updatePosts,totalPosts} = props
   let me = JSON.parse(localStorage.getItem('userLogin'))
@@ -23,6 +24,7 @@ const PostHead = (props) => {
 	.then(res=>{
 		console.log(res)
 		if(res.status){
+			toast(`Post deleted successfully!`)
 			updatePosts(totalPosts.filter(item=>item._id!==post._id))
 		}
 	})

@@ -102,6 +102,7 @@ const Profile = () => {
   const logout = () => {
 	localStorage.clear()
 	setLoad(false)
+	toast(`Logged out!`)
 	setTimeout(() => out(true), 2000);
   }
  const [loaded, setLoad] = useState(Object.keys(userPosts).length)

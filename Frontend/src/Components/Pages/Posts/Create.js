@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {toast} from 'react-toastify'
+import {toast} from '../../../toast'
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux'; 
 import Loader from '../../StateComponents/Loader'
@@ -17,7 +17,8 @@ const Create = () => {
     fileReader.readAsDataURL(post); // Change to readAsDataURL  
     //console.log(typeof post, post)
 	  }catch(err){
-	return navigator('/')	  
+		toast('Something went wrong')
+		return navigator('/')	  
 	  }
     return ()=>null
   },[post])
@@ -42,10 +43,10 @@ const Create = () => {
 		if(resp.status){
 			setTimeout(() => {
 				navigator('/')
-				toast.success('Posted')
+				toast('Posted')
 			}, 2500);
 		}else{
-			toast.error(resp.message)
+			toast(resp.message)
 		}
 	})
   }
