@@ -1,6 +1,5 @@
 import React from 'react'
-import ProfileContext from './ProfileContext';
-import pfp from '../../assets/icons/profile.png';
+import ProfileContext from './ProfileContext'; 
 import headers from '../../APIs/Headers';
 import { useNavigate } from 'react-router';
 
@@ -62,18 +61,7 @@ const ProfileState = (props) => {
             }
         }).catch(err=>alert(err.message))
    }
-        const  profiles= [] 
-
-        const LoggedIn = {
-            pfp ,
-            posts :0,
-            username : 'te.sting8398',
-            name : 'Deployment',
-            bio : 'Future belongs to those who believe in beauty of their dreams',
-            followers:'173',
-            following: '98',
-            url : '/profile'
-        };
+        const  profiles= []  
  
         const getChatsOf = async(cID) => {
         let res = await fetch(process.env.REACT_APP_SERVER_URI+'/api/messages/of',{
@@ -111,7 +99,7 @@ const ProfileState = (props) => {
         return resp.status ? true :false
     }
   return (
-    <ProfileContext.Provider value={{profiles, LoggedIn, chats, getChats,getChatsOf,searchUser,updateChat, updateProfile}}>
+    <ProfileContext.Provider value={{profiles, chats, getChats,getChatsOf,searchUser,updateChat, updateProfile}}>
         {props.children}
     </ProfileContext.Provider>
   )

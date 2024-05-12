@@ -11,9 +11,9 @@ const PostFooter = (props) => {
   let me = JSON.parse(localStorage.getItem('userLogin'))
   const { post,alt, c } = props;
   const [isLoading, setLoading] = useState(true)
-   // c is for whether to show the comment icon or not
+  // c is for whether to show the comment icon or no
   const [likes, setLikes ]= useState(post.likes.length)
-  const [like, reactPost] = useState(post.likes.includes(me.username));
+  const [like, reactPost] = useState(post.likes.includes(me?.username??''));
   const [save, savePost] = useState(false);
   const [comment,setComment] = useState(''); // this holds the input text
   const [addAnthorComment,addAnother] = useState(''); // this holds the input text
@@ -148,6 +148,7 @@ const PostFooter = (props) => {
       document.removeEventListener('click', rem)
     }
   },[])
+  if(me===null) return null
   return (
     <>
       <ContextMenu {...contextMenu}  />

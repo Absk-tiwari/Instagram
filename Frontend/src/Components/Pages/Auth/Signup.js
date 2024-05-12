@@ -2,8 +2,8 @@ import React, { useRef, useState} from "react";
 import logo from "../../../assets/icons/insta.svg";
 import LoadingBar from "react-top-loading-bar";
 import headers from "../../../APIs/Headers";
-import { useNavigate } from "react-router-dom";
-import { toast,ToastContainer } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "../../../toast";
 const Signup = () => {
   const nav = useNavigate(); 
   const [progress,setProgress] = useState(0)
@@ -16,7 +16,7 @@ const Signup = () => {
 		})
 		const resp = await json.json();
 		if(resp.status){
-			toast.success(resp.message)
+			toast(resp.message)
 			setTimeout(() => nav('/login'), 2500);
 		}else{
 		    validate({...validatefields, [resp.key] : {...validatefields[resp.key], bad:true, message:resp.message }})
@@ -74,7 +74,6 @@ const Signup = () => {
   return (
     <>
     <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
-	<ToastContainer position='top-center' autoClose={5000} hideProgressBar={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='dark' />           
       <div className='container-fluid justify-contents-center'>
         <div className='container sgnup'>
           <div className='col-md-5 loginContainer'>
@@ -115,6 +114,12 @@ const Signup = () => {
                 <p className='text-secondary text-center px-4'>
                   By signing up , you agree to our faltu terms, conditions & Privacy Policy
                 </p>
+				<p className="text-center pt-3">
+					Back to &nbsp;
+					<Link className="fw-bold text-decoration-none"  onClick={() => setProgress(100)} to={"/login"}>
+						Login
+					</Link>
+				</p>
               </form>
             </div>
           </div>

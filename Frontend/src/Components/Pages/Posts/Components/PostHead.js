@@ -13,7 +13,7 @@ const PostHead = (props) => {
     elem.closest('.head').querySelector('.linkToProfile').click();
   }
   useEffect(()=>{},[])
-
+  if(me===null) return null
   const del =()=> {
 	fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/delete/${post._id}`,{
 		headers:headers(),

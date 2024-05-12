@@ -37,6 +37,7 @@ const Profile = () => {
   const [open, setmodal] = useState(false);
   const lstyle = { listStyleType: "none" };
   const [react, setReact] = useState(false)
+  const [loggedOut, out] = useState(false)
   
   const toggleModal = e => {
     if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
@@ -94,12 +95,16 @@ const Profile = () => {
       
     })
   }
- 
+  const logout = () => {
+	localStorage.clear()
+	setLoad(false)
+	setTimeout(() => out(true), 2000);
+  }
  const [loaded, setLoad] = useState(Object.keys(userPosts).length)
   useEffect(()=>{ 
     let term = searchedProfile
 	if(me===undefined) return navigator('/login')
-	console.log(term)
+	if(loggedOut) return navigator('/login')
 	const init = () => 
 	{
 		fetch(`${process.env.REACT_APP_SERVER_URI}/api/profile/getuser`,{
@@ -148,8 +153,8 @@ const Profile = () => {
 			init()
 		}
 	}
-	  
-  },[react,searchedProfile])
+	return () =>  null 
+  },[react,searchedProfile,loggedOut])
   return (
     <>
      { loaded ? chatopened ? (
@@ -167,11 +172,11 @@ const Profile = () => {
 
           <div className="row col-12">
             <div className="col-6 d-flex">
-              <h4>{user.username??'Instagram User'}</h4>
+              <h4>{user?.username??'Instagram User'}</h4>
 			{user.verified ? 
 			  	<img height={20} width={20} src={verified} className={`mx-1`} alt={''}/> :''}
             </div>
-            {user && me.username===user.username?
+            {user && me?.username===user.username?
             (<div className="col-6">
               <Link to={'/edit-profile'} className="btn editprofile text-decoration-none text-dark fw-bold btn-secondary">
                 Edit Profile
@@ -198,7 +203,7 @@ const Profile = () => {
           </div>
           
             <div className="col-sm-12 mb-3">
-              <small>{user.bio??''}</small>
+              <small>{user?.bio??''}</small>
             </div>
           
           { (me.username !==user.username)? (
@@ -266,7 +271,7 @@ const Profile = () => {
   <Modal isOpen={open} dimens={{ height: 250, width: 360 }} onClose={toggleModal} className="profiler">
     <h3 className="text-center">Are you sure?</h3>
     <li style={lstyle} className="text-center mt-5 mb-4" >
-      <Link onClick={()=>{localStorage.clear();return navigator('/login')}} className="text-primary text-decoration-none fs-4">Logout</Link>
+      <Link onClick={logout} className="text-primary text-decoration-none fs-4">Logout</Link>
     </li>
     <li style={lstyle}>
       <hr className="dropdown-divider" />

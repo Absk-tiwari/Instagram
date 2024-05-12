@@ -1,5 +1,4 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import {ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -68,8 +67,12 @@ function App() {
         <PostState>
           <ProfileState>
             <div className="App" style={{ display: "flex" }}>
-                <ToastContainer position='top-center' autoClose={5000} hideProgressBar={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='dark' />           
-                <SidebarComponent />
+				<div className={"parentToast"}>
+					<div className={"notifier"} id={"notifier"} >
+						<p/>
+					</div>
+				</div>     
+				<SidebarComponent />
                 {/* <AnimatedRoutes/> */}
                 <Routes>
                   <Route exact path="/login" element={<Login />} />

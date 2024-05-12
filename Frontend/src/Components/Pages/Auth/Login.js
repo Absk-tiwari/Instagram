@@ -3,16 +3,16 @@ import logo from "../../../assets/icons/insta.svg";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 import Loader from "../../StateComponents/Loader";
-import {toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import headers from "../../../APIs/Headers";
+import { toast } from '../../../toast'
 const host = process.env.REACT_APP_SERVER_URI
-
 const Login = () => {
   const [progress, setProgress] = useState(0)
   let navigator = useNavigate();
 	useEffect(()=>{
-	   if( localStorage.getItem(`token`) ){
+	   if( localStorage.getItem(`token`) )
+	   {
 	     return navigator('/');
 	   }
 	},[]);
@@ -30,15 +30,15 @@ const Login = () => {
 			// Save the auth token 
 			localStorage.setItem('token', response.authToken);
 			navigator('/')
-			toast.success('Logged in!')
+			toast('Logged in successfully!')
 			setTimeout(() => window.location.reload(), 2500);
 		}else{
-			toast.error(response.message) 
+			toast(response.message) 
 			setLoading(false)
 		}
 
 	} catch (err) {
-		alert(err.message); 
+		toast(err.message); 
 		setLoading(false)
 	}
 }
@@ -60,7 +60,6 @@ const Login = () => {
   return (
     <>
       <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
-      <ToastContainer position='top-center' autoClose={2500} hideProgressBar={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='dark' />           
        <div className="container-fluid justify-contents-center">
         <div className="container">
           <div className="col-md-5 loginContainer">

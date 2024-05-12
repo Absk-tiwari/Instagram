@@ -15,8 +15,9 @@ const Navbar = () => {
 	{
 		dispatch({type:'GET_STORIES'})
 	}
-    setTimeout(() => setLoader(false), 2000); 
+	setTimeout(() => setLoader(false), 2000); 
   }, [])
+  if(me===null) return null
 
   const placeholderStyle = {height:'60px',width:'60px',marginLeft:'40px', borderRadius:'50%'};
 

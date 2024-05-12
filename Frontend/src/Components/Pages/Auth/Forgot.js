@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import logo from "../../../assets/icons/insta.svg"; 
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from '../../../toast'
 import LoadingBar from 'react-top-loading-bar'
 import headers from '../../../APIs/Headers' 
+import { Link } from 'react-router-dom';
 
 function Forgot() {
   const [message, setMessage] = useState('')
@@ -10,7 +11,7 @@ function Forgot() {
   const [progress, setProgress] = useState(0) 
   const host = process.env.REACT_APP_SERVER_URI || 'https://instagram-vquy.onrender.com';
   const [input, setInput] = useState('')
-
+  const isPhone = window.screen.width < 500
   const sendMail = async event => {
 	event.preventDefault()
 	fetch(`${host}/api/auth/forgotPassword`,{
@@ -19,11 +20,10 @@ function Forgot() {
 		body:JSON.stringify({email:input})
 	}).then(res=>res.json()).then(data=>{
 		if(data.status){ 
-			toast.success('a verification mail has been sent to '+input)
+			toast('a verification mail has been sent to '+input)
 			setStage(!sent)
 		}else{
-			toast.error(data.message)
-			alert(data.message)
+			toast(data.message) 
 		}
 	})
   }
@@ -40,22 +40,21 @@ function Forgot() {
   return (
 	<>
       <LoadingBar color='#f11946' progress={progress} onLoaderFinished={() => setProgress(0)}/>
-      <ToastContainer position='top-center' autoClose={2500} hideProgressBar={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme='dark' />           
        <div className="container-fluid justify-contents-center">
         <div className="container d-flex mt-5">
-          <div className="col-md-5 offset-4 mt-3">
+          <div className={` ${isPhone >500 ?'col-md-5  mt-3 offset-4':'col-12'}`}>
             <div className="card d-flex" style={{ zIndex: 4 }}>
               <div className="formTitle align-items-center text-center mt-3">
-                <img src={logo} alt="not?" style={{ height: "15vh",width: "25vw" }}/>
+                <img src={logo} alt="not?" style={{ height: "15vh",width: isPhone <500?'60vw':"25vw" }}/>
               </div>
               <div className='loginBody mb-5 mt-3'>
                 <div className='container'>
 				  {sent?
 				  'Password reset link has been sent to '+input
  				  :
-				  <form onSubmit={sendMail}>
+				  <form onSubmit={sendMail} className='text-center'>
                     <div className="form-floating mb-3">
-                      <input type="text" onChange={e=>setInput(e.target.value)} name="email" value={input} onBlur={validate} className="form-control" id="input" placeholder="" />
+                      <input type="text" onChange={e=>setInput(e.target.value)} name="email" value={input} onBlur={validate} className={isPhone?"form-control mx-2":'form-control'} id="input" placeholder="" style={{width:isPhone?'100%!important':'auto'}} />
 
                       <label htmlFor="input">
                         Enter your email
@@ -63,8 +62,13 @@ function Forgot() {
 					  <small className='text-danger mx-3'>{message}</small>
                     </div>
 					<input type='submit' className='btn col-12 btn-primary mb-3 fw-bold'
-					value={`Send password reset link`} onClick={()=>setProgress(100)} />
-	          
+					value={`Send password reset link`} style={{width:isPhone?'100%!important':''}} onClick={()=>setProgress(100)} />
+	          		<p className="text-center pt-3">
+						Back to &nbsp;
+						<Link className="fw-bold text-decoration-none"  onClick={() => setProgress(100)} to={"/login"}>
+							Login
+						</Link>
+                	</p>
                   </form> 
 				  }
                 </div>

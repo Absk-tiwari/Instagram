@@ -8,7 +8,7 @@ const Story = () => {
     const [touchStart, setTouchStart] = useState(null)
     const [touchEnd, setTouchEnd] = useState(null)
     // the required distance between touchStart and touchEnd to be detected as a swipe
-    const minSwipeDistance = 60 
+    const minSwipeDistance = 100 
 
     const onTouchStart = e => { 
         
@@ -88,7 +88,7 @@ const Story = () => {
     }
     return ( 
      <div id={'storyviewer'} onClick={onTouchStart} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
-        <section id='progres-bar' className='d-flex' style={{position:"absolute"}}>
+        <section id='progres-bar' className='d-flex' style={{position:"absolute", overscrollBehavior:'none'}}>
             {list}
         </section>
         <section id='contents'  style={{height:'500px'}} >
