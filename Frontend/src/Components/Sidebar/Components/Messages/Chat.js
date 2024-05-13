@@ -250,7 +250,7 @@ function Chat(props) {
 					style={{
 						position: 'absolute',
 						left: '13px',
-						fontSize: 'xx-large'
+						fontSize: 'x-large'
 					}}
 					onClick={remC}
 					/>): null }
@@ -347,7 +347,7 @@ function Chat(props) {
               </div>
 
             </section>
-            <section className='footer mt-4'>
+            <section className={`footer ${isPhone?'':'mt-4'}`}>
                 <form className='hstack rel' onSubmit={sendMessage} >
                     <input type='text' className={isPhone?'chat-input-phone':'chat-input'} name='message' value={msg} onChange={OnKeyUp} autoComplete='off' onBlur={()=>socket.emit('stopped',{is:me,to:username})} />
                     <span style={{left:'3%',position:'absolute'}}>
@@ -356,8 +356,8 @@ function Chat(props) {
                     <span style={{left:'88%',position:'absolute'}} onClick={uploadFile}>
                       <i className={`fa-regular ${msg.length?'d-none':''} fs-3 fa-image`}/>
                     </span>
-					<input className='d-none' type='file' name='sendImage' ref={file}/>
-                    <span type='submit' className={`text-primary abs ${msg.length?'':'d-none'} fs-5 fw-bold`} style={{width:'90%', marginLeft:'15px', left:isPhone?'78%':'85%',fontFamily:'monospace'}} > Send </span>
+          					<input className='d-none' type='file' name='sendImage' ref={file}/>
+                    <span onClick={sendMessage} className={`text-primary abs ${msg.length?'':'d-none'} fs-5 fw-bold`} style={{width:'90%', marginLeft:'15px', left:isPhone?'78%':'85%',fontFamily:'monospace'}} > Send </span>
                 </form>
             </section>
         </div>

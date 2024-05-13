@@ -31,6 +31,8 @@ const HOST = process.env.REACT_APP_SERVER_URI
 function App() {
 
  useEffect(()=>{
+ 
+   setTimeout(() => document.querySelector('.likenotif').classList.add('d-none'), 25000);
    if(localStorage.getItem('token')){
 		let me= JSON.parse(localStorage.getItem('userLogin'))
 		socket.connect()

@@ -349,11 +349,14 @@ html{
 	.notification{
 		font-size: smaller;
 		margin-left: 0px;
-		width:324px!important;
+		width:103%!important;
 		max-height:820px!important;
-		overflow:scroll!important
+		overflow-y:auto!important;
+		padding-top: 6px;
 	}
-	
+	.offcanvas-header{
+		height: 35px;
+	}
 	.row .list-item{
 		margin-left: 5px;
 		max-width: 96vw;
@@ -374,8 +377,8 @@ html{
 		margin-left: 0px!important;
 	}
 	.outer .spinner{
-		height: 100px!important;
-		width: 100px!important;
+		height: 50px!important;
+		width: 50px!important;
 		margin-top: 30vh!important;
 	}
 	.bakwaas{
@@ -526,6 +529,36 @@ html{
 		max-width: 70%;
 		line-height: 2.5;
 		text-wrap: pretty;
+	}
+	.other{
+		font-family: sans-serif;
+	}
+	section.header{
+		background-color:white!important;
+		padding: 5px;
+	}
+	section.header .pfpicture{
+		height: 49px!important;
+		width: 49px!important;
+		display: grid;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1;
+        vertical-align: middle;
+        margin-top: 6px;
+    } 
+	section.header div:first-child{
+		height: 63px!important;
+	}
+	.spinner {
+		border: 1px solid #f3f3f3!important;
+		border-top: 1px solid #bcbbbb!important;
+		border-radius: 50%!important;
+		animation: spinner 1.5s linear infinite;
+	}
+	.header-notification {
+		border-bottom:0px!important;
 	}
 	.selfImage{
 		width: 60%!important;
@@ -1047,7 +1080,7 @@ html{
     padding-left: 50px;
     width: 100% !important;
     height: 67px !important; 
-	font-size: 25px!important;
+	font-size: 20px!important;
 	padding-right: 90px;
     border-radius: 36px;
     border: 1px solid gray;

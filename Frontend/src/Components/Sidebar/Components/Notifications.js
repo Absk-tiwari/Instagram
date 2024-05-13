@@ -12,6 +12,7 @@ const Notifications = (props) => {
   const [notifications,set] = useState([]) 
   const [count, setCount] = useState(0)
   const [ting , ring] = useState(false)
+  const isPhone = window.screen.width < 500
   const [contextMenu, setContext] = useState({isVisible: false,x: 0,y: 0,items: [],c:''})
   const redirect = event => {
 	if(event.target?.dataset?.id){
@@ -137,7 +138,7 @@ const Notifications = (props) => {
     {notifications.map((item,index)=>{   
       return (
       <div className={`notification ${item.read===true && 'read'}`}  data-id={item._id} key={index} onContextMenu={onContext} id={item._id} data-from={item.from} data-s={(item.message).includes('following')} onClick={redirect}>
-			<div className="hstack list-item gap-3" data-id={item._id}>
+			<div className={`hstack list-item ${isPhone?'':'gap-3'}`} data-id={item._id}>
 			<img src={item.label??logo} alt="?" className="rounded-circle pfpicture mx-2" data-id={item._id} />
 			<p className="text-dark text-wrap notify-text" dangerouslySetInnerHTML={{ __html: item.message}} data-id={item._id} />
 			<small data-id={item._id} className="text-secondary"> {howLong(item.at)} </small>

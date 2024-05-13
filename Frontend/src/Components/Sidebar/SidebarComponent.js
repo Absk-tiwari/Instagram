@@ -148,25 +148,38 @@ function SidebarComponent() {
           {SidebarData.map((menu, key) => {
             return (
               <div className={`custom-row ${location.pathname === menu.link && "active"} `+menu.title} key={key}
-               onClick={refer} data-refer={menu.link} >
+               onClick={menu.link==='/notifications'?markRead:refer} data-refer={menu.link} >
                 <div id="icon" style={{ height: "20px" }} data-refer={menu.link} onClick={refer}>
                   {menu.icon}
-				  {menu.add??''}
+				          {menu.add??''}
                   {menu.link === "/notifications" && <span className="arrived d-none">.</span>}
                 </div>
                 {menu.link === "/notifications" || menu.link === "/search" ? (
                   <>
-                  <Link id="title" to={menu.link} onClick={menu.title === "Create" ? submit: menu.link==='/notifications' && markRead}
-                    data-refer={menu.link} data-bs-toggle="offcanvas" data-bs-target={menu.modal} >
-                   {menu.title} 
+                  {menu.title === 'Create' ?
+                  <Link id="title" to={menu.link} onClick={menu.title === "Create" ? submit: menu.link==='/notifications'} data-refer={menu.link} data-bs-toggle="offcanvas" data-bs-target={menu.modal} >
+                    {menu.title} 
+                  </Link> :
+                  (menu.link==='/notifications' ?
+                  (<>
+                  <Link id="title" to={menu.link} onClick={markRead} data-refer={menu.link} data-bs-toggle="offcanvas" data-bs-target={menu.modal} >
+                    {menu.title} 
                   </Link>
-                 {menu.link === "/notifications" && <div className="likenotif d-none">
+                  <div className="likenotif d-none" data-bs-toggle="offcanvas" data-bs-target="#notifications">
                     <div className="rectangle">
-                      <div className="heart"></div>
-                      <div className="number">4</div>
+                      <div className="heart"/>
+                      <div className="number"/>
                     </div>
-                    <div className="square"></div>
-                  </div>}
+                    <div className="square"/>
+                  </div>
+                  </>
+                  )
+                  :
+                  <Link id="title" to={menu.link} data-refer={menu.link} >
+                    {menu.title} 
+                  </Link>
+                  )
+                  }  
                   </>
                 ) : (
                   <Link id="title" to={menu.link} onClick={menu.title === "Create" && submit} data-refer={menu.link} >
