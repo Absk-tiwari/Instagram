@@ -105,6 +105,7 @@ const Profile = () => {
   }
   const logout = () => {
 	localStorage.clear()
+	dispatch({'LOGOUT'})
 	setLoad(false)
 	toast(`Logged out!`)
 	setTimeout(() => out(true), 2000);
