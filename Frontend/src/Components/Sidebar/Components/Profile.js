@@ -105,10 +105,12 @@ const Profile = () => {
   }
   const logout = () => {
 	localStorage.clear()
-	dispatch({ type:'LOGOUT',payload:null })
 	setLoad(false)
 	toast(`Logged out!`)
-	setTimeout(() => out(true), 2000);
+	setTimeout(() => {
+		out(true)
+		dispatch({ type:'LOGOUT',payload:null })
+	}, 2000);
   }
  const [loaded, setLoad] = useState(isLoaded)
   useEffect(()=>{
