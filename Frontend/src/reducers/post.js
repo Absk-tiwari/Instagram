@@ -20,6 +20,13 @@ const postReducer = (state=initialState,action)=>{
 				...state,
 				skip:action.payload
 			}
+	        case 'LOGOUT':
+		    return {
+			    ...state,
+			    totalPosts:[],
+			    call:false,
+			    skip:0
+		    }
         default : return state
     }
 }
