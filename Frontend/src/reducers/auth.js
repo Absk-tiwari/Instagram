@@ -11,8 +11,10 @@ const initialState = {
 	loading:false,
 	userInfo:{}, // the other details of user ;
 	userPosts:[], // for the post of user ; 
+	userPostsLoaded:false,
 	myInfo:{},
 	myPosts:[],
+	myPostsLoaded:false,
 	userToken,
 	error: null,
 	success: false,
@@ -117,8 +119,29 @@ const authReducer = (state=initialState,action)=>{
 					}
 				]
 			}
-		default:
-			return state 
+		case 'MY_POSTS_LOADED':
+			return {
+				...state,
+				myPostsLoaded:action.payload
+		        }
+		case 'SEARCH_USER_POSTS_LOADED':
+			return {
+			        ...state,
+			        userPostsLoaded:action.payload
+			}
+		case 'LOGOUT':
+		      return {
+			      ...state,
+			      userInfo:{},
+			      myInfo:{},
+			      userPostsLoaded:false,
+			      myPostsLoaded:false,
+			      userPosts:[],
+			      myPosts:[],
+			      userToken:null,
+			      searchProfile:null
+		      }
+		default:return state 
 	}
 }
 // export const { logout, setCredentials, setCurrentUsers } = authSlice.actions
