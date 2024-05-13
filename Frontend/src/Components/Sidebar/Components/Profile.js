@@ -23,13 +23,16 @@ const Profile = () => {
 //   let myPosts = useSelector(state=>state.auth.myPosts) // for searched user
   let userInfo // = useSelector(state=>state.auth.userInfo)  // post of searched user
   let userPosts //= useSelector(state=>state.auth.userPosts) // for searched user
+  let isLoaded;
   if(searchedProfile===me?.username)
   {
 	userInfo = state.myInfo
 	userPosts = state.myPosts
+	isLoaded = state.myPostsLoaded
   }else{
 	userInfo = state.userInfo
 	userPosts = state.userPosts
+	isLoaded = state.userPostsLoaded
   }
   const [active, setStat] = useState(1);
   const [chatopened, setupChat] = useState(false)
@@ -86,13 +89,14 @@ const Profile = () => {
         setReact(act)
         
         if(type === 'follow')
-		{
-  		  toast(`following `+data.for)
-          if(data.user!==data.for){
+	{
+  	  toast(`following `+data.for)
+          if(data.user!==data.for)
+	  {
             socket.emit('notify',data)
           }
         }else{
-  		  toast(`unfollowed `+data.for)
+  	  toast(`unfollowed `+data.for)
           socket.emit('remNotified',data)
         }
       }
@@ -105,11 +109,12 @@ const Profile = () => {
 	toast(`Logged out!`)
 	setTimeout(() => out(true), 2000);
   }
- const [loaded, setLoad] = useState(Object.keys(userPosts).length)
-  useEffect(()=>{ 
-    let term = searchedProfile
-	if(me===undefined) return navigator('/login')
-	if(loggedOut) return navigator('/login')
+ const [loaded, setLoad] = useState(isLoaded)
+  useEffect(()=>{
+	  
+        let term = searchedProfile
+	if(me===undefined || loggedOut) return navigator('/login');
+	  
 	const init = () => 
 	{
 		fetch(`${process.env.REACT_APP_SERVER_URI}/api/profile/getuser`,{
@@ -126,7 +131,7 @@ const Profile = () => {
 				{
 					dispatch({type:'SET_MY_INFO',payload:data.user}) 
 				}else{
-					dispatch({type:'SET_USER',payload:data.user}) 
+					dispatch({type:'SET_USER',payload:data.user})
 				}
 				if(data.isFollowing) setReact(true)
 				
@@ -140,9 +145,11 @@ const Profile = () => {
 					setPost(data)
 					if(term===me.username)
 					{
+						dispatch({type:'MY_POSTS_LOADED',payload:true})
 						dispatch({ type:'SET_MY_POSTS', payload:data })
 					}else
 					{ 
+						dispatch({type:'SEARCH_USER_POSTS_LOADED',payload:true})
 						dispatch({ type:'SET_PROFILE_POSTS', payload:data })
 					}
 				})
