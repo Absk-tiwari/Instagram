@@ -19,6 +19,7 @@ const Profile = () => {
   const isPhone = window.screen.width < 500
   let me = JSON.parse(localStorage.getItem('userLogin')) 
   const searchedProfile = useSelector(state=>state.auth.searchProfile)
+  console.log(searchedProfile)
   let state = useSelector(state=>state.auth)  // post of searched user
 //   let myPosts = useSelector(state=>state.auth.myPosts) // for searched user
   let userInfo // = useSelector(state=>state.auth.userInfo)  // post of searched user
@@ -84,7 +85,7 @@ const Profile = () => {
           icon: user.profile??obito,
           user : me.username ,
           about:me.username,
-          message : `<b>${me.username}</b> started following you` 
+          message : `<b>${me.username}</b> ${user.private?'requested to follow you':'started following you'}` 
         }
         setReact(act)
         
@@ -115,7 +116,7 @@ const Profile = () => {
  const [loaded, setLoad] = useState(isLoaded)
   useEffect(()=>{
 	  
-        let term = searchedProfile
+  let term = searchedProfile
 	if(me===undefined || loggedOut) return navigator('/login');
 	  
 	const init = () => 
@@ -223,8 +224,8 @@ const Profile = () => {
           
           { (me.username !==user.username)? (
             <div className="row" style={{marginBottom:'30px'}}>
-                <div className={`col-sm-4 ${react? 'editprofile':'btn-primary'} btn mx-1 fw-bold`} onClick={()=>reaction(!react,user.username)}>
-                  {react? 'Following':'Follow'}
+                <div className={` ${react? 'editprofile col-sm-4':'btn-primary'} btn mx-1 fw-bold`} onClick={()=>reaction(!react,user.username)}>
+                  { react? (user.private?'Following':'Requested') : 'Follow' }
                 </div>
                {(user.private && react ) || user.private===false ? 
 	        <div className="col-sm-4 editprofile btn mx-3 fw-bold" onClick={()=> setupChat(!chatopened)}>
@@ -263,7 +264,13 @@ const Profile = () => {
         <div className="tab-content">
         { loaded ?
           (<>
-          {active === 1 && <UserPosts posts={posts} /> }
+          {active === 1 && 
+            <UserPosts 
+              privateAccount={user.private} 
+              isMe={me.username===user.username}
+              posts={(user.private && react ) || !user.private? posts:[]} 
+            /> 
+          }
           {active === 2 && me.username!==user.username ? <Saved />:'' }
           {active === 3 && <UserTagged /> }
           </>):(<Loader height={100} left={350}/>)

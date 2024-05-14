@@ -54,6 +54,7 @@ const authReducer = (state=initialState,action)=>{
 				suggested:action.payload
 			}
 		case 'SEARCH_PROFILE':
+			console.log(action)
 			return {
 				...state,
 				searchProfile:action.payload

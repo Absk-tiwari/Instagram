@@ -26,20 +26,20 @@ import Forgot from "./Components/Pages/Auth/Forgot";
 import Reset from "./Components/Pages/Auth/Reset";
 import { useEffect } from "react";
 import { socket } from "./socket";
+import axios from 'axios'
 import headers from "./APIs/Headers";
 const HOST = process.env.REACT_APP_SERVER_URI
+axios.defaults.baseURL = HOST+'/api'
+axios.defaults.headers.common=headers()
 function App() {
 
- useEffect(()=>{
+  useEffect(()=>{
  
    setTimeout(() => document.querySelector('.likenotif').classList.add('d-none'), 25000);
    if(localStorage.getItem('token')){
 		let me= JSON.parse(localStorage.getItem('userLogin'))
 		socket.connect()
-		fetch(`${HOST}/api/messages/count/${me.username}`,{
-			method:'GET',
-			headers:headers()
-		}).then(res=>res.json()).then(data=>{
+		axios.get(`/messages/count/${me.username}`).then(data=>{
 			if(data.status){
 				let elem = document.getElementById('msg-badge') 
 				if(data.count){
