@@ -509,26 +509,13 @@ html{
 		padding: 12px 0px 11px 0px;
 	}
 	section.body{
-		height: 80vh!important;
+		height: 84vh!important;
 	}
-	.self{
-		text-align: right;
-		display: block!important;
-		height: auto!important;
-		color: white!important;
-		background-color: #87a2cf!important;
-		width: auto!important;
-		float: right!important;
-		border-radius: 22px!important;
-		padding-top: 3px!important;
-		margin-right: 0px!important;
-		font-size: larger!important;
-		padding-inline: 20px!important;
-		clear: both!important;
+	.self, .otherDiv>p{ 
 		font-family: sans-serif!important;
-		max-width: 70%;
-		line-height: 2.5;
-		text-wrap: pretty;
+		max-width: 70%; 		 
+		border-radius:10px!important;
+		height: auto;
 	}
 	.other{
 		font-family: sans-serif;
@@ -562,6 +549,10 @@ html{
 	}
 	.selfImage{
 		width: 60%!important;
+	}
+	.chat-input-phone {
+		background-color: gainsboro!important;
+		border: none!important;
 	}
 }
 /* mobile version ended above */
