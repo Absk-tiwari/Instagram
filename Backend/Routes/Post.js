@@ -148,34 +148,44 @@ router.post("/update", fetchuser, async (req, res) => {  // when someone followe
       set = { $pull: { likes: thisUser.username } };
     }
     if (req.body.type === "follow") {
-      await User.updateOne({ _id: req.body.id }, { $inc: { following: 1 } });
-      const updated = await User.updateOne(
-        { username: req.body.targetUsername },
-        { $inc: { followers: 1 } }
-      );
-      if (updated) {
-        await Followers.create({
-          of: req.body.targetUsername,
-          username: thisUser.username,
-        });
-        return res.status(200).json(output);
+      let alreadyAfollower = await Followers.findOne({of: req.body.targetUsername,username: thisUser.username})
+      if( alreadyAfollower?.of === undefined )
+      {
+	  await User.updateOne({ _id: req.body.id }, { $inc: { following: 1 } });
+	  const updated = await User.updateOne(
+	    { username: req.body.targetUsername },
+	    { $inc: { followers: 1 } }
+	  );
+	  if (updated) {
+	     await Followers.create({
+	        of: req.body.targetUsername,
+	        username: thisUser.username,
+	     });
+	     return res.status(200).json(output);
+           }
+	   return res.json(error);	      
       }
-      return res.json(error);
+      return res.status(200).json(output);
     }
     if (req.body.type === "unfollow") {
-      await User.updateOne({ _id: req.body.id }, { $inc: { following: -1 } });
-      let deleted = await Followers.deleteOne({
-        of: req.body.targetUsername,
-        username: thisUser.username,
-      });
-      if (deleted) {
-        let updated = await User.updateOne(
-          { username: req.body.targetUsername },
-          { $inc: { followers: -1 } }
-        );
-        if (updated) return res.json(output);
+      let isFollowing = await Followers.findOne({of: req.body.targetUsername,username: thisUser.username})
+      if( isFollowing?.of !== undefined )
+      {
+	  await User.updateOne({ _id: req.body.id }, { $inc: { following: -1 } });
+	  let deleted = await Followers.deleteOne({
+	     of: req.body.targetUsername,
+	     username: thisUser.username,
+	  });
+	  if (deleted) {
+	     let updated = await User.updateOne(
+	        { username: req.body.targetUsername },
+	        { $inc: { followers: -1 } }
+	     );
+	  if (updated) return res.json(output);
+	  }
+	  return res.end(500).json(error);
       }
-      return res.end(500).json(error);
+      return res.json(output);
     }
 
     let updated = await Post.updateOne({ _id: req.body.postID }, set);
