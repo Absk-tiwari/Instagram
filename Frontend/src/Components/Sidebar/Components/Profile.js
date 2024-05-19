@@ -224,7 +224,7 @@ const Profile = () => {
           
           { (me.username !==user.username)? (
             <div className="row" style={{marginBottom:'30px'}}>
-                <div className={` ${react? 'editprofile col-sm-4':'btn-primary col-sm-4'} btn mx-1 fw-bold`} onClick={()=>reaction(!react,user.username)}>
+                <div className={` ${react? 'editprofile col-sm-4':'btn-primary'} btn mx-1 fw-bold`} onClick={()=>reaction(!react,user.username)}>
                   { react? (user.private?'Following':'Requested') : 'Follow' }
                 </div>
                {(user.private && react ) || user.private===false ? 
@@ -266,7 +266,7 @@ const Profile = () => {
           (<>
           {active === 1 && 
             <UserPosts 
-              privateAccount={user.private} 
+              privateAccount={user.private && user.username!==me.username} 
               isMe={me.username===user.username}
               posts={(user.private && react ) || !user.private? posts:[]} 
             /> 
