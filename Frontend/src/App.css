@@ -1030,7 +1030,7 @@ html{
 	border : 5px solid #f3f3f3;
 	border-top: 5px solid #bcbbbb;
 	border-radius: 50%;
-	animation: spinner 1.5s linear infinite; 
+	animation: spinner 1s linear infinite; 
   }
   
   @keyframes spinner{

@@ -11,6 +11,7 @@ import ContextMenu from "../../../StateComponents/ContextMenu";
 import { howLong } from "../../../../helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentUser } from "../../../../actions/setCurrentUser";
+import { toast } from "../../../../toast";
 
 const Messages = () => {
   const isPhone = window.screen.width < 500
@@ -54,7 +55,7 @@ const Messages = () => {
       })
     }
   }
-  const block = () => {}
+  const block = () => {toast(`In development!`)}
 
   const onContext = event => {
     event.preventDefault()
@@ -121,17 +122,10 @@ const Messages = () => {
 		og.innerHTML=added
 		og.classList.remove('d-none')
 	  })
-    document.addEventListener('click',function(){
-        setContext({
-          isVisible : false,  
-        })
-    })
+    document.addEventListener('click',()=>setContext({isVisible:false}))
     socket.emit('users')
-    const init = async() => {
-      let texts = await getChats(user.username)
-      return texts  
-    }
-    if(totalChats.length===0)
+    const init = async() => await getChats(user.username)
+  if(totalChats.length===0)
 	{
 		init().then(res=>{  
 		if(res){

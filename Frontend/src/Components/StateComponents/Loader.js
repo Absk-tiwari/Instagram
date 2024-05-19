@@ -1,7 +1,7 @@
 import React  from 'react'
 
 const Loader = (props) => {
-    const dimens = props.height??30 
+    const dimens = props.height??40 
 	const Class = props.Class
     return (
         <div className={`spinner-container ${Class??''}`} >
