@@ -216,19 +216,21 @@ function Chat(props) {
 		fileReader.readAsDataURL(blob)
 	})
     setParent(!parent);
+    window.addEventListener('popstate',()=> dispatch({type:'REMOVE_CHAT'}))
     return () => {
-	  ImgElem.removeEventListener('change',e=>{
-		let blob = e.target.files[0]
-		var fileReader = new FileReader()
-		 
-		fileReader.onload = function (e) {
-		  sendImage(e.target.result)
-		}
-		fileReader.readAsDataURL(blob); 
-	})
-      document.removeEventListener('click', ()=> setContext({isVisible : false}))
-      loadChats([])
-      socket.off('receive',receive)
+        ImgElem.removeEventListener('change',e=>{
+        let blob = e.target.files[0]
+        var fileReader = new FileReader()
+            
+        fileReader.onload = function (e) {
+            sendImage(e.target.result)
+        }
+        fileReader.readAsDataURL(blob); 
+        })
+        document.removeEventListener('click', ()=> setContext({isVisible : false}))
+        loadChats([])
+        socket.off('receive',receive)
+        window.removeEventListener('popstate',()=> dispatch({type:'REMOVE_CHAT'}))
     }
   },[username,launch,me])
 
