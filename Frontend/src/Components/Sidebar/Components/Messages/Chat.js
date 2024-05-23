@@ -319,12 +319,12 @@ function Chat(props) {
                 </div>
             </section>
             <section className={`body`} style={{height:'70vh'}} ref={box} >
-              {!hasmsg && 
+              {(!hasmsg && !loader ) ?
                 (<div className='spinner-container'>
                     <div style={{marginTop:'30vh', height:'100px'}}>
                       <p> Send a message to start the conversation</p>
                     </div>
-                </div>)}
+                </div>):null }
 				{loader && (<div className='spinner-container d-block' style={{marginLeft:'45%',marginTop:'30%'}}><div className='spinner' style={{height:'60px', width:'60px'}}/></div>)}
 
               <div className='container' id='container'>
