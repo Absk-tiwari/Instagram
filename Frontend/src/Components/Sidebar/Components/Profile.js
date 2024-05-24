@@ -268,7 +268,7 @@ const Profile = () => {
             <UserPosts 
               privateAccount={user.private && user.username!==me.username} 
               isMe={me.username===user.username}
-              posts={(user.private && react ) || (!user.private && user.username!==me.username)? posts:[]} 
+              posts={(user.private && react ) || !user.private || user.username!==me.username? posts:[]} 
             /> 
           }
           {active === 2 && me.username!==user.username ? <Saved />:'' }
