@@ -216,7 +216,7 @@ function Chat(props) {
 		fileReader.readAsDataURL(blob)
 	})
     setParent(!parent);
-    window.addEventListener('popstate',()=> dispatch({type:'REMOVE_CHAT'}))
+    window.addEventListener('popstate',event => {event.preventDefault(); dispatch({type:'REMOVE_CHAT'})})
     return () => {
         ImgElem.removeEventListener('change',e=>{
         let blob = e.target.files[0]
@@ -230,7 +230,7 @@ function Chat(props) {
         document.removeEventListener('click', ()=> setContext({isVisible : false}))
         loadChats([])
         socket.off('receive',receive)
-        window.removeEventListener('popstate',()=> dispatch({type:'REMOVE_CHAT'}))
+        window.removeEventListener('popstate',event => {event.preventDefault(); dispatch({type:'REMOVE_CHAT'})})
     }
   },[username,launch,me])
 
