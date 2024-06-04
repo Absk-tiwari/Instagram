@@ -3,6 +3,7 @@ import {toast} from '../../../toast'
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux'; 
 import Loader from '../../StateComponents/Loader'
+import axios from 'axios';
 const Create = () => {
   const post = useSelector(state=> state.image.imageURL) 
   const navigator = useNavigate()
@@ -33,13 +34,9 @@ const Create = () => {
 	body.append('caption',fields.caption)
 	body.append('location',fields.location)
   
-	fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/create`,{
-		method:'POST',
-		headers:{
-			'auth-token':localStorage.getItem('token')
-		},
-		body:body
-	}).then(res=>res.json()).then(resp=>{
+	axios.post(`/post/create`, body )
+	.then((res)=>{
+		let resp= res.data
 		if(resp.status){
 			setTimeout(() => {
 				navigator('/')

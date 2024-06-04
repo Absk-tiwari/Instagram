@@ -52,10 +52,8 @@ socket.on("connection", conn => {
     // console.log("connected users -", myObject);
   }
 
-  conn.on("users", () => {
-    socket.emit("init", Object.keys(Object.fromEntries(users)));
-  });
-  conn.on("send", async data => {
+  conn.on(`users`, ()=> socket.emit('init', Object.keys(Object.fromEntries(users))));
+  conn.on(`send`, async data => {
     let target = data.to;
     target = users.get(target);
     let dataobj = {
@@ -76,20 +74,16 @@ socket.on("connection", conn => {
       dataobj._id = saved._id;
       socket
         .to(users.get(data.from))
-        .emit("putID", { on: data.putAt, exact: dataobj._id });
-      socket.to(target).emit("receive", dataobj);
+        .emit(`putID`, { on: data.putAt, exact: dataobj._id });
+      socket.to(target).emit('receive', dataobj);
     }
   });
 
-  conn.on("typing", data => {
-    socket.to(users.get(data.to)).emit("isTyping", data.is);
-  });
+  conn.on('typing', data => socket.to(users.get(data.to)).emit('isTyping', data.is));
 
-  conn.on("stopped", data => {
-    socket.to(users.get(data.to)).emit("hasStopped", data.is);
-  });
+  conn.on('stopped', data => socket.to(users.get(data.to)).emit('hasStopped', data.is));
 
-  conn.on("notify", async data => {
+  conn.on('notify', async data => {
     let obj = {};
     if (data.type) {
       switch (data.type) {
@@ -135,21 +129,21 @@ socket.on("connection", conn => {
       obj._id = created._id;
       obj.about = data.about;
       if (target) {
-        socket.to(target).emit("notification", obj);
+        socket.to(target).emit('notification', obj);
       }
     }
   });
 
-  conn.on("remNotified", async data => {
+  conn.on('remNotified', async data => {
     let set = {};
     if (data.type) {
-      if (data.type === "follow") {
-        set.type = "follow";
+      if (data.type === 'follow') {
+        set.type = 'follow';
         set.about = data.user;
         set.for = data.for;
       }
-      if (data.type === "like") {
-        set.type = "like";
+      if (data.type === 'like') {
+        set.type = 'like';
         set.about = data.about;
         set.for = data.for;
       }
@@ -159,12 +153,12 @@ socket.on("connection", conn => {
 		.emit("error", "couldnt remove the notification");
       } else {
         console.log(done._id, "this should be an id i.e. removin notifications");
-        socket.to(users.get(data.for)).emit("unnotify", data);
+        socket.to(users.get(data.for)).emit('unnotify', data);
       }
     }
   });
 
-  conn.on("disconnect", async() => {
+  conn.on('disconnect', async() => {
 	 
 	disconnecting.push(socket.username)
 	await updateLastActive(socket.username)

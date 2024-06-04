@@ -35,11 +35,11 @@ function App() {
 
   useEffect(()=>{
  
-   setTimeout(() => document.querySelector('.likenotif').classList.add('d-none'), 25000);
+   setTimeout(() => document.querySelector('.likenotif')?.classList?.add('d-none'), 25000);
    if(localStorage.getItem('token')){
 		let me= JSON.parse(localStorage.getItem('userLogin'))
 		socket.connect()
-		axios.get(`/messages/count/${me.username}`).then(data=>{
+		axios.get(`/messages/count/${me.username}`).then(({data})=>{
 			if(data.status){
 				let elem = document.getElementById('msg-badge') 
 				if(data.count){
@@ -50,9 +50,8 @@ function App() {
 						let final = me.username===a?b:a
 						usernames.push(final)
 					}
-					console.log(usernames)
 					elem.dataset.garbage = JSON.stringify(usernames)
-					elem.classList.remove('d-none')	
+					elem.classList?.remove('d-none')	
 				}
 			}
 		})

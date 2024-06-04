@@ -406,7 +406,7 @@ html{
 		margin-left:110px!important
 	}
 	.stories{
-		width: 90vw!important;
+		width: 100vw!important;
 	}
 	.home .col-md-8 {
 		margin-top: 10px!important;
@@ -448,6 +448,7 @@ html{
 		margin-left: 0%!important;
 		left: 0%!important;
 		overflow-x: hidden;
+		height: min-content;
 	} 
 	.custom-sidebar{
 		display: flex;
@@ -1427,6 +1428,12 @@ html{
   }
   .dark{
 	background-color: #3a3838;
+	p.other{
+		background-color: white;	
+	}
+	.readStat{
+		color: white;
+	}
   }
   .fa-ellipsis-h{
 	  position:static;
@@ -1489,4 +1496,25 @@ html{
 	display: block!important;
 	margin: auto!important;
 	max-width: 300px;
+}
+.randomPreview{
+	height:100vh;
+	width:100vw;
+	background-color:black;
+	position:absolute;
+	display: flex;
+}
+.randomPreviewImg{
+	object-fit: cover;
+	height: auto;
+	width: 100vw;
+}
+.dismissPreview{
+    color: white;
+    position: absolute;
+    top: 25px;
+    left: 86vw;
+    height: 34px;
+    width: 34px;
+    font-size: xx-large;
 }

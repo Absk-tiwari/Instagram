@@ -7,11 +7,11 @@ import More from "../../assets/icons/more.png";
 import profile from "../../assets/icons/profile.png";
 import Modal from "../StateComponents/Modal";
 import LoadingBar from "react-top-loading-bar";
-import headers from "../../APIs/Headers";
 import Notifications from "../Sidebar/Components/Notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageURL } from "../../actions/setImageURL";
 import logo from '../../assets/log.svg'
+import axios from "axios";
 
 function SidebarComponent() {
   const location = useLocation();
@@ -57,12 +57,9 @@ function SidebarComponent() {
     }
   }
   const submit = () => document.getElementById("create").click();
-  const markRead = () => fetch(`${process.env.REACT_APP_SERVER_URI}/api/notifications/read`,{
-    headers:headers()
-  })
-  .then(r=>r.json())
-  .then(res=>{
-    if(res.status){
+  const markRead = () => axios.get(`/notifications/read`)
+  .then( res=>{
+    if(res.data.status){
       read(!hasRead)
       document.querySelector('.likenotif').classList.add('d-none')
     }
@@ -88,7 +85,7 @@ function SidebarComponent() {
   	let target=elem.dataset.refer
  
     if (target) {
-      if(!['/notifications','/search','#create'].includes(target)){
+      if(!['/notifications','#','#create'].includes(target)){
 		if(target==='/profile')
 		{
 			dispatch({ type:'SEARCH_PROFILE', payload:me.username }) 
@@ -117,13 +114,8 @@ function SidebarComponent() {
 
   const searchUser = term => {
     setLoading(true)
-      fetch(`${process.env.REACT_APP_SERVER_URI}/api/profile/search`,{
-			method:'POST',
-			headers:headers(),
-			body:JSON.stringify({param:term})
-      })
-	  .then(res=> res.json())
-	  .then(data=>{
+      axios.post(`/profile/search`,{param:term})
+	  .then( ({data}) =>{
         setResults(data)
         setTimeout(()=>setLoading(false),500)
       })

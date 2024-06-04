@@ -5,6 +5,7 @@ import LoadingBar from "react-top-loading-bar";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import Loader from '../../StateComponents/Loader';
+import axios from 'axios';
 
 const ProfileSetting = () => {
 	let navigator = useNavigate()
@@ -46,17 +47,13 @@ const ProfileSetting = () => {
 	formData.append('image', file)
 	formData.append('bio', fields.bio)
 	formData.append('private', stat)
-	fetch(process.env.REACT_APP_SERVER_URI+'/api/profile/update',{
-		method:'POST',
-		headers:{
-			'auth-token':localStorage.getItem('token')
-		},
-		body:formData
-	}).then(res=>{
-		if(!res.status){
-			throw new Error(res)
+	axios.post('/profile/update', formData )
+	.then(({data})=>{
+		if(!data.status)
+		{
+			throw new Error(data)
 		}else{
-			localStorage.setItem('userLogin',JSON.stringify(res))
+			localStorage.setItem('userLogin',JSON.stringify(data))
 			setTimeout(() => {
 				setLoading(false)
 				navigator('/')
@@ -65,7 +62,7 @@ const ProfileSetting = () => {
 
 			setTimeout(() => window.location.reload(), 2000)
 		}
-	}).catch(err=>alert(err.message)) 
+	}).catch(err=>console.log(err)) 
   }
 
   return (

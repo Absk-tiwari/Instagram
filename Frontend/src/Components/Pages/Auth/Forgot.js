@@ -2,23 +2,19 @@ import React, { useState } from 'react'
 import logo from "../../../assets/icons/insta.svg"; 
 import { toast } from '../../../toast'
 import LoadingBar from 'react-top-loading-bar'
-import headers from '../../../APIs/Headers' 
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function Forgot() {
   const [message, setMessage] = useState('')
   const [sent, setStage] = useState(false)
   const [progress, setProgress] = useState(0) 
-  const host = process.env.REACT_APP_SERVER_URI || 'https://instagram-vquy.onrender.com';
   const [input, setInput] = useState('')
   const isPhone = window.screen.width < 500
   const sendMail = async event => {
 	event.preventDefault()
-	fetch(`${host}/api/auth/forgotPassword`,{
-		method:'POST',
-		headers:headers(),
-		body:JSON.stringify({email:input})
-	}).then(res=>res.json()).then(data=>{
+	axios.post(`/auth/forgotPassword`,{email:input})
+	.then(({data})=>{
 		if(data.status){ 
 			toast('a verification mail has been sent to '+input)
 			setStage(!sent)

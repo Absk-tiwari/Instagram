@@ -19,19 +19,19 @@ router.get('/test', async(req,res)=>{
 router.post('/update',[ upload.single('image'), fetchuser], async(req,res)=>{
     try {
 		let updateSet= {
-                          bio : req.body.bio
+			bio : req.body.bio
 		}
 		if(req.file) {
 			const uploaded = await uploadOnCloudnary(req.file.path)
 			updateSet.profile=uploaded.url
 		}
-	        updateSet.private = req.body.private?req.body.private:false
+		updateSet.private = req.body.private?req.body.private:false
         const update = {
             $set: updateSet
         };
         let updated = await User.updateOne({_id:req.body.id},update)
         if(updated){  
-            return res.json(updated)
+            return res.json(output)
         }
         return res.json(error)
     } catch (err) {
@@ -99,9 +99,13 @@ router.post('/block', fetchuser, async (req,res) => {
  
 router.post('/users',fetchuser,async(req,res)=>{
     try{
-        let users = req.body.users
-        let fetchedUsers = await User.find({username:{ $in: users } }).select('profile username name active')
-        return res.json(fetchedUsers);
+        let fetchedUsers = await User.find({username:{ $in: req.body.users } }).select('profile username name active')
+		let userObj={}
+		for(let user of fetchedUsers)
+		{
+			userObj[user.username]=user
+		}
+        return res.json(userObj);
     }catch(e){
         return res.json({...error,message:e.message})
     }

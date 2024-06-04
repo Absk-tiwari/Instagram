@@ -12,48 +12,67 @@ let output = { status : true }
 router.post('/', fetchuser, async(req, res) =>{
     try {
         //await Message.deleteMany() // truncate data
-        let username = req.body.username
         const result = await Message.aggregate([
             {
               $match: {
                 $or:[
-                    {from: username},
-                    {to: username}
+                    {from: req.body.username},
+                    {to: req.body.username}
                 ] // Add your WHERE condition here
-				,cleared_by:{$ne:username}
+				,cleared_by:{$ne:req.body.username}
               },
             },
             {
               $group: {
-                _id: '$connectionID',
                 count: { $sum: 1 },
-              },
-            },
+                _id: { 
+					conn: '$connectionID',
+					year: {$year: '$at'},
+					month:{$month: '$at'},
+					day: {$dayOfMonth: '$at' },
+					hour: { $hour: "$at" },
+					min: { $minute: "$at" },
+					sec: { $second: "$at" }
+				},
+			  }
+			},
+			{
+				$sort: {
+					"_id.year":-1,
+					"_id.month":-1,
+					"_id.day":-1,
+					"_id.hour":-1,
+					"_id.min":-1,
+					"_id.sec":-1
+				}
+			}
         ]);
         let conv =[]
-        for(let item of result){
- 
-                let [a,b] = (item._id).split('&')
-                let one = a+'&'+b
-                let two = b+'&'+a
-                let data = await Message.find({            
-                  $or : [
-                    { connectionID:one},
-                    { connectionID:two}
-                  ]
-                }).select('-_id');
-                let lastInd = data.length -1
-                let lastMessage = data[lastInd].content
-                let lastMessageFrom = data[lastInd].from
-                let reads = data.filter(it=>{return it.read===false});
-                item.last = reads && Object.keys(reads).length > 1 ?`${Object.keys(reads).length} new messages`:lastMessage
-                item.read = Object.keys(reads).length ? false : true
-                item.from = lastMessageFrom
-                item.at = data[lastInd].at
-                if(Object.keys(reads).length > 0){
-                    item.MessageOfSender = lastMessage
-                }
-                conv.push(item)
+		let used =[]
+        for(let item of result)
+		{
+			let [a,b] = item._id.conn.split('&')
+			let comp = a===req.body.username ? b :a
+			if(!used.includes(comp))
+			{
+				let data = await Message.find({
+					$or : [
+						{ connectionID:a+'&'+b},
+						{ connectionID:b+'&'+a}
+					]
+				}).select('-_id');
+				let reads = data.filter( it=>it.read===false );
+				item.read = Object.keys(reads).length ? false : true
+				item.from = data[data.length-1].from
+				item.at = data[data.length-1].at
+				item.last = reads && Object.keys(reads).length>1 ?`${Object.keys(reads).length} new messages`:data[data.length-1].content;
+				if(Object.keys(reads).length)
+				{
+					item.MessageOfSender = data[data.length-1].content
+				}
+				conv.push(item)
+				used.push(comp)
+			}
         }
         return res.json(conv);
     } catch (e) {

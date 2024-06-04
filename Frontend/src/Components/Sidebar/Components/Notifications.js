@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { socket } from '../../../socket';
-import headers from '../../../APIs/Headers';
 import Button from '../../StateComponents/Button';
 import logo from '../../../assets/icons/profile.png'
 import ContextMenu from '../../StateComponents/ContextMenu';
 import {howLong} from '../../../helpers';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 const Notifications = (props) => {
   const navigator =	useNavigate()
   const [read] = useState(props.read)
@@ -28,14 +28,9 @@ const Notifications = (props) => {
 	}
   }
   const remove = _id => {
-    fetch(process.env.REACT_APP_SERVER_URI+'/api/notifications/delete',{
-      method:'POST',
-      headers:headers(),
-      body:JSON.stringify({_id})
-    })
-	.then(r=>r.json())
-	.then(resp=>{
-      if(resp.status){
+    axios.post('/notifications/delete', {_id})
+	.then(({data})=>{
+      if(data.status){
         let temp = notifications
         temp = temp.filter(item=>item._id!==_id)
         set(temp)
@@ -92,11 +87,8 @@ const Notifications = (props) => {
       socket.on('unnotify', remNotification)
     document.addEventListener('click',rem)
     if(ting===false){
-      fetch(process.env.REACT_APP_SERVER_URI+'/api/notifications',{
-        headers:headers()
-      })
-	  .then(r=> r.json())
-	  .then(data=>{
+      axios.get('/notifications')
+	  .then(({data})=>{
         set(data);//console.log(data)
         let count=0;
         if(data && data.length){

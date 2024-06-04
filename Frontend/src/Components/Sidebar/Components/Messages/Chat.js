@@ -3,15 +3,15 @@ import img from "../../../../assets/icons/profile.png" ;
 import {socket} from '../../../../socket'
 import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
 import ContextMenu from '../../../StateComponents/ContextMenu';
-import headers from '../../../../APIs/Headers';
 import {howLong, randomStr} from '../../../../helpers'
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 function Chat(props) {
   const isChatOpened = useSelector(state=> state.auth.chatUser)
   const dispatch = useDispatch()
   const remC = () => {
-	dispatch({type:'REMOVE_CHAT'})
+	dispatch({type:'REMOVE_CHAT',payload:{}})
   }
   const {me,username,launch,update,till,changeMsg,details} = props    
   const [parent,setParent] = useState(false) // reflection to parent
@@ -27,26 +27,21 @@ function Chat(props) {
   const [chosen, choose] = useState('')
   const isPhone = window.screen.width < 500
   const unsend = (from, _id) => {   // handle un-sending message
-    fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/unsend`,{
-      method:'POST',
-      headers:headers(),
-      body:JSON.stringify({_id,of:from})
-    }).then(r=>r.json()).then(res=>{
-      	if(res.status) document.querySelector('[data-id="'+_id+'"]').remove() 
+    axios.post(`/messages/unsend`,{_id,of:from})
+	.then(({data})=>{
+      	if(data.status) document.querySelector('[data-id="'+_id+'"]').remove() 
+		update(!props.change)
     });
   }
-
-  const uploadFile = event => {
-	file.current?.click()
-  }
+  const backStyle = { position: 'absolute',left: '13px',fontSize: 'x-large'}
+  const pfpStyle = {height:'63px',width:'63px'}
+  
+  const uploadFile = () => file.current?.click()
 
   const remove = (me, _id) => {   // handle delete message
-    fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/delete`,{
-      method:'POST',
-      headers:headers(),
-      body:JSON.stringify({me,_id,username})
-    }).then(r=> r.json()).then(res=>{
-      	if(res.status) document.querySelector('[data-id="'+_id+'"]').remove()
+    axios.post(`/messages/delete`,{me,_id,username})
+    .then(({data})=>{
+      	if(data.status) document.querySelector('[data-id="'+_id+'"]').remove()
     })
   }
   const onContext = event => {  // add items to context-menu
@@ -71,8 +66,7 @@ function Chat(props) {
    
   const OnKeyUp = event => {  // signal typing... 
     setMessage(event.target.value)
-    let res= {is:me,to:username}
-    socket.emit('typing', res)
+    socket.emit('typing', {is:me,to:username})
   }
  
  
@@ -113,10 +107,25 @@ function Chat(props) {
         scrollToBottom(0)
       }
   }    // messages has been printed
-  
+	const makeApreview = e => {
+		let div = document.createElement('div')
+		div.className='randomPreview justify-content-center align-items-center'
+		let btn = document.createElement('span')
+		btn.style.position='absolute'
+		btn.className ='dismissPreview fa fa-close'  
+		btn.addEventListener('click', ()=> document.querySelector('.randomPreview').remove())
+		img = document.createElement('img')
+		img.className='randomPreviewImg'
+		img.style.position='absolute'
+		img.src=e.target.src 
+		div.appendChild(btn)
+		div.appendChild(img)
+		document.body.appendChild(div)
+	}
   const sendImage = src =>{
 	 let img = document.createElement('img')
 	 img.src= src
+	 img.addEventListener('click',makeApreview)
 	 img.className=`selfImage`
 	 let createdID = randomStr(5) 
 	 img.dataset.id = createdID
@@ -191,12 +200,10 @@ function Chat(props) {
       changeMsg(added)
     }
     socket.on('receive', receive)  // handle 
- 
-    fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/of`,{
-            method:'POST',
-            headers:headers(),
-            body:JSON.stringify({cID:me+'&'+username})
-    }).then(res=> res.json()).then(oldchats=>{
+	
+    axios.post(`/messages/of`,{cID:me+'&'+username})
+    .then( _ =>{
+	  let oldchats = _.data
       if(oldchats && oldchats.length){
         loadChats(oldchats)
         AvailMessage(true)
@@ -208,35 +215,27 @@ function Chat(props) {
     })
 	let ImgElem = file.current
 	ImgElem.addEventListener('change', e =>{
-		let blob = e.target.files[0]
 		var fileReader = new FileReader()
-		fileReader.onload = function (e) {
-		  sendImage(e.target.result)
-		}
-		fileReader.readAsDataURL(blob)
+		fileReader.onload = (e) => sendImage(e.target.result)
+		fileReader.readAsDataURL(e.target.files[0])
 	})
     setParent(!parent);
-    window.addEventListener('popstate',event => {event.preventDefault(); dispatch({type:'REMOVE_CHAT'})})
+    window.addEventListener('popstate', ()=>dispatch({type:'REMOVE_CHAT'}))
     return () => {
         ImgElem.removeEventListener('change',e=>{
-        let blob = e.target.files[0]
-        var fileReader = new FileReader()
-            
-        fileReader.onload = function (e) {
-            sendImage(e.target.result)
-        }
-        fileReader.readAsDataURL(blob); 
+			var fileReader = new FileReader()
+			fileReader.onload = (e) => sendImage(e.target.result)
+			fileReader.readAsDataURL(e.target.files[0])
         })
         document.removeEventListener('click', ()=> setContext({isVisible : false}))
         loadChats([])
         socket.off('receive',receive)
-        window.removeEventListener('popstate',event => {event.preventDefault(); dispatch({type:'REMOVE_CHAT'})})
+        window.removeEventListener('popstate', ()=> dispatch({type:'REMOVE_CHAT'}))
     }
   },[username,launch,me])
 
-  const checkTheme = () => {
-	setTheme(chosen)
-  }
+  const checkTheme = () => setTheme(chosen)
+
   if(Object.keys(isChatOpened).length===0) return null;
 
   return (
@@ -249,16 +248,12 @@ function Chat(props) {
                 <div className='hstack'>
 					{isPhone ? 
 					(<i className={'fa-solid fa-arrow-left'} 
-					style={{
-						position: 'absolute',
-						left: '13px',
-						fontSize: 'x-large'
-					}}
-					onClick={remC}
+						style={backStyle}
+						onClick={remC}
 					/>): null }
                     <div className='col-9 hstack'>
                         <div className='img-container mx-5 col-1'>
-                            <img src={details && (details[0].profile??img)} style={{height:'63px',width:'63px'}} className='pfpicture' alt={username} />
+                            <img src={details && (details[0].profile??img)} style={pfpStyle} className='pfpicture' alt={username} />
                         </div>
                         <div className='col-10' style={{paddingTop:'15px'}}>
                             {isPhone? <h5>{username}</h5>:  <h3>{username}</h3>}
@@ -270,8 +265,8 @@ function Chat(props) {
                         </div>
                     </div>
                     <div className='col-3 rel dropdown d-flex'>
-                        <span className='fa fa-phone iconStyle' title='call' />
-                        <span className='fa fa-video-camera iconStyle' title='video call'/> 
+                        {isPhone?'':<span className='fa fa-phone iconStyle' title='call' />}
+						<span className='fa fa-video-camera iconStyle' title='video call'/> 
                         <span className='fa fa-ellipsis-v iconStyle dropdown' data-bs-toggle={`dropdown`} title='options'/> 
                         <ul className={`dropdown-menu`}>
                           <h5 className={'mx-4'} > Wallpaper </h5>
@@ -331,9 +326,18 @@ function Chat(props) {
                 {chats && chats.map((item, index)=>{ 
                   return (item.from===me?
                       (<div key={index} className={`d-block`}>
-						{item.content.length>10000?
-						<img src={item.content} className={`selfImage`} alt={``} data-id={item._id} onContextMenu={onContext} />:
-						<p data-from={item.from===me?me:username} className='self' data-id={item._id} onContextMenu={onContext} >{item.content}</p>}
+						{item.content.length>10000? // was an image from this side
+							<img src={item.content} 
+								className={`selfImage`} alt={``} 
+								data-id={item._id} 
+								onContextMenu={onContext} 
+								onClick={makeApreview}
+							/>:
+							<p data-from={item.from===me?me:username} 
+								className='self' 
+								data-id={item._id} 
+								onContextMenu={onContext} >{item.content}</p> // was a normal text
+						} 
                         
 						{index===chats.length-1 && item.read ? <small className={'readStat'}>seen</small> :''}
                       </div>):
@@ -341,7 +345,7 @@ function Chat(props) {
 							<div className='hstack otherDiv'>
 								<img className={`img-rounded inchat`} src={details && (details[0].profile??img)} alt={''} />
 								{item.content?.length>10000?
-								<img src={item.content} className={`otherImage`} data-id={item._id} alt={``} onContextMenu={onContext}/>
+								<img src={item.content} className={`otherImage`} data-id={item._id} alt={``} onContextMenu={onContext} onClick={makeApreview} />
 								:<p className='other' data-id={item._id} onContextMenu={onContext}>{item.content}</p>}
 							</div>
 						</div>)) 

@@ -35,7 +35,7 @@ export const SidebarData = [
         {" "}search{" "}
       </i>
     ),
-    link: "/search",
+	link: "#",
     modal: "#search",
   },
   {

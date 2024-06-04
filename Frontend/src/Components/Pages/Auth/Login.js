@@ -4,9 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 import Loader from "../../StateComponents/Loader";
 import 'react-toastify/dist/ReactToastify.css'
-import headers from "../../../APIs/Headers";
 import { toast } from '../../../toast'
-const host = process.env.REACT_APP_SERVER_URI
+import axios from "axios";
+
 const Login = () => {
   const [progress, setProgress] = useState(0)
   let navigator = useNavigate();
@@ -19,24 +19,21 @@ const Login = () => {
   
   const login = async({username, password}) =>{
 	try {
-		const resp =await fetch(`${host}/api/auth/login`,{
-			method : 'POST',
-			headers : headers(),
-			body : JSON.stringify({username, password})
-		});
-		const response = await resp.json();
-		console.log(response)
-		if(response.status){
-			// Save the auth token 
-			localStorage.setItem('token', response.authToken);
-			navigator('/')
-			toast('Logged in successfully!')
-			setTimeout(() => window.location.reload(), 2500);
-		}else{
-			toast(response.message) 
-			setLoading(false)
-		}
+		axios.post(`/auth/login`,{username, password})
+		.then((res)=>{
+			let response = res.data
+			if(response.status){
+				// Save the auth token 
+				localStorage.setItem('token', response.authToken);
+				navigator('/')
+				toast('Logged in successfully!')
+				setTimeout(() => window.location.reload(), 2500);
+			}else{
+				toast(response.message) 
+				setLoading(false)
+			}
 
+		})
 	} catch (err) {
 		toast(err.message); 
 		setLoading(false)

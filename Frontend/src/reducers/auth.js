@@ -46,7 +46,7 @@ const authReducer = (state=initialState,action)=>{
 		case 'REMOVE_CHAT':
 			return {
 				...state,
-				chatUser:{}	
+				chatUser:action.payload
 			}
 		case 'SET_SUGGESTED':
 			return {

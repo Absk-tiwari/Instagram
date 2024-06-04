@@ -1,26 +1,29 @@
 import React, { useRef, useState} from "react";
 import logo from "../../../assets/icons/insta.svg";
 import LoadingBar from "react-top-loading-bar";
-import headers from "../../../APIs/Headers";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "../../../toast";
+import axios from "axios";
 const Signup = () => {
   const nav = useNavigate(); 
   const [progress,setProgress] = useState(0)
   const signup = async({name, email, username, password}) =>{
 	try {
-	   const json = await fetch(`https://instagram-vquy.onrender.com/api/auth/signup`,{
-			method : 'POST',
-			headers : headers(),
-			body : JSON.stringify({name, email, username, password})
+	    axios.post(`/auth/signup`,{
+		 	name,
+			email,
+			username,
+			password
+		}) 
+		.then( res =>{ 
+			let resp = res.data
+			if(resp.status){
+				toast(resp.message)
+				setTimeout(() => nav('/login'), 2500);
+			}else{
+				validate({...validatefields, [resp.key] : {...validatefields[resp.key], bad:true, message:resp.message }})
+			}
 		})
-		const resp = await json.json();
-		if(resp.status){
-			toast(resp.message)
-			setTimeout(() => nav('/login'), 2500);
-		}else{
-		    validate({...validatefields, [resp.key] : {...validatefields[resp.key], bad:true, message:resp.message }})
-		}
 	} catch (error) {
 		console.log(error.message);
 	}

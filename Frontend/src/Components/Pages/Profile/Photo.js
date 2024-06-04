@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Modal from '../../StateComponents/Modal'; 
 import PostFooter from '../Posts/Components/PostFooter';
-import headers from '../../../APIs/Headers';
 import profile from '../../../assets/icons/profile.png'
 import { howLong } from '../../../helpers';
 import Placeholder from '../../StateComponents/Placeholder'; 
+import axios from 'axios';
 const Photo = (props) => {
 	const isPhone = window.screen.width < 500 
     const post = props.post;
@@ -21,12 +21,8 @@ const Photo = (props) => {
       if(e.target.id==='modal' || e.target.classList.contains('postImg')) setmodal(!open)
     }
 	const getComments = ()=> {
-		fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/comments/${post._id}`,{
-			method:'GET',
-			headers:headers()
-		})
-		.then(r=>r.json())
-		.then(data=>{
+		axios.get(`/post/comments/${post._id}`)
+		.then(({data})=>{
 			setComments(data)
 			setTimeout(() => {
 				setLoading(false)
@@ -60,14 +56,14 @@ const Photo = (props) => {
 	}
 
 	const addComment = (reply=false) => {
-		fetch(process.env.REACT_APP_SERVER_URI+'/api/post/addComment',{
-		  method:'POST',
-		  headers:headers(),
-		  body:JSON.stringify({username:post.username,comment, postID:post._id,reply})
+		axios.post('/post/addComment',{
+			username:post.username,
+			comment, 
+			postID:post._id,
+			reply 
 		})
-		.then(r=>r.json())
-		.then(resp=>{
-		  if(resp.status)
+		.then(({data})=>{
+		  if(data.status)
 		  setComment('')
 		  getComments()
 		})

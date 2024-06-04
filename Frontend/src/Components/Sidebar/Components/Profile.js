@@ -6,12 +6,12 @@ import UserPosts from "../../Pages/Profile/UserPosts";
 import Saved from "../../Pages/Profile/Saved";
 import UserTagged from "../../Pages/Profile/UserTagged";
 import Loader from "../../StateComponents/Loader";
-import headers from "../../../APIs/Headers";
 import Chat from '../Components/Messages/Chat'
 import { socket } from "../../../socket";
 import Modal from "../../StateComponents/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "../../../toast";
+import axios from "axios";
 
 const Profile = () => {
   const navigator = useNavigate() 
@@ -71,14 +71,9 @@ const Profile = () => {
 
   const reaction =  (act,targetUsername)  => {  // update profile based on follow btn change
     let type = act ? 'follow':'unfollow'
-    fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/update`,{
-      method:'POST',
-      headers:headers(),
-      body:JSON.stringify({type,targetUsername})
-    })
-	.then(r=> r.json())
+    axios.post(`/post/update`,{type,targetUsername})
 	.then(resp=>{
-      if(resp.status){
+      if(resp.data.status){
         let data={
           type: 'follow',
           for: targetUsername,
@@ -89,18 +84,18 @@ const Profile = () => {
         }
         setReact(act)
         
-        if(type === 'follow')
+	if(type === 'follow')
 	{
-  	  toast(`following `+data.for)
-          if(data.user!==data.for)
-	  {
+		toast(`following `+data.for)
+		if(data.user!==data.for)
+	  	{
             socket.emit('notify',data)
-          }
-        }else{
-  	  toast(`unfollowed `+data.for)
+		}
+	}else{
+		toast(`unfollowed `+data.for)
           socket.emit('remNotified',data)
         }
-      }
+	}
       
     })
   }
@@ -121,13 +116,8 @@ const Profile = () => {
 	  
 	const init = () => 
 	{
-		fetch(`${process.env.REACT_APP_SERVER_URI}/api/profile/getuser`,{
-			method:'POST',
-			headers:headers(),
-			body:JSON.stringify({username:term})
-		})
-		.then(res=> res.json())
-		.then(data=>{
+		axios.post(`/profile/getuser`,{username:term}) 
+		.then(({data}) => {
 			setLoad(true)
 			if(data?.user){
 				setUser(data.user)
@@ -139,13 +129,8 @@ const Profile = () => {
 				}
 				if(data.isFollowing) setReact(true)
 				
-				fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/getPostsOf`,{
-					method:'POST',
-					headers:headers(),
-					body:JSON.stringify({username:data.user.username})
-				})
-				.then(res=> res.json())
-				.then(data=>{
+				axios.post(`/post/getPostsOf`,{username:data.user.username}) 
+				.then(({data})=>{
 					setPost(data)
 					if(term===me.username)
 					{
@@ -169,7 +154,10 @@ const Profile = () => {
 			init()
 		}
 	}
-	return () =>  null 
+	document.querySelector('.App').style.height='100vh'
+	return () =>  {
+		document.querySelector('.App').style.height='auto'	
+	}
   },[react,searchedProfile,loggedOut])
   return (
     <>
@@ -224,11 +212,14 @@ const Profile = () => {
           
           { (me.username !==user.username)? (
             <div className="row" style={{marginBottom:'30px'}}>
-                <div className={` ${react? 'editprofile col-sm-4':'btn-primary'} btn mx-1 fw-bold`} onClick={()=>reaction(!react,user.username)}>
-                  { react? (user.private?'Following':'Requested') : 'Follow' }
+                <div 
+					className={`${react?'editprofile col-sm-4': user.private ?'btn-primary':'btn-primary col-sm-4'} btn mx-1 fw-bold`} 
+					onClick={()=>reaction(!react,user.username)}
+				>
+                  { react? 'Following' : 'Follow' }
                 </div>
                {(user.private && react ) || user.private===false ? 
-	        <div className="col-sm-4 editprofile btn mx-3 fw-bold" onClick={()=> setupChat(!chatopened)}>
+		        <div className="col-sm-4 editprofile btn mx-3 fw-bold" onClick={()=> setupChat(!chatopened)}>
                   Message
                 </div>:""}
             </div>
@@ -268,7 +259,7 @@ const Profile = () => {
             <UserPosts 
               privateAccount={user.private && user.username!==me.username} 
               isMe={me.username===user.username}
-              posts={(user.private && react ) || !user.private || user.username!==me.username? posts:[]} 
+              posts={(user.private && react ) || !user.private || user.username===me.username? posts:[]} 
             /> 
           }
           {active === 2 && me.username!==user.username ? <Saved />:'' }

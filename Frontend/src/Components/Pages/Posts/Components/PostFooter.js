@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import headers from "../../../../APIs/Headers";
 import {socket} from '../../../../socket';
 import Modal from "../../../StateComponents/Modal";
 import profile from '../../../../assets/icons/profile.png'
 import ContextMenu from "../../../StateComponents/ContextMenu";
 import Placeholder from "../../../StateComponents/Placeholder";
 import { howLong } from "../../../../helpers";
+import axios from "axios";
 const PostFooter = (props) => {
   let me = JSON.parse(localStorage.getItem('userLogin'))
   const { post,alt, c } = props;
@@ -47,13 +47,14 @@ const PostFooter = (props) => {
   }
   const addComment = (reply=false,another=false) => {
 	let cmt = another? addAnthorComment : reply ? repliedTo : comment
-    fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/addComment`,{
-      method:'POST',
-      headers:headers(),
-      body:JSON.stringify({username:post.username,comment:cmt, postID:post._id,reply})
-    })
-	.then(r=>r.json())
-	.then(resp=>{
+    axios.post(`/post/addComment`,{
+		username:post.username,
+		comment:cmt, 
+		postID:post._id,
+		reply
+	})
+	.then(res=>{
+	  let resp = res.data
       if(resp.status)
       setComment('')
 	  let data={ 
@@ -71,13 +72,8 @@ const PostFooter = (props) => {
   const updatePost = type => {
     type = type?'unlike':'like'
     reactPost(!like)    
-    fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/update`,{
-      method : 'POST',
-      headers: headers(),
-      body:JSON.stringify({ type:type,postID:post._id})
-    }).then(res=>{
-      return res.json()
-    }).then(data=>{
+    axios.post(`/post/update`,{ type,postID:post._id})
+    .then(({data})=>{
       if(data.status){
         if(type==='like'){
           setLikes(parseInt(likes)+1)
@@ -94,10 +90,8 @@ const PostFooter = (props) => {
   }
 
   const getComments = (outside=true) => {
-    fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/comments/${post._id}`,{
-      method:'GET',
-      headers:headers()
-    }).then(res=>res.json()).then(data=>{
+    axios.get(`/post/comments/${post._id}`)
+	.then(({data})=>{
       if(data.length){
         put(data)
       }
@@ -109,11 +103,9 @@ const PostFooter = (props) => {
   }
 
   const remove = _id => {
-    fetch(`${process.env.REACT_APP_SERVER_URI}/api/post/comment/delete/${_id}`,{
-      method:'DELETE',
-      headers:headers()
-    }).then(res=>res.json())
-	.then(resp=>{
+    axios.delete(`/post/comment/delete/${_id}`)
+	.then((res)=>{
+	  let resp = res.data
       if(resp.status){
         let temp = comments 
         put(temp.filter(item=>item._id!==_id)) 
@@ -154,8 +146,12 @@ const PostFooter = (props) => {
       <ContextMenu {...contextMenu}  />
       <div className="row theFooter">
         <div className="col-sm-1">
-          <i className={`fa${!like ? '-regular': ''} fa-heart${like ? ' animate': ''} mt-1`} style={{transition: "0.2s",fontSize: "25px",
-          color: like ? 'red':''}} onClick={() =>updatePost(like)} title={like?'Unlike':'Like'}/>
+          <i 
+		  	className={`fa${!like? '-regular':''} fa-heart ${like?'animate':''}`} 
+			style={{transition:'0.2s',fontSize:'25px',marginTop:'2px',marginLeft:'-4px',color: like ? 'red':''}} 
+			onClick={() =>updatePost(like)} 
+			title={like?'Unlike':'Like'}
+		  />
         </div>
 		{c && <div className="col-sm-1">
            <svg aria-label="Comment" className="_8-yf5 " color="#262626" fill="#262626" 

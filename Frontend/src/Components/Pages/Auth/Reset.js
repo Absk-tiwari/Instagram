@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import headers from '../../../APIs/Headers'
 import LoadingBar from 'react-top-loading-bar';
 import { toast, ToastContainer } from 'react-toastify';
 import logo from "../../../assets/icons/insta.svg"; 
 import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Reset() {
 	let navigator = useNavigate()
@@ -13,11 +13,8 @@ function Reset() {
 	const doneReset = event => {
 		event.preventDefault()
 		const token = location.pathname.split('/')[2]
-		fetch(`${process.env.REACT_APP_SERVER_URI}/api/auth/changePassword`, {
-			method:'POST',
-			headers:headers(),
-			body:JSON.stringify({tokenedID:token, password:passwords.pass1})
-		}).then(res=>res.json()).then(data=>{
+		axios.post(`/auth/changePassword`, {tokenedID:token, password:passwords.pass1})
+		.then(({data})=>{
 			console.log('after reset',data)
 			if(data.status){
 				toast.success(data.message)

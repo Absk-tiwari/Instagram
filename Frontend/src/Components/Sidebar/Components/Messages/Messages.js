@@ -1,17 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import ProfileContext from "../../../../Contexts/Profiles/ProfileContext";
+import React, { useEffect, useRef, useState } from "react";
 import msg from "../../../../assets/icons/messenger.jpg";
 import Modal from "../../../StateComponents/Modal";
 import Loader from "../../../StateComponents/Loader";
 import { socket } from '././../../../../socket';
 import Chat from '../Messages/Chat'
 import profile from '../../../../assets/icons/profile.png'
-import headers from "../../../../APIs/Headers";
 import ContextMenu from "../../../StateComponents/ContextMenu";
 import { howLong } from "../../../../helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentUser } from "../../../../actions/setCurrentUser";
 import { toast } from "../../../../toast";
+import axios from "axios";
 
 const Messages = () => {
   const isPhone = window.screen.width < 500
@@ -27,11 +26,9 @@ const Messages = () => {
   const [userDetail, setDetail] = useState({})
   const [opened, openedChat] = useState(false);
   const [searched, setResults] = useState([])
-  const {getChats} = useContext(ProfileContext);
   const [launch,set] = useState(false)
   const mapref = useRef(null)
   let user = JSON.parse(localStorage.getItem('userLogin'))
-  // let chats=[];
   const [change , setchange] = useState(false);
   const [onlines , setOnline] = useState([]);
   const [open, setmodal] = useState(false);
@@ -40,15 +37,9 @@ const Messages = () => {
 
   const deleteChat = username => {  // handle delete chat
     if(username){
-      let me = user.username
-      fetch(`${process.env.REACT_APP_SERVER_URI}/api/messages/clear`,{
-		method:'POST',
-		headers:headers(),
-		body:JSON.stringify({me,username})
-	  })
-	  .then(r=> r.json())
-	  .then(res=>{
-        if(res?.status){
+      axios.post(`/messages/clear`,{me:user.username,username}) 
+	  .then( ({data})=>{
+        if(data.status){
           setChats(totalChats.filter(c=>c.username!==username))
 		  if(selectedUser.username===username) openedChat(!opened)
         }
@@ -72,10 +63,38 @@ const Messages = () => {
       ]
     })
   }
-  const changeParent = newState => setchange(newState)
-  let tillMessages={};
 
-   
+  const changeParent = newState => setchange(newState)
+
+  	const getChats = async(me)=>{
+
+		let res = await axios.post('/messages',{username:me})  
+		let usernames=[];
+		res.data.forEach( ele => {
+			let [u1,u2] = ele._id.conn.split('&') 
+			usernames.push(u1===me?u2:u1)
+		});
+		let users = await axios.post('/profile/users',{users:usernames})
+
+		let newly=[]
+		for(let item of res.data){
+			let [u1, u2] = item._id.conn.split('&')
+			let compUser = u1===me? u2: u1 
+			let user = users.data[compUser]
+			user.read = item.read
+			user.last = item.last
+			user.from = item.from
+			user.sender = item.MessageOfSender
+			user.at = item.at
+			tillMessages[user.username] = user.last          
+			tillMessages[user.username+'_seen'] = user.read?' seen '+howLong(user.at):' sent '+howLong(user.at)          
+			tillMessages[user.username+'_last'] = user.sender // its the message by sender(anyone)          
+			newly.push(user)
+		}
+		return newly
+	}
+
+	let tillMessages={};
 
   socket.on('flag',()=>setchange(!change))
   socket.on('isTyping', who=>{
@@ -89,14 +108,11 @@ const Messages = () => {
   })
   useEffect(()=>{
 
-    socket.on('init',data=>{
-      setOnline(data)
-    })
+    socket.on('init', recepients => setOnline(recepients))
 
 	socket.on('receive',data=>{
 		let cloned = dump
 		cloned[data.from] = data.replaceMsg
-		console.log(data)
 		putMessage(cloned)
 		setchange(!change)
 		let og = document.getElementById('msg-badge')
@@ -106,7 +122,6 @@ const Messages = () => {
 			let oggyHas = og.dataset.garbage
 			if(oggyHas){
 				let users = JSON.parse(oggyHas)
-				console.log(og.innerHTML,users)
 				let exists = users.indexOf(data.from) 
 				if(exists < 0){
 					added= parseInt(oggy) + 1
@@ -125,20 +140,12 @@ const Messages = () => {
     document.addEventListener('click',()=>setContext({isVisible:false}))
     socket.emit('users')
     const init = async() => await getChats(user.username)
-  if(totalChats.length===0)
+  	if(totalChats.length===0)
 	{
 		init().then(res=>{  
 		if(res){
 			setChats(res)
 			dispatcher({type:'SET_USERS',payload:res})
-			for(let i of res){
-			let key = i.username
-			let key2 = i.username+'_seen'
-			let key3 = i.username+'_last'
-			tillMessages[key] = i.last          
-			tillMessages[key2] = i.read?' seen '+howLong(i.at):' sent '+howLong(i.at)          
-			tillMessages[key3] = i.sender // its the message by sender(anyone)          
-			} 
 			putMessage(tillMessages)     
 			dispatcher({type:'SET_META',payload:tillMessages})
 		}
@@ -147,58 +154,51 @@ const Messages = () => {
 	return ()=>{
 		socket.off('receive')  
 	}
-  } ,
-[ getChats, user.username])
+	}, [change])
 
   
   const toggleModal = e => {   
     if(e.target.id==='modal' || e.target.classList.contains('openModal')) setmodal(!open)
   } 
 
-  const openChat = event => {
-	  let ele = event.target
-	  if(ele && ele.dataset.pick){
-		let element = document.getElementById(ele.dataset.pick) 
-		let data = JSON.parse(element.dataset.detail)
-		let username = data.username
-		let name = data.name
-		let fire = JSON.parse(element.dataset.s)
-		set(fire)
-		openedChat(true); 
-		dispatcher(setCurrentUser(data))
-		let thisUser = totalChats.filter(chat=>chat.username===username)
-		if(!thisUser.length){
-			let clone = totalChats
-			thisUser = searched.filter(chat=>chat.username===username)
-			clone.unshift(thisUser[0]) // filtered result is array
-			setChats(clone) // this will update the chat list 
+	const openChat = event => {
+		let ele = event.target
+	  	if(ele && ele.dataset.pick)
+		{
+			let element = document.getElementById(ele.dataset.pick) 
+			let data = totalChats[element.dataset.existsat]
+			let { username,name } = data
+			set(data.from && data.from!==user.username)
+			openedChat(true); 
+			dispatcher(setCurrentUser(data))
+			let thisUser = totalChats.filter(chat=>chat.username===username)
+			if(!thisUser.length)
+			{
+				let clone = totalChats
+				thisUser = searched.filter(chat=>chat.username===username)
+				clone.unshift(thisUser[0]) // filtered result is array
+				setChats(clone) // this will update the chat list 
+			}
+			setDetail(thisUser)
+			setUser({username,name})
+			setmodal(false)
+			setSearchParam('')
+
+		} else {
+			event.preventDefault() // dont want to see cannot read #~@! of "undefined"
 		}
-		setDetail(thisUser)
-		setUser({username,name})
-		setmodal(false)
-		setSearchParam('')
-	}else{
-		event.preventDefault() // dont want to see cannot read #~@! of "undefined"
 	}
-  }
 
   
   const searchChatUser = e => {
     setLoading(true)
     e.preventDefault();
  
-      fetch(process.env.REACT_APP_SERVER_URI+'/api/profile/search',{
-                method:'POST',
-                headers:headers(),
-                body:JSON.stringify({param:searchParam})
-      }).then(res=>{
-        return res.json()
-      }).then(data=>{
-        setResults(data)
-        setTimeout(()=>setLoading(false),200)
-      })
-  
- 
+	axios.post('/profile/search',{param:searchParam})
+	.then(({data})=>{
+		setResults(data)
+		setTimeout(()=>setLoading(false),200)
+	})
   }
 
   return (
@@ -219,21 +219,35 @@ const Messages = () => {
           {totalChats.length ? totalChats.map((chatuser,index)=>{
             let active = onlines?.length ? onlines.includes(chatuser.username) : false;
             return (
-            <div key={index} className={`row mt-3 openchat cpo`} id={chatuser._id} data-detail={JSON.stringify(chatuser)} data-s={chatuser.from && chatuser.from!==user.username} onContextMenu={onContext} onClick={openChat} data-pick={chatuser._id}>
-              <div className="col-sm-2 rel" onClick={openChat}>
-                  <img
-                  src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt="" onClick={openChat} data-pick={chatuser._id}/>
-                  <h2 className={active?'online':'d-none'} onClick={openChat} data-pick={chatuser._id}>.</h2>
+            <div key={index} 
+				className={`row mt-3 openchat cpo`} 
+				id={chatuser._id}  
+				onContextMenu={onContext} 
+				onClick={openChat} 
+				data-pick={chatuser._id}
+				data-existsat={index}
+			>
+              <div className="col-sm-2 rel" >
+				<img
+				src={chatuser.profile??profile} style={{height:'50px',width:'50px!important'}} 
+				className="mx-auto pfpicture" alt="" 
+				data-pick={chatuser._id}/>
+                  <h2 className={active?'online':'d-none'} data-pick={chatuser._id}>.</h2>
               </div>
-              <div className={`col-sm-10 chatUser`} onClick={openChat} data-pick={chatuser._id}>
-                <b onClick={openChat} data-pick={chatuser._id}>{chatuser.username}</b>
-                <p className={`username ${chatuser.read?'p':'text-dark'}`} style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} onClick={openChat} data-pick={chatuser._id}>
+              <div className={`col-sm-10 chatUser`} data-pick={chatuser._id}>
+                <b data-pick={chatuser._id}>{chatuser.username}</b>
+                <p 
+					className={`username ${chatuser.read?'p':'text-dark'}`} 
+					style={{fontWeight:!chatuser.read && chatuser.from!==user.username?'700':'p'}} 
+					data-pick={chatuser._id}
+				>
 					{isTyping.includes(chatuser.username)?'typing...':
-					(chatuser.from && chatuser.from===user.username? dump[chatuser.username+'_last']?.length>10000?'Photo':dump[chatuser.username+'_last'] 
+					(chatuser.from && chatuser.from===user.username? 
+						dump[chatuser.username+'_last']?.length>10000?'Photo':dump[chatuser.username+'_last'] 
 					: dump[chatuser.username]?.length>10000?'Photo':dump[chatuser.username] ??'' )} 
 					{!isTyping.includes(chatuser.username) && 
-					<small onClick={openChat} data-pick={chatuser._id}>
-						{(chatuser.from && chatuser.from===user.username)? dump[chatuser.username+'_seen'] :''}
+					<small data-pick={chatuser._id}>
+						{ chatuser.from && chatuser.from===user.username? dump[chatuser.username+'_seen'] :''}
 					</small>}
 				</p>
               </div>
@@ -258,7 +272,7 @@ const Messages = () => {
               </button>
             </div>
           </div> :  
-		  <Chat me={user.username} userImage={selectedUser.image} username={selectedUser.username} name={selectedUser.name} details={{...userDetail,onlines}} launch={launch} till={dump} changeMsg={putMessage} update={changeParent} />
+		  <Chat me={user.username} userImage={selectedUser.image} username={selectedUser.username} name={selectedUser.name} details={{...userDetail,onlines}} launch={launch} till={dump} changeMsg={putMessage} update={changeParent} change={change} />
          }
         </div>
       </div>

@@ -1,9 +1,8 @@
 import React, { useEffect }  from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import pfp from '../../../../assets/icons/profile.png'
 import Button from "../../../StateComponents/Button";
 import {howLong} from  '../../../../helpers'
-import headers from '../../../../APIs/Headers';
 import verified from '../../../../assets/icons/verified.png'  
 import { toast } from '../../../../toast';
 import { useDispatch } from 'react-redux';
@@ -40,11 +39,7 @@ const PostHead = (props) => {
 	  toast(`in development`)
   }
   const save =()=> {
-	fetch(process.env.REACT_APP_SERVER_URI+'/api/post/save',{
-		method:'POST',
-		headers:headers(),
-		body:JSON.stringify({post_id:post._id})
-	}).then(r=>r.json)
+	axios.post('/post/save',{post_id:post._id}) 
 	.then(data=>console.log(data))
   }
   const rep =()=> {
