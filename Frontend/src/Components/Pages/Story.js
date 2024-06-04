@@ -10,7 +10,6 @@ const Story = () => {
     // the required distance between touchStart and touchEnd to be detected as a swipe
     const minSwipeDistance = 100 
 
-	window.onbeforeunload = () => false
     const onTouchStart = e => { 
         
         setTouchEnd(null) // otherwise the swipe is fired even with usual touch events
@@ -50,7 +49,8 @@ const Story = () => {
     useEffect(()=>{
         document.getElementById('progres-bar').children[0].classList.add('seen');
         document.getElementById('contents').childNodes[0].setAttribute('id','list-active')
-        return ()=> null
+		document.body.style.overscrollBehavior='none'
+        return ()=> document.body.style.overscrollBehavior=''
     },[])
  
     const change = e => {
