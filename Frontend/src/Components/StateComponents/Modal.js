@@ -2,7 +2,9 @@
 
 import React from "react";
 
-const Modal = ({ isOpen, dimens, onClose, children,className='' }) => {
+const Modal = props => {
+  const { isOpen, dimens, onClose, children } = props
+  const className = props.className??''
   if (!isOpen) return null;
   const { height, width } = dimens;
 
@@ -25,18 +27,25 @@ const Modal = ({ isOpen, dimens, onClose, children,className='' }) => {
       <div
         style={{
           background: "white",
-          height: height,
           width: width,
           margin: "auto",
           padding: "2%",
           border: "none",
           borderRadius: "12px",
-          boxShadow: "10px solid gray",
-          overflow:dimens.overflow??'auto'
+          boxShadow: "10px solid gray"
         }}
         className={`firstChild `+className}
       >
+		{ props.title ? 
+			<div className="modal-header d-block" style={{borderBottom:'1px solid gray',marginBottom:'10px'}}>
+				<h5 className="text-center fw-bolder">{props.title}</h5>
+			</div>
+			:
+			null
+		} 
+		<div style={{overflowY:dimens.overflow??'auto',height}}>
         {children}
+		</div>
       </div>
     </div>
   );

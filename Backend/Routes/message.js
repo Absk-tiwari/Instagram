@@ -93,7 +93,7 @@ router.post('/of', fetchuser, async(req, res) =>{     // get the chats of
                { connectionID:one},
                { connectionID:two}
             ],deleted_by:{$ne:me}
-        }).select('from content read');
+        }).select('from content read at');
           
         return res.json(result);
 

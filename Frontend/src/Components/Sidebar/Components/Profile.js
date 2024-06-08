@@ -19,7 +19,6 @@ const Profile = () => {
   const isPhone = window.screen.width < 500
   let me = JSON.parse(localStorage.getItem('userLogin')) 
   const searchedProfile = useSelector(state=>state.auth.searchProfile)
-  console.log(searchedProfile)
   let state = useSelector(state=>state.auth)  // post of searched user
 //   let myPosts = useSelector(state=>state.auth.myPosts) // for searched user
   let userInfo // = useSelector(state=>state.auth.userInfo)  // post of searched user
@@ -154,10 +153,7 @@ const Profile = () => {
 			init()
 		}
 	}
-	document.querySelector('.App').style.height='100vh'
-	return () =>  {
-		document.querySelector('.App').style.height='auto'	
-	}
+	return () => null
   },[react,searchedProfile,loggedOut])
   return (
     <>
@@ -274,13 +270,19 @@ const Profile = () => {
   }
   {loaded ?
   (<>
-  <div id="moreOnProfile" className="dropdown custom-row" data-bs-toggle="dropdown" aria-expanded="false">
-	<div id="icon" style={{height:`20px`,marginTop:'40px',left:'35vw',fontSize:'20px'}}>
-	 &#x2630;</div> 
-    <ul className={"dropdown-menu"} style={{position:'absolute',left:'70vw'}}> 
-      <li><Link className="dropdown-item px-4 text-danger openModal" to="/profile" onClick={setmodal}> Log out </Link></li>
-    </ul>
-  </div>
+  {
+	isPhone? 
+	  <span className="openModal moreOnProfile fa-solid fs-3 fa-arrow-right-from-bracket abs" to="/profile" onClick={setmodal} style={{height:`20px`,marginTop:'40px',left:'85vw',fontSize:'20px'}}/>
+	:
+	<div id="moreOnProfile" className="dropdown custom-row" data-bs-toggle="dropdown" aria-expanded="false">
+		<div id="icon" style={{height:`20px`,marginTop:'40px',left:'35vw',fontSize:'20px'}}>
+		&#x2630;</div> 
+		<ul className={"dropdown-menu"} style={{position:'absolute',left:'70vw'}}> 
+		<li><Link className="dropdown-item px-4 text-danger openModal" to="/profile" onClick={setmodal}> Log out </Link></li>
+		</ul>
+	</div>
+
+  }
   <Modal isOpen={open} dimens={{ height: 250, width: 360 }} onClose={toggleModal} className="profiler">
     <h3 className="text-center">Are you sure?</h3>
     <li style={lstyle} className="text-center mt-5 mb-4" >

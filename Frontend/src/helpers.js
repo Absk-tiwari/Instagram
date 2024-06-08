@@ -46,4 +46,21 @@ const howLong = date => {
 	return outputDiff
 
 }
-export { randomStr, howLong }
+
+const compDates = (firstDate,second) => {
+	let f = new Date(firstDate)
+	let s = new Date(second)
+	if(f.getDate() > s.getDate())
+	{
+		return true
+	} else if(f.getMonth() > s.getMonth()){
+		return true
+	}else if(f.getFullYear() > s.getFullYear())
+	{
+		return true
+	} 
+	console.log(s.getDate() +' <-Date '+ f.getDate() + ' -- ye bekaar',s.getMonth() +' <-Month '+ f.getMonth()+'  --ye bhi bekar',
+	s.getFullYear() +' <-Year '+ f.getFullYear()+'  --finally ye bhi bekar');
+	return false;
+}
+export { randomStr, howLong , compDates}

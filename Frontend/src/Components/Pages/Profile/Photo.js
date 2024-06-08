@@ -56,12 +56,7 @@ const Photo = (props) => {
 	}
 
 	const addComment = (reply=false) => {
-		axios.post('/post/addComment',{
-			username:post.username,
-			comment, 
-			postID:post._id,
-			reply 
-		})
+		axios.post('/post/addComment',{ username:post.username,comment,postID:post._id,reply })
 		.then(({data})=>{
 		  if(data.status)
 		  setComment('')
@@ -81,7 +76,7 @@ const Photo = (props) => {
             <i className={`fa fa-heart mb-3 fs-5`}/>
             <p >{post && post.likes?post.likes.length:0}</p>
         </div>
-        <Modal isOpen={open} dimens={{height:500 ,width:920 }} onClose={toggle}>
+        <Modal isOpen={open} dimens={{height:620 ,width:920 }} title='Post' onClose={toggle}>
           <>
           <div className='container d-flex'>
             <div className={isPhone?'col-12 rel text-center':'col-6 rel'}>
@@ -91,8 +86,12 @@ const Photo = (props) => {
               <div className='col-12 placeholder-glow mt-3 mx-2 rel' >
                 <PostFooter post={post} alt={{details:false}} c={false} />
 				<form id="commentForm" onSubmit={submitComment}>
-					<input placeholder="Add a comment..." className="input" value={comment}
-					 onChange={e=>setComment(e.target.value)} />
+					<input 
+						placeholder="Add a comment..." 
+						className="input" 
+						value={comment}
+					 	onChange={e=>setComment(e.target.value)} 
+					/>
 					<button type="submit" className="btn text-primary">
 						Add
 					</button>

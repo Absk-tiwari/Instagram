@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ContextMenu = ({ isVisible, x, y, items, c,h=`70px` }) => {
+const ContextMenu = ({ isVisible, x, y, items, c,h=`70px`,position='fixed' }) => {
   const height = items? (100/items.length).toFixed(0)+'%':0
   return isVisible ? (
     <div className={`${c??''}`}
@@ -10,7 +10,8 @@ const ContextMenu = ({ isVisible, x, y, items, c,h=`70px` }) => {
         left: x,
         width:c??'200px',
         zIndex:99999,
-		height:h
+		height:h,
+		position
       }}
     >
       {items.map((item, index) => (

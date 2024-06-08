@@ -211,21 +211,21 @@ html{
 	.postCreateDiv{
 		margin-left:40px!important;
 		left:40px!important;
-		width:auot!important;
+		width:auto!important;
 	}
 	.postCreateDiv form{
 		flex-direction:column!important;
 		margin-left:5%!important;
 	}
 	.postCreateDiv div{
-		max-width:300px!important;
+		max-width:350px!important;
 	}
 	.postCreateDiv h4,p{
 		margin-left: 0px!important;
 	}
 	.postCreateDiv>textarea,input{
 		border:0.5px solid lightgray;
-		width:93%!important;
+		width:100%!important;
 		height:auto!important;
 		margin-left: 0px!important;
 	}
@@ -238,7 +238,7 @@ html{
 	}
 	.postPreview{
 	      height:280px;
-	      width:280px!important;
+	      width:350px!important;
 	      object-fit:contain!important;
 	      border:1px solid gray;
 	      border-radius:4px
@@ -260,7 +260,22 @@ html{
 	}
 	.chat-open-screen{
 		width:66%;
+	}
+	.open-searched{
+		height:60px;
+		background-color:#e9ecef;
+		border-radius:10px;
+		width:100%!important;
+		display:flex;
+		margin-left:0px!important;
+		margin-top:5px;
+		padding-top:4px;
+		cursor:pointer
 	} 
+	.in-search-loader{
+		margin-top: 0px!important;
+		margin-left: -20px!important;
+	}
 	.head .col-6{
 		margin-left: 10px;
 	}
@@ -428,6 +443,7 @@ html{
 	.App{
 		flex-direction: column;
 		overflow-x: hidden;
+		height: initial!important;
 	}
 	.custom-logo, .Explore, .Messages{
 		display: none!important;
@@ -1517,4 +1533,8 @@ html{
     height: 34px;
     width: 34px;
     font-size: xx-large;
+}
+.chat-time-stamp{
+	font-size: small;
+	clear: both;
 }

@@ -124,12 +124,12 @@ const PostFooter = (props) => {
     user = comments[user]
     let id = user._id
     let items = [ 
-        {label:(<i className='fa fa-trash'/>), class:'text-danger', onClick:()=>remove(id)}
+        {label:(<div className={`d-flex`}><i className={`fa fa-trash mt-1`}/><span className={'text-danger'}>Remove</span></div>), class:'text-danger', onClick:()=>remove(id)}
       ]
     event.preventDefault()
     const x = event.clientX
     const y = event.clientY + 25
-    setContext({isVisible : true, x, y ,items,c:'70px'})
+    setContext({isVisible : true, x, y ,items,c:100})
   }
 
   const rem = () => setContext({isVisible : false})
@@ -200,7 +200,7 @@ const PostFooter = (props) => {
           </button>
         </form>
       </div> } 
-        <Modal isOpen={open} dimens={{height:500 ,width:520 }} onClose={toggle}>
+        <Modal isOpen={open} dimens={{height:620 ,width:520 }} title="Comments" onClose={toggle}>
           <>
           <div className='container'>
             <div className='col-12'> 

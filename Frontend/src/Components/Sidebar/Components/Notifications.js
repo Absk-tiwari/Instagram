@@ -52,7 +52,7 @@ const Notifications = (props) => {
         {label:(<div className={`d-flex`}><i className={`fa fa-trash mt-1 mx-1`}/><span className={'text-danger'}>Remove</span></div>), class:'text-danger', onClick:()=>remove(_id)}
       ]
     event.preventDefault()
-    const x = event.clientX - 250
+    const x = event.clientX 
     const y = event.clientY 
     setContext({
       isVisible : true, 

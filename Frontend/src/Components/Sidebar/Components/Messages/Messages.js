@@ -50,13 +50,13 @@ const Messages = () => {
 
   const onContext = event => {
     event.preventDefault()
-	let elem = document.getElementById(event.target.dataset.pick).dataset.detail
-	elem = JSON.parse(elem)
+	let elem = document.getElementById(event.target.dataset.pick).dataset.existsat
+	elem = totalChats[elem]
     const x = event.clientX - 100
     const y = event.clientY  
     setContext({
       isVisible : true, 
-      x, y ,
+      x, y , c:100 ,
       items : [
         {label:'Delete', onClick:()=>deleteChat(elem.username)},
         {label:'Block', class:'text-danger', onClick:()=>block(elem.username)}
@@ -276,7 +276,7 @@ const Messages = () => {
          }
         </div>
       </div>
-      <Modal isOpen={open} dimens={{ height: 410, width: 550 }} onClose={toggleModal} >
+      <Modal isOpen={open} dimens={{height:410,width:550}} onClose={toggleModal} >
         <>
           <div className="searchChat" id="searchChat" >
             <p className="text-center fw-bolder">New message</p>
@@ -285,14 +285,14 @@ const Messages = () => {
               <form onSubmit={searchChatUser} className="col-11">
                 <input type="text" className="search_in_chat" name="search_in_chat" onChange={e=>{setSearchParam(e.target.value);searchChatUser(e)}} autoComplete="off" value={searchParam} placeholder="Search..."/>
               </form>
-              {isLoading && <Loader height={46}/>}
+              {isLoading && <Loader height={46} Class={`in-search-loader`}/>}
             </div>
             <hr />
            {isLoading===true ?
             (<p className="placeholder-glow mb-3 mt-3 mx-2">
               <span className="placeholder col-1" style={{height:'40px',width:'40px',borderRadius:'50%'}}/>&nbsp;
-              <span className="placeholder col-3" /><br/>
-              <span className="placeholder col-6" />
+              <small className="placeholder col-3"/><br/>
+              <small className="placeholder col-6"/>
             </p>):             
             (searchParam && searched.length ? searched.map((user,index)=>{
               return (
