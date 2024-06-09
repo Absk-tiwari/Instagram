@@ -542,15 +542,15 @@ html{
 		padding: 5px;
 	}
 	section.header .pfpicture{
-		height: 49px!important;
-		width: 49px!important;
+		height: 57px!important;
+		width: 57px!important;
 		display: grid;
         align-items: center;
         justify-content: center;
         text-align: center;
         line-height: 1;
         vertical-align: middle;
-        margin-top: 6px;
+        margin-top: 3px;
     } 
 	section.header div:first-child{
 		height: 63px!important;

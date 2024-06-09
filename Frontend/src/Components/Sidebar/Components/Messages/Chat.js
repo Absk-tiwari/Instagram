@@ -282,7 +282,7 @@ function Chat(props) {
 								alt={username} 
 							/>
 						</div>
-						<div className='col-10' style={{paddingTop:'15px'}}>
+						<div className='col-10' style={{paddingTop:'6px',lineHeight:0.5}}>
 							{isPhone? <h5>{username}</h5>:  <h3>{username}</h3>}
 							{details[0].active?
 							<p> Active {details.onlines.includes(username)? 'now' 

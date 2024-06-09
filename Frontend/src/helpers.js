@@ -59,8 +59,6 @@ const compDates = (firstDate,second) => {
 	{
 		return true
 	} 
-	console.log(s.getDate() +' <-Date '+ f.getDate() + ' -- ye bekaar',s.getMonth() +' <-Month '+ f.getMonth()+'  --ye bhi bekar',
-	s.getFullYear() +' <-Year '+ f.getFullYear()+'  --finally ye bhi bekar');
 	return false;
 }
 export { randomStr, howLong , compDates}
