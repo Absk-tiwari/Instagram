@@ -443,7 +443,7 @@ html{
 	.App{
 		flex-direction: column;
 		overflow-x: hidden;
-		height: initial!important;
+		height: initial;
 	}
 	.custom-logo, .Explore, .Messages{
 		display: none!important;
@@ -570,6 +570,9 @@ html{
 	.chat-input-phone {
 		background-color: gainsboro!important;
 		border: none!important;
+	}
+	.online{
+		bottom:-10px!important;
 	}
 }
 /* mobile version ended above */

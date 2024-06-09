@@ -6,6 +6,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function Forgot() {
+	if(document.querySelector('.App'))
+	{ 
+		document.querySelector('.App').style.height='100vh'
+	}
   const [message, setMessage] = useState('')
   const [sent, setStage] = useState(false)
   const [progress, setProgress] = useState(0) 

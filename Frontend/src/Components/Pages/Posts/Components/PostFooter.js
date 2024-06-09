@@ -7,6 +7,7 @@ import ContextMenu from "../../../StateComponents/ContextMenu";
 import Placeholder from "../../../StateComponents/Placeholder";
 import { howLong } from "../../../../helpers";
 import axios from "axios";
+import Loader from "../../../StateComponents/Loader";
 const PostFooter = (props) => {
   let me = JSON.parse(localStorage.getItem('userLogin'))
   const { post,alt, c } = props;
@@ -113,11 +114,12 @@ const PostFooter = (props) => {
     });
   }
 
-  const showReplies=className=>{
+  const showReplies=(className,elm)=>{
 	let set = document.getElementsByClassName(className)
 	for(let i in set){
-		set[i]?.classList?.remove('d-none')
+		set[i]?.classList?.toggle('d-none')
 	}
+	elm.innerText =set[0].className.indexOf('d-none')===-1 ?'Hide replies':'View replies'
   }
   const onContext = event => { 
     let user = event.target.dataset.index
@@ -218,22 +220,40 @@ const PostFooter = (props) => {
 					</form>
 				</div>
               {isLoading ?(
-                <Placeholder/>
-              ):''}
-			 {comments?.length? comments.map((user,ind)=>{
+                <Loader/>
+              ): 
+			  comments?.length? comments.map((user,ind)=>{
 				return (
-				  <div key={ind} className={`row mt-3 cpo`} data-index={ind} onContextMenu={onContext}>
+				  <div key={ind} 
+				  	className={`row mt-3 cpo`} 
+					data-index={ind} 
+					onContextMenu={onContext}
+					>
 					<div className="col-sm-2 rel" data-index={ind} >
-						<img data-index={ind}
-						src={profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
+						<img 
+						data-index={ind}
+						src={profile} 
+						style={{height:'50px',width:'50px!important'}} 
+						className="mx-auto pfpicture" 
+						alt=""/> 
 					</div>
-					<div className={`col-sm-10 user`} style={{lineHeight:'1.3'}} data-index={ind} >
+					<div className={`col-sm-10 user`} style={{lineHeight:'1.3'}} 
+					data-index={ind} >
 					  <b>{user.from}</b>
-					  <p className={`username text-dark`} style={{fontWeight:'500'}} data-index={ind}> 
-					  <small data-index={ind}>{user.content}</small><br/> <span className="text-secondary" onClick={()=>ToReply(ind+'_id')}>Reply</span>
+					  <p className={`username text-dark fw-normal`} 
+					  data-index={ind}> 
+					  <small data-index={ind}>{user.content}</small><br/> 
+					  <span 
+					  	className="text-secondary" 
+					  	onClick={()=>ToReply(ind+'_id')}>Reply</span>
 					  {user.replies.length?(
-  					  	<small className={`mx-2 text-secondary cpo`}
-					   	onClick={()=>showReplies(ind+'_replies')}>View replies</small>):''}
+							<span 
+							className={`mx-2 text-secondary cpo`}
+							onClick={event=>showReplies(ind+'_replies',event.target)}
+							> View replies </span>
+						)
+						:null
+					  }
 					  <small className={`text-secondary mx-5`}>{howLong(user.at)}</small>
 					</p>
 					<form className="d-none" id={ind+'_id'} onSubmit={replied}>
@@ -241,7 +261,8 @@ const PostFooter = (props) => {
 					  <button type="submit" className="btn text-primary">send</button>
 					</form>
 					{user.replies && (user.replies).map((cmt,index)=>{
-					return (<div key={index} className={`row mt-3 d-none ${ind+'_replies'} cpo`}>
+					return (
+					<div key={index} className={`row mt-3 d-none ${ind+'_replies'} cpo`}>
 							  <div className={`col-sm-2 rel`} >
 								<img data-index={index} src={cmt.profile??profile} style={{height:'50px',width:'50px!important'}} className="mx-auto pfpicture" alt=""/> 
 							  </div>

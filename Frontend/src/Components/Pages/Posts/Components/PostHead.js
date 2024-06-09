@@ -27,7 +27,6 @@ const PostHead = (props) => {
   const del =()=> {
 	axios.delete(`post/delete/${post._id}`)
 	.then(res=>{
-		console.log(res.data)
 		if(res.data.status)
     {
 			toast(`Post deleted!`)

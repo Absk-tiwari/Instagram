@@ -8,6 +8,10 @@ import { toast } from '../../../toast'
 import axios from "axios";
 
 const Login = () => {
+  if(document.querySelector('.App'))
+  { 
+	document.querySelector('.App').style.height='100vh'
+  }
   const [progress, setProgress] = useState(0)
   let navigator = useNavigate();
 	useEffect(()=>{
@@ -15,6 +19,7 @@ const Login = () => {
 	   {
 	     return navigator('/');
 	   }
+	   return () => document.querySelector('.App').style.height='initial'
 	},[]);
   
   const login = async({username, password}) =>{

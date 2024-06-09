@@ -6,6 +6,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Reset() {
+	if(document.querySelector('.App'))
+	{ 
+		document.querySelector('.App').style.height='100vh'
+	}
 	let navigator = useNavigate()
 	let location = useLocation()
 	const [passwords, setPassword] = useState({pass1:'',pass2:''})

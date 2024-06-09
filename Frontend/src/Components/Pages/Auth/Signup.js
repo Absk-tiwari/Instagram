@@ -5,6 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "../../../toast";
 import axios from "axios";
 const Signup = () => {
+	if(document.querySelector('.App'))
+	{ 
+		document.querySelector('.App').style.height='100vh'
+	}
   const nav = useNavigate(); 
   const [progress,setProgress] = useState(0)
   const signup = async({name, email, username, password}) =>{

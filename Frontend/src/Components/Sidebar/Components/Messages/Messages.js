@@ -13,6 +13,7 @@ import { toast } from "../../../../toast";
 import axios from "axios";
 
 const Messages = () => {
+	console.log('Message rendered')
   const isPhone = window.screen.width < 500
   const dispatcher = useDispatch()
   const chatState = useSelector(state=>state.messages.data)
@@ -64,7 +65,9 @@ const Messages = () => {
     })
   }
 
-  const changeParent = newState => setchange(newState)
+  const changeParent = newState => {
+	setchange(newState)
+}
 
   	const getChats = async(me)=>{
 
@@ -106,6 +109,12 @@ const Messages = () => {
     let now = isTyping.filter(them=>them!==who)
     setTyping(now)
   })
+  const hideContext = () => { 
+	if(document.querySelector('#contextMenu')) // it would be null if not visible
+	{
+		setContext({isVisible:false})
+	}
+  }
   useEffect(()=>{
 
     socket.on('init', recepients => setOnline(recepients))
@@ -137,7 +146,7 @@ const Messages = () => {
 		og.innerHTML=added
 		og.classList.remove('d-none')
 	  })
-    document.addEventListener('click',()=>setContext({isVisible:false}))
+    document.addEventListener('click',hideContext)
     socket.emit('users')
     const init = async() => await getChats(user.username)
   	if(totalChats.length===0)
@@ -145,13 +154,14 @@ const Messages = () => {
 		init().then(res=>{  
 		if(res){
 			setChats(res)
-			dispatcher({type:'SET_USERS',payload:res})
+			// dispatcher({type:'SET_USERS',payload:res})
 			putMessage(tillMessages)     
-			dispatcher({type:'SET_META',payload:tillMessages})
+			// dispatcher({type:'SET_META',payload:tillMessages})
 		}
 		})
 	} 
 	return ()=>{
+		document.addEventListener('click',hideContext)
 		socket.off('receive')  
 	}
 	}, [change])
@@ -166,8 +176,9 @@ const Messages = () => {
 	  	if(ele && ele.dataset.pick)
 		{
 			let element = document.getElementById(ele.dataset.pick) 
-			let data = totalChats[element.dataset.existsat]
+			let data = ele.dataset.fromSearch? searched[element.dataset.existsat] : totalChats[element.dataset.existsat]
 			let { username,name } = data
+			console.log(username, name, data);
 			set(data.from && data.from!==user.username)
 			openedChat(true); 
 			dispatcher(setCurrentUser(data))
@@ -296,11 +307,28 @@ const Messages = () => {
             </p>):             
             (searchParam && searched.length ? searched.map((user,index)=>{
               return (
-              <div className='open-searched' data-s={false} data-pick={user._id} key={index} id={user._id} onClick={openChat} data-detail={JSON.stringify(user)}>
-              <img src={user.profile??profile} className="mx-3 pfpicture" data-s={false} data-pick={user._id} onClick={openChat} alt=""/>
-              <div className="d-block" data-s={false} data-pick={user._id}onClick={openChat}>
-                <b data-pick={user._id} data-s={false} onClick={openChat}>{user.username}</b> <br/>
-                <small data-pick={user._id} data-s={false} onClick={openChat}>{user.name}</small>
+              <div 
+			  	className='open-searched' 
+				data-pick={user._id} key={index} 
+			  	id={user._id} 
+				onClick={openChat} 
+				data-from-search="true"
+				data-existsat={index} 
+			  >
+              <img 
+			  	src={user.profile??profile} 
+				className="mx-3 pfpicture" 
+				data-pick={user._id} 
+				onClick={openChat} 
+				alt=""
+			  />
+              <div 
+			    className="d-block" 
+				data-pick={user._id} 
+				onClick={openChat}
+			  >
+                <b data-pick={user._id} onClick={openChat}>{user.username}</b> <br/>
+                <small data-pick={user._id} onClick={openChat}>{user.name}</small>
               </div>
             </div>)
             }):(

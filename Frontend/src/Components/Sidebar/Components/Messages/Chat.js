@@ -1,4 +1,4 @@
-import React, { useEffect , useState,useContext, useRef } from 'react'
+import React, { useEffect , useState,useContext, useRef, memo } from 'react'
 import img from "../../../../assets/icons/profile.png" ;
 import {socket} from '../../../../socket'
 import ProfileContext from '../../../../Contexts/Profiles/ProfileContext';
@@ -9,6 +9,7 @@ import axios from 'axios';
 import {toast} from '../../../../toast'
 
 function Chat(props) {
+	console.log('chat rendered')
 	const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June','July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 	const dateToday = (new Date()).getDate()+(new Date()).getMonth()+(new Date()).getFullYear()
 	const isChatOpened = useSelector(state=> state.auth.chatUser)
@@ -208,7 +209,7 @@ function Chat(props) {
 	useEffect(()=>
 	{
 		setLoading(true);
-		document.addEventListener('click',()=>{ setContext({isVisible : false}) })
+		// document.addEventListener('click',()=>{ setContext({isVisible : false}) })
 		socket.on('putID', data => document.querySelector(`[id="${data.on}"]`).dataset.id = data.exact )
 		const receive = data=>{
 			let content = data.content
@@ -457,4 +458,4 @@ function Chat(props) {
 	)
 }
 
-export default Chat
+export default memo(Chat)

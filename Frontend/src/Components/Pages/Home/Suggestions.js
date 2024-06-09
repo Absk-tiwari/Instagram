@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import ProfileRow from '../Posts/Components/ProfileRow';
-import pfp from '../../../assets/icons/profile.png';
+import Default from '../../../assets/icons/profile.png';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import Button from '../../StateComponents/Button';
+import { useNavigate } from 'react-router-dom';
 const Suggestions = () => {
   let me = JSON.parse(localStorage.getItem('userLogin'))
   let suggested = useSelector(state=>state.auth.suggested)
   let dispatch = useDispatch()
   const [profiles, setProfiles] = useState(suggested)
+  const navigateTo = useNavigate()
+  const refer = e => {
+	dispatch({type:'SEARCH_PROFILE',payload:profiles[e.target.dataset.index].username})
+	navigateTo('/profile')
+  }
   useEffect(()=>{
 	if(suggested.length===0)
 	{ 
@@ -23,9 +30,10 @@ const Suggestions = () => {
   if(me===null) return null
   return (
     <>
+	{ window.screen.width > 500 ? 
      <div className='col-md-3 rightSide'>
         <div className='mt-5 mb-5'>
-          <ProfileRow profile={{profile:me.profile??pfp,username:me.username,url:'',self:true,name:me.name}}/>
+          <ProfileRow profile={{profile:me.profile??Default,username:me.username,url:'',self:true,name:me.name}}/>
         </div>
         <span id='sug'> Suggested for you </span>
         {
@@ -34,6 +42,38 @@ const Suggestions = () => {
           }) :''
 		}
       </div> 
+	  :
+	  <div className='mt-3'>
+		<h6 className='mx-4'>Suggested For you</h6>
+		<div className='d-flex followingbtn' style={{zIndex:1, overflow:'auto'}}>
+		{profiles.map((pfp,index)=>{
+			return (
+				<div className='text-center col mx-3 mt-3 p-3' key={index} 
+					style={{
+						zIndex:10,
+						width:'auto',
+						minWidth:145,
+						background:'white',
+						borderRadius:'15px'
+					}}
+					data-index={index}
+				>
+					<img 
+						src={pfp.profile??Default} 
+						className='pfpicture' 
+						style={{height:80,width:80}}
+						alt='' 
+						onClick={refer}
+						data-index={index}
+					/><br/>
+					<b>{pfp.username}</b> <br/>
+					<small className='text-secondary'>{pfp.name}</small><br/>
+					<Button text={'Follow'} Class={`followbtn`} alt={'Following'}/>
+				</div>)
+		})}
+		</div>
+	  </div>
+	  }
     </>
   )
 }
