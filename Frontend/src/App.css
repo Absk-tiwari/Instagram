@@ -1434,20 +1434,26 @@ html{
 	  background-color: blue;
   }
   .evening{
-	  background-image: linear-gradient(0deg, lightpink, darkcyan);
+	background-image: linear-gradient(0deg, lightpink, darkcyan);
+	.readStat, .chat-time-stamp{
+		color: white;
+	}
   }
-  .morning{
+  	.morning{
 	  background-image: linear-gradient(0deg, transparent, lightblue);
-  }
+  	}
   .dust{
-	background-image: linear-gradient(0deg, #efeeee, black);
+	background-image: linear-gradient(0deg, #797551, black);
+	.readStat, .chat-time-stamp{
+		color: white;
+	}
   }
   .dark{
 	background-color: #3a3838;
 	p.other{
 		background-color: white;	
 	}
-	.readStat{
+	.readStat, .chat-time-stamp{
 		color: white;
 	}
   }

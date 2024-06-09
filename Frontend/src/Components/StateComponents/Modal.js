@@ -37,8 +37,9 @@ const Modal = props => {
         className={`firstChild `+className}
       >
 		{ props.title ? 
-			<div className="modal-header d-block" style={{borderBottom:'1px solid gray',marginBottom:'10px'}}>
+			<div className="modal-header d-block" style={{marginBottom:'10px'}}>
 				<h5 className="text-center fw-bolder">{props.title}</h5>
+				<hr style={{margin:'1rem 0 0 8.6rem',borderTop:'4px solid',borderRadius:'100px',width:'30%'}}/>
 			</div>
 			:
 			null
