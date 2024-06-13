@@ -31,7 +31,7 @@ const Suggestions = () => {
   return (
     <>
 	{ window.screen.width > 500 ? 
-     <div className='col-md-3 rightSide'>
+      <div className='col-md-3 rightSide'>
         <div className='mt-5 mb-5'>
           <ProfileRow profile={{profile:me.profile??Default,username:me.username,url:'',self:true,name:me.name}}/>
         </div>
@@ -44,15 +44,16 @@ const Suggestions = () => {
       </div> 
 	  :
 	  <div className='mt-3'>
-		<h6 className='mx-4'>Suggested For you</h6>
-		<div className='d-flex followingbtn' style={{zIndex:1, overflow:'auto'}}>
+		<div className='followingbtn' style={{zIndex:1, overflow:'auto'}}>
+		<h6 className='mx-4 mt-3'> Suggested For you </h6>
+		<div className='d-flex'>
 		{profiles.map((pfp,index)=>{
 			return (
-				<div className='text-center col mx-3 mt-3 p-3' key={index} 
+				<div className='text-center col mx-2 mt-2 p-3' key={index} 
 					style={{
 						zIndex:10,
 						width:'auto',
-						minWidth:145,
+						minWidth:175,
 						background:'white',
 						borderRadius:'15px'
 					}}
@@ -61,16 +62,17 @@ const Suggestions = () => {
 					<img 
 						src={pfp.profile??Default} 
 						className='pfpicture' 
-						style={{height:80,width:80}}
+						style={{height:120,width:120}}
 						alt='' 
 						onClick={refer}
 						data-index={index}
 					/><br/>
 					<b>{pfp.username}</b> <br/>
 					<small className='text-secondary'>{pfp.name}</small><br/>
-					<Button text={'Follow'} Class={`followbtn`} alt={'Following'}/>
+					<Button text={'Follow'} Class={`followbtn w-50`} alt={'Following'}/>
 				</div>)
 		})}
+		</div>
 		</div>
 	  </div>
 	  }

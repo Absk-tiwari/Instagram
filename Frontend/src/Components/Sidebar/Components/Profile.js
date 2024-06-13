@@ -146,6 +146,7 @@ const Profile = () => {
 	}
 	if(term!==me?.username)
 	{
+		setLoad(false)
 		init()
 	}else{
 		if(Object.keys(userInfo).length===0)
