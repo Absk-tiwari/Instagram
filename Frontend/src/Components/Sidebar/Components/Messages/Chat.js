@@ -9,7 +9,6 @@ import axios from 'axios';
 import {toast} from '../../../../toast'
 
 function Chat(props) {
-	console.log('chat rendered')
 	const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June','July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 	const dateToday = (new Date()).getDate()+(new Date()).getMonth()+(new Date()).getFullYear()
 	const isChatOpened = useSelector(state=> state.auth.chatUser)
@@ -177,6 +176,13 @@ function Chat(props) {
 
 	const sendMessage = event => {
 	event.preventDefault()
+	if(compDates((new Date()),chats[chats.length-1].at))
+	{
+		let div  = document.createElement('div')
+		div.className = 'text-center chat-time-stamp'
+		div.innerHTML = 'Today'
+		box.current.children[0].appendChild(div) 
+	}
 	let createdID = randomStr(5) // helper function
 	if(msg){
 		let cstring = me+'&'+username

@@ -31,8 +31,8 @@ function Home() {
         '' }
         <Navbar />
         <Post />
-		<Suggestions />
       </div>
+	<Suggestions />
     </>
   );
 }

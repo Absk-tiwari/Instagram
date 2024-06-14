@@ -31,7 +31,7 @@ const Suggestions = () => {
   return (
     <>
 	{ window.screen.width > 500 ? 
-      <div className='col-md-3 rightSide'>
+      <div className='col-md-3 rightSide' style={{overflow:'auto',height:'100vh'}}>
         <div className='mt-5 mb-5'>
           <ProfileRow profile={{profile:me.profile??Default,username:me.username,url:'',self:true,name:me.name}}/>
         </div>

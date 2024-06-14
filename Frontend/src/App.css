@@ -559,7 +559,7 @@ html{
 		border: 1px solid #f3f3f3!important;
 		border-top: 1px solid #bcbbbb!important;
 		border-radius: 50%!important;
-		animation: spinner 1.5s linear infinite;
+		animation: spinner 1.7s linear infinite;
 	}
 	.header-notification {
 		border-bottom:0px!important;
@@ -1050,7 +1050,7 @@ html{
 	border : 5px solid #f3f3f3;
 	border-top: 5px solid #bcbbbb;
 	border-radius: 50%;
-	animation: spinner 1s linear infinite; 
+	animation: spinner 0.7s linear infinite; 
   }
   
   @keyframes spinner{
