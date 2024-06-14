@@ -293,7 +293,7 @@ function Chat(props) {
 							{isPhone? <h5>{username}</h5>:  <h3>{username}</h3>}
 							{details[0].active?
 							<p> Active {details.onlines.includes(username)? 'now' 
-							:`${howLong(details[0].active)} ago`}</p>
+							:howLong(details[0].active)==='just now'?`1s ago`:`${howLong(details[0].active)} ago`}</p>
 							: <p>{username}</p>
 							}
 						</div>

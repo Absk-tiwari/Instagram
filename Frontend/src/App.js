@@ -32,6 +32,7 @@ const HOST = process.env.REACT_APP_SERVER_URI
 axios.defaults.baseURL = HOST+'/api'
 axios.defaults.headers.common=headers()
 function App() {
+	const isPhone = window.screen.width < 500 
 
   useEffect(()=>{
  
@@ -69,7 +70,7 @@ function App() {
           <ProfileState>
             <div className="App" style={{ display: "flex" }}>
 				<div className={"parentToast"}>
-					<div className={"notifier"} id={"notifier"} >
+					<div className={"notifier"} id={"notifier"} style={{position:"fixed",left:!isPhone && window.screen.width/2-100, bottom:35}}>
 						<p/>
 					</div>
 				</div>     

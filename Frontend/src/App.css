@@ -578,7 +578,7 @@ html{
 /* mobile version ended above */
 .stories{    
 	display: flex;
-    width: 546px;
+    width: 654px;
     overflow-x: scroll;
 }
 .loginContainer{ 
