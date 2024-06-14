@@ -123,6 +123,7 @@ const PostFooter = (props) => {
   }
   const onContext = event => { 
     let user = event.target.dataset.index
+	console.log(user)
     user = comments[user]
     let id = user._id
     let items = [ 
@@ -239,22 +240,24 @@ const PostFooter = (props) => {
 					</div>
 					<div className={`col-sm-10 user`} style={{lineHeight:'1.3'}} 
 					data-index={ind} >
-					  <b>{user.from}</b>
+					  <b data-index={ind} >{user.from}</b>
 					  <p className={`username text-dark fw-normal`} 
 					  data-index={ind}> 
 					  <small data-index={ind}>{user.content}</small><br/> 
 					  <span 
+						data-index={ind} 
 					  	className="text-secondary" 
 					  	onClick={()=>ToReply(ind+'_id')}>Reply</span>
 					  {user.replies.length?(
 							<span 
 							className={`mx-2 text-secondary cpo`}
+							data-index={ind} 
 							onClick={event=>showReplies(ind+'_replies',event.target)}
 							> View replies </span>
 						)
 						:null
 					  }
-					  <small className={`text-secondary mx-5`}>{howLong(user.at)}</small>
+					  <small data-index={ind}  className={`text-secondary mx-5`}>{howLong(user.at)}</small>
 					</p>
 					<form className="d-none" id={ind+'_id'} onSubmit={replied}>
 					  <input type="text" className="form-control" style={{border:0,borderRadius:0,borderBottom:'0.5px solid black'}} onChange={e=>setreply(e.target.value)} /> 
