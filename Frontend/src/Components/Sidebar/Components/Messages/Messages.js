@@ -154,14 +154,14 @@ const Messages = () => {
 		init().then(res=>{  
 		if(res){
 			setChats(res)
-			// dispatcher({type:'SET_USERS',payload:res})
+			dispatcher({type:'SET_USERS',payload:res})
 			putMessage(tillMessages)     
-			// dispatcher({type:'SET_META',payload:tillMessages})
+			dispatcher({type:'SET_META',payload:tillMessages})
 		}
 		})
 	} 
 	return ()=>{
-		document.addEventListener('click',hideContext)
+		document.removeEventListener('click',hideContext)
 		socket.off('receive')  
 	}
 	}, [change])
