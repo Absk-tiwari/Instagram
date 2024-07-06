@@ -6,8 +6,9 @@ const userToken = localStorage.getItem('token')
   ? localStorage.getItem('token')
   : null
 let me = localStorage.getItem('userLogin')
-me = me? JSON.parse(me) : []
+me = me? JSON.parse(me) : null
 const initialState = {
+	profileInfo:me,
 	loading:false,
 	userInfo:{}, // the other details of user ;
 	userPosts:[], // for the post of user ; 
@@ -21,7 +22,7 @@ const initialState = {
 	chatUser:{},
 	suggested:[],
 	stories:[],
-	searchProfile:me?.username,
+	searchedProfile:me?.username,
 }
 
 const authReducer = (state=initialState,action)=>{
@@ -31,6 +32,13 @@ const authReducer = (state=initialState,action)=>{
 				...state,
 				userInfo:action.payload
 			} 
+		case 'LOGIN':{
+			return {
+				...state,
+				userToken:action.payload.token,
+				profileInfo:action.payload.info
+			}
+		}
 		case 'SET_MY_INFO':
 			return {
 				...state,
@@ -57,7 +65,7 @@ const authReducer = (state=initialState,action)=>{
 			console.log(action)
 			return {
 				...state,
-				searchProfile:action.payload
+				searchedProfile:action.payload
 			}
 		case 'SET_PROFILE_POSTS':
 			return {
@@ -97,27 +105,7 @@ const authReducer = (state=initialState,action)=>{
 						cover:obio,
 						content : '',
 						username:'obio'
-					},
-					{ 
-						cover:obio,
-						content : '',
-						username:'obio'
-					},
-					{ 
-						cover:obito,
-						content : '',
-						username:'obio'
-					},
-					{ 
-						cover:profile,
-						content : '',
-						username:'obio'
-					},
-					{ 
-						cover:obito,
-						content : '',
-						username:'obio'
-					}
+					} 
 				]
 			}
 		case 'MY_POSTS_LOADED':
@@ -140,8 +128,19 @@ const authReducer = (state=initialState,action)=>{
 			      userPosts:[],
 			      myPosts:[],
 			      userToken:null,
-			      searchProfile:null
+			      searchedProfile:null,
+				  profileInfo:null
 		      }
+		case 'ERROR':
+			return {
+				...state,
+				error:action.payload.error
+			}
+		case 'SET_LOADING':
+			return {
+				...state,
+				loading:action.payload
+			}
 		default:return state 
 	}
 }

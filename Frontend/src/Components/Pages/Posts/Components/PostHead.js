@@ -5,13 +5,14 @@ import Button from "../../../StateComponents/Button";
 import {howLong} from  '../../../../helpers'
 import verified from '../../../../assets/icons/verified.png'  
 import { toast } from '../../../../toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 const PostHead = (props) => { 
   let dispatch = useDispatch()
   let navigator = useNavigate()
   let {post,updatePosts,totalPosts} = props
-  let me = JSON.parse(localStorage.getItem('userLogin'))
+  const {profileInfo} = useSelector(state=>state.auth)
+  let me = profileInfo
   const refer = e => {
     let elem = e.target;
     dispatch({ type:'SEARCH_PROFILE', payload:post.username })

@@ -6,15 +6,23 @@ let config = {
 	maxHttpBufferSize:1e8,
 	autoConnect: false,
 }
-if(localStorage.getItem(`token`)){
+const init = async() => {
+	let previous;
+	if(previous = localStorage.getItem('userLogin'))
+	{
+		return JSON.parse(previous)
+	}
 	const userdata = await fetch(`${URL}/api/auth/getuser`,{
 		method:'GET',
 		headers: headers()
 	});
-	const data = await userdata.json(); 
+	return await userdata.json(); 
+}
+if(localStorage.getItem(`token`)){
+	const data = await init()
 	localStorage.setItem('userLogin',JSON.stringify(data));
 	const username = data.username ?? '';
 	config.query= {username}
 }  
-
+export {init}
 export const socket = io(URL, config);

@@ -28,17 +28,19 @@ import { useEffect } from "react";
 import { socket } from "./socket";
 import axios from 'axios'
 import headers from "./APIs/Headers";
+import { toast } from "./toast";
+import { useSelector } from "react-redux";
 const HOST = process.env.REACT_APP_SERVER_URI
 axios.defaults.baseURL = HOST+'/api'
 axios.defaults.headers.common=headers()
 function App() {
 	const isPhone = window.screen.width < 500 
-
+  const {error,profileInfo} = useSelector(state=>state.auth)
   useEffect(()=>{
  
    setTimeout(() => document.querySelector('.likenotif')?.classList?.add('d-none'), 25000);
    if(localStorage.getItem('token')){
-		let me= JSON.parse(localStorage.getItem('userLogin'))
+		let me= profileInfo
 		socket.connect()
 		axios.get(`/messages/count/${me.username}`).then(({data})=>{
 			if(data.status){
@@ -60,7 +62,12 @@ function App() {
 			socket.disconnect()
 		}
 	}
-},[])
+},[error])
+  if(error)
+  {
+    toast('Something went wrong..')
+    console.log(error)
+  }
   return (
     <>
     <Router>

@@ -18,9 +18,10 @@ function SidebarComponent() {
   const searchbox = useRef(null)
   const lstyle = { listStyleType: "none" };
   const isPhone = window.screen.width < 500 
-  const chatState = useSelector(state=>state.auth.chatUser)
+  const {chatUser,profileInfo} = useSelector(state=>state.auth)
   const dispatch = useDispatch() 
-  const me = JSON.parse(localStorage.getItem('userLogin'))
+  const me = profileInfo 
+  const chatState = chatUser
   let navigator = useNavigate();
   let [hasRead,read] = useState(false)
   const [term, setTerm] = useState("");

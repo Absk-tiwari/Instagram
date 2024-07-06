@@ -6,8 +6,8 @@ import axios from 'axios';
 import Button from '../../StateComponents/Button';
 import { useNavigate } from 'react-router-dom';
 const Suggestions = () => {
-  let me = JSON.parse(localStorage.getItem('userLogin'))
-  let suggested = useSelector(state=>state.auth.suggested)
+  let {suggested, profileInfo} = useSelector(state=>state.auth)
+  let me = profileInfo
   let dispatch = useDispatch()
   const [profiles, setProfiles] = useState(suggested)
   const navigateTo = useNavigate()

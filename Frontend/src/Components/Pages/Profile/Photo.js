@@ -5,17 +5,19 @@ import profile from '../../../assets/icons/profile.png'
 import { howLong } from '../../../helpers';
 import Placeholder from '../../StateComponents/Placeholder'; 
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 const Photo = (props) => {
 	const isPhone = window.screen.width < 500 
     const post = props.post;
     const [open, setmodal] = useState(false);
     const [state, setState]= useState(false);
     const [src, setsrc]= useState(false);
+	const {profileInfo} = useSelector(state=>state.auth)
 	const [comment,setComment] = useState(''); // this holds the input text
 	const [comments,setComments] = useState([])
 	const [isLoading, setLoading] = useState(true)
 	// const [contextMenu, setContext] = useState({isVisible: false,x: 0,y: 0,items: [],c:''})
-	const me = JSON.parse(localStorage.getItem('userLogin'))
+	const me = profileInfo
 
     const toggle = e => {
       if(e.target.id==='modal' || e.target.classList.contains('postImg')) setmodal(!open)

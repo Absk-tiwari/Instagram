@@ -5,12 +5,16 @@ import LoadingBar from "react-top-loading-bar";
 import Loader from "../../StateComponents/Loader";
 import 'react-toastify/dist/ReactToastify.css'
 import { toast } from '../../../toast'
+import { useDispatch } from "react-redux";
 import axios from "axios";
+import headers from "../../../APIs/Headers";
+import { init } from "../../../socket";
 
-const Login = () => {
+const Login =  () => {
+  const dispatch = useDispatch()
   if(document.querySelector('.App'))
   { 
-	document.querySelector('.App').style.height='100vh'
+  	document.querySelector('.App').style.height='100vh'
   }
   const [progress, setProgress] = useState(0)
   let navigator = useNavigate();
@@ -30,15 +34,18 @@ const Login = () => {
 			if(response.status){
 				// Save the auth token 
 				localStorage.setItem('token', response.authToken);
-				navigator('/')
 				toast('Logged in successfully!')
-				setTimeout(() => window.location.reload(), 2500);
+        axios.defaults.headers.common=headers()
+        init().then(res=>{
+          dispatch({type:'LOGIN', payload:{token:response.authToken, info:res}})
+        })
+			  setTimeout(() => navigator('/'), 2500);
 			}else{
 				toast(response.message) 
 				setLoading(false)
 			}
 
-		})
+		}).catch((err)=>dispatch({type:'ERROR',payload:{error:err.message}}))
 	} catch (err) {
 		toast(err.message); 
 		setLoading(false)

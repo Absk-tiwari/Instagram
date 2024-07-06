@@ -1,7 +1,8 @@
 import axios from "axios"
 import { toast } from "../toast"
 import { socket } from "../socket"
-let me = JSON.parse(localStorage.getItem('userLogin'))
+import { init } from "../socket"
+let me = JSON.parse(localStorage.getItem('userLogin')) ?? init()
 
 const initialState = {
     react:false

@@ -4,19 +4,17 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
-  let me = JSON.parse(localStorage.getItem('userLogin'))
-  const stories = useSelector(state=>state.auth.stories)
+  const {stories,loading,profileInfo} = useSelector(state=>state.auth)
   const [Loaded, setLoader] = useState(stories.length===0)
   const dispatch = useDispatch()
   const addToStory = ()=> {}
   useEffect(()=>{
-	if(stories.length===0)
 	{
 		dispatch({type:'GET_STORIES'})
 	}
 	setTimeout(() => setLoader(false), 2000); 
-  }, [])
-  if(me===null) return null
+  }, [loading])
+  if(profileInfo===null) return null
 
 	const placeholderStyle = {
 		height:'60px',
@@ -34,8 +32,8 @@ const Navbar = () => {
 		 	style={{position:'relative', marginBottom:'15px',marginLeft:'22px'}} 
 			onClick={addToStory}
 		 >
-            <span onClick={addToStory} style={{marginBottom:`auto`}} >
-				<div className='story' style={{backgroundImage:`url(${me.profile??ob}`}} /> 
+        <span onClick={addToStory} style={{marginBottom:`auto`}} >
+      <div className='story' style={{backgroundImage:`url(${profileInfo.profile??ob}`}} /> 
 			</span>
             <div className="userStory"><i className="fa fa-plus text-white" /></div>
          </div>

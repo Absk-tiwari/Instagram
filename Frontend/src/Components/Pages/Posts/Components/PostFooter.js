@@ -8,8 +8,10 @@ import Placeholder from "../../../StateComponents/Placeholder";
 import { howLong } from "../../../../helpers";
 import axios from "axios";
 import Loader from "../../../StateComponents/Loader";
+import { useSelector } from "react-redux";
 const PostFooter = (props) => {
-  let me = JSON.parse(localStorage.getItem('userLogin'))
+  const { profileInfo } = useSelector(state=>state.auth)
+  let me = profileInfo
   const { post,alt, c } = props;
   const [isLoading, setLoading] = useState(true)
   // c is for whether to show the comment icon or no

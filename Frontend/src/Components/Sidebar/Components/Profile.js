@@ -17,8 +17,8 @@ const Profile = () => {
   const navigator = useNavigate() 
   const dispatch = useDispatch()
   const isPhone = window.screen.width < 500
-  let me = JSON.parse(localStorage.getItem('userLogin')) 
-  const searchedProfile = useSelector(state=>state.auth.searchProfile)
+  const {profileInfo,searchedProfile} = useSelector(state=>state.auth)
+  let me = profileInfo 
   let state = useSelector(state=>state.auth)  // post of searched user
 //   let myPosts = useSelector(state=>state.auth.myPosts) // for searched user
   let userInfo // = useSelector(state=>state.auth.userInfo)  // post of searched user

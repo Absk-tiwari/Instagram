@@ -13,7 +13,7 @@ import { toast } from "../../../../toast";
 import axios from "axios";
 
 const Messages = () => {
-	console.log('Message rendered')
+	const {profileInfo} = useSelector(state=>state.auth) 
   const isPhone = window.screen.width < 500
   const dispatcher = useDispatch()
   const chatState = useSelector(state=>state.messages.data)
@@ -29,7 +29,7 @@ const Messages = () => {
   const [searched, setResults] = useState([])
   const [launch,set] = useState(false)
   const mapref = useRef(null)
-  let user = JSON.parse(localStorage.getItem('userLogin'))
+  let user = JSON.parse(localStorage.getItem('userLogin')) ?? profileInfo
   const [change , setchange] = useState(false);
   const [onlines , setOnline] = useState([]);
   const [open, setmodal] = useState(false);
