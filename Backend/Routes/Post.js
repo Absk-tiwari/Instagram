@@ -6,11 +6,11 @@ const fetchuser = require("../Middlewares/LoggedIn");
 const upload = require("../Middlewares/multer");
 const Comment = require("../Models/Comments");
 const Followers = require("../Models/Followers");
-// const multer = require('multer')
-// const upload = multer({dest:'./../tmp/uploads'})
+const fileSystem = require('fs')
 const uploadOnCloudnary = require("./../utils/cloudinary");
 const Notification = require("../Models/Notification");
 const Saved = require("../Models/Saved");
+const compressImages = require('compress-images')
 let error = { status: false, message: "Something went wrong!" };
 let output = { status: true };
 
@@ -46,10 +46,48 @@ router.post("/create", [ upload.single('post'),fetchuser] , async (req, res) => 
   try {
     const user = await User.findById(req.body.id).select("-password")
     const post = req.file
-    console.log("user is : ",user.username)
-    if (!post) return error
-    const uploadedPost = await uploadOnCloudnary(post.path)
-    console.log("received upload : ", uploadedPost.url)
+    let filePath, compressedFilePath; 
+    if(post && post.size > 0)
+    {
+      if(post.mimetype === 'image/png' || post.mimetype === 'image/jpeg')
+        {
+          compressedFilePath = "../Backend/tmp/uploads/compressed_" +post.originalname
+          filePath = "../Backend/tmp/uploads/"+(new Date().getTime())+"-"+post.originalname
+          const rate = 60
+          fileSystem.readFile(post.path, function(err,data){
+            if(err) throw err
+            fileSystem.writeFile(filePath, data, async (err)=>{
+              if(err) throw err
+              compressImages(filePath,compressedFilePath,{
+                compress_force:true ,statistic:true,autoupdate:true 
+              }, false, 
+              { jpg : {engine:"mozjpeg", command:[ "-quality", rate ]}},
+              { png : {engine: "pngquant", command:[ "--quality=" + rate + "-"+ rate, "-o" ]}},
+              { svg : {engine: "svgo", command:"--multipass=" }},
+              { gif : {engine: "gifsicle", command:["--colors","64", "--use-col=web"] }},
+              async (error, completed, statistic) => {
+                console.log('Is compression failed ? ', error )
+                console.log('Is compression completed ? ',completed)
+                fileSystem.unlink(filePath, err => {
+                  if(err) throw err
+                })
+              }
+            )
+            console.log('file has been compressed and save')
+          })
+
+          fileSystem.unlink(post.path, err=>{
+            if(err) throw err;
+          })
+        })
+      } else {
+        console.log("Please select an image")
+        error.message = "Please select an image";
+      }
+    }
+    if (!post) return error;
+    const uploadedPost = await uploadOnCloudnary(compressedFilePath)
+     
     if (user) {
       let obj = {
         user_id: user._id,

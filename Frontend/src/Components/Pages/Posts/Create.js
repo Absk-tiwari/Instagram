@@ -16,7 +16,6 @@ const Create = () => {
     var fileReader = new FileReader()
     fileReader.onload = e=>setPost(e.target.result) 
     fileReader.readAsDataURL(post); // Change to readAsDataURL  
-    //console.log(typeof post, post)
 	  }catch(err){
 		toast('Something went wrong')
 		return navigator('/')	  
@@ -28,25 +27,30 @@ const Create = () => {
 
   const handleSubmit = async(event) =>{
     event.preventDefault()
-	setLoading(true)
+	  setLoading(true)
   	let body= new FormData()
-	body.append('post',post)
-	body.append('caption',fields.caption)
-	body.append('location',fields.location)
+    body.append('post',post)
+    body.append('caption',fields.caption)
+    body.append('location',fields.location)
   
-	axios.post(`/post/create`, body )
-	.then((res)=>{
-		let resp= res.data
-		if(resp.status){
-			setTimeout(() => {
-				navigator('/')
-				toast('Posted')
-			}, 2500);
-		}else{
-			toast(resp.message)
-		}
-	})
+    axios.post(`/post/create`, body ,{
+      headers:{
+        "Content-Type":'multipart/formdata'
+      }
+    })
+    .then((res)=>{
+      let resp= res.data
+      if(resp.status){
+        setTimeout(() => {
+          navigator('/')
+          toast('Posted')
+        }, 2500);
+      }else{
+        toast(resp.message)
+      }
+    })
   }
+
   return (
     <>
     <div className='d-flex mt-5 mb-3 mx-1 postCreateDiv'>

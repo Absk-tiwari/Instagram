@@ -1,6 +1,7 @@
 const  express = require("express");
 const User=require('../Models/User');
 const Post=require('../Models/Post');
+const sharp = require('sharp')
 const BlockedUser =require('../Models/BlockedUser');
 const Followers =require('../Models/Followers');
 const router = express.Router();
@@ -22,6 +23,8 @@ router.post('/update',[ upload.single('image'), fetchuser], async(req,res)=>{
 			bio : req.body.bio
 		}
 		if(req.file) {
+            let ext= req.file
+            console.log(ext) 
 			const uploaded = await uploadOnCloudnary(req.file.path)
 			updateSet.profile=uploaded.url
 		}
