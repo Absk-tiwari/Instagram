@@ -2,14 +2,13 @@ import React, { useState,useEffect } from "react";
 import logo from "../../../assets/icons/insta.svg";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
-import Loader from "../../StateComponents/Loader";
 import 'react-toastify/dist/ReactToastify.css'
 import { toast } from '../../../toast'
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import headers from "../../../APIs/Headers";
 import { init } from "../../../socket";
-
+import { RotatingLines } from 'react-loader-spinner'
 const Login =  () => {
   const dispatch = useDispatch()
   if(document.querySelector('.App'))
@@ -23,7 +22,7 @@ const Login =  () => {
 	   {
 	     return navigator('/');
 	   }
-	   return () => document.querySelector('.App').style.height='initial'
+	//    return () => document.querySelector('.App').style.height='initial'
 	},[]);
   
   const login = async({username, password}) =>{
@@ -35,17 +34,19 @@ const Login =  () => {
 				// Save the auth token 
 				localStorage.setItem('token', response.authToken);
 				toast('Logged in successfully!')
-        axios.defaults.headers.common=headers()
-        init().then(res=>{
-          dispatch({type:'LOGIN', payload:{token:response.authToken, info:res}})
-        })
-			  setTimeout(() => navigator('/'), 2500);
+				axios.defaults.headers.common=headers()
+				init().then( res =>{
+					dispatch({type:'LOGIN', payload:{token:response.authToken, info:res}})
+				})
+			  	setTimeout(() => navigator('/'), 2500);
 			}else{
 				toast(response.message) 
-				setLoading(false)
 			}
 
 		}).catch((err)=>dispatch({type:'ERROR',payload:{error:err.message}}))
+		.finally(()=>{
+			setLoading(false)
+		})
 	} catch (err) {
 		toast(err.message); 
 		setLoading(false)
@@ -92,10 +93,27 @@ const Login =  () => {
                         onChange={onchange} />
                       <label htmlFor="password">Password</label>
                     </div>
-                    <input
-                      type="submit" className="btn col-12 btn-primary mb-3 fw-bold"
-                      value={`Log in`} disabled={fields.username.length < 5 || fields.password.length < 7 } onClick={()=>setProgress(100)} />
-	                    {isLoading && <Loader height='30'/>}
+                    <button
+                      	type="submit" 
+						className="btn col-12 btn-primary mb-3 fw-bold"
+						disabled={fields.username.length < 5 || fields.password.length < 7 || isLoading} 
+						onClick={()=>setProgress(100)} >
+							{isLoading ? 
+							<RotatingLines
+								visible={true}
+								height="30"
+								width="30"
+								strokeColor="white"
+								strokeWidth="4"
+								animationDuration="0.75"
+								ariaLabel="rotating-lines-loading"
+								wrapperStyle={{}}
+								wrapperClass=""
+							/>
+							:`Log in`}
+					</button>
+ 
+						
 
                     <center className="text-secondary mt-5">
                       Forgot password? Click 
